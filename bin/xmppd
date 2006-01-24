@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby -w
+#
+# xmppd: a small XMPP server
+# xmppd: launches a XMPPd class
+#
+# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+#
+# $Id$
+#
+
+$: << File.join(Dir.getwd, 'lib')
+$0 = 'xmppd'
+
+#
+# Import required xmppd modules.
+#
+require 'xmppd'
+
+# Launch a new XMPPd.
+XMPPd.instance.ioloop
