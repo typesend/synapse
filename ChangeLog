@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r2 | rakaur | 2006-01-26 01:29:49 -0600 (Thu, 26 Jan 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/Rakefile
+   A /trunk/etc/configure.xml
+   A /trunk/etc/configure.xsd
+
+Did some work on the configuration file format.
+Touched up the Rakefile.
+
+------------------------------------------------------------------------
 r1 | rakaur | 2006-01-24 11:34:28 -0600 (Tue, 24 Jan 2006) | 2 lines
 Changed paths:
    A /branches

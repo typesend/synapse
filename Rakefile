@@ -113,7 +113,7 @@ end
 Rake::RDocTask.new do |r|
     r.rdoc_dir = 'doc'
     r.options << '--line-numbers' << '--inline-source'
-    r.rdoc_files.include('lib/**/*')
+    r.rdoc_files.include('lib/**/*', 'README')
 end
 
 #
@@ -146,8 +146,9 @@ spec = Gem::Specification.new do |s|
     s.files = PKG_FILES.to_a
     s.require_paths = ['lib']
 
-    #s.test_file = 'test/ts_xmppd.rb'
+    #s.test_file = 'test/ts_xmppd.rb' # FIXME:UNIT TEST
     s.has_rdoc = true
+    s.extra_rdoc_files = ['README']
 
     s.rubyforge_project = 'xmppd'
 
