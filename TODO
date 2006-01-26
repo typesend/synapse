@@ -1,0 +1,57 @@
+#
+# xmppd: a small XMPP server
+# TODO: a todo list for xmppd.
+#
+# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+#
+# $Id$
+#
+
+xmppd-1.0:
+
+NOTE: Things in this are not gauranteed to be coded. They're just random
+thoughts.
+
+X = completed
+
+MUST BE IN xmppd-1.0a1:
+[ ] - config stuff
+[ ]  . config file parsing
+[ ]  . config class setup
+[X]  . config file schema
+[ ] - client stream establishment
+[ ]   . TLS
+[ ]   . SASL
+[ ]   . JEP-0078 (legacy auth)
+[ ]   . JEP-0077 (in-band registration)
+[ ] - XML parsing
+[ ] - IO stuff
+[ ] - IDN
+[ ]   . Stringprep
+[ ]   . Nameprep
+[ ]   . Nodeprep
+[ ]   . Resourceprep
+[ ] - Database stuff
+[ ]   . XML? (fits with XMPP, modern, etc)
+[ ]   . SQLite? (easier, C-like, but has prereqs)
+
+MUST BE IN xmppd-1.0b1:
+[ ] - server stream establishment
+[ ]   . TLS
+[ ]   . SASL
+[ ]   . Dialback
+
+xmppd-1.1:
+
+MUST BE IN xmppd-1.1b1:
+[ ] - JEP implementation
+[ ]   . JEP-0004 (data forms)
+[ ]   . JEP-0030 (service discovery)
+[ ]   . JEP-0013 (flexible offline message retrieval)
+[ ]   . JEP-0045 (multi-user chat)
+[ ]   . JEP-0060 (publish-subscribe)
+[ ]   . JEP-0085 (chat state notifications)
+[ ]   . JEP-0126 (invisibility)
+[ ]   . JEP-0012 (last activity)
+[ ]   . JEP-0054 (vcard-temp)
+[ ]   . JEP-0092 (software version)
