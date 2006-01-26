@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r3 | rakaur | 2006-01-26 16:13:59 -0600 (Thu, 26 Jan 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/README
+   M /trunk/Rakefile
+
+Added an early README, in rdoc format.
+Touched up the Rakefile.
+
+------------------------------------------------------------------------
 r2 | rakaur | 2006-01-26 01:29:49 -0600 (Thu, 26 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
