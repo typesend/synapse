@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+
+<configure xmlns='xmppd:configure'
+           xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+           xsi:schemaLocation='xmppd:configure configure.xsd'>
+
+    <!--
+         Please note that the configuration elements MUST be listed
+         in sequence in accordance to the schema:
+
+         <virtual_host/>
+         <listen/>
+         <auth/>
+         <operator/>
+
+         Failure to comply will break this program.
+    -->
+
+    <!--
+         The 'virtual_host' element defines a host this daemon will service.
+         You may define as many as you like, and you must define
+         at least one.
+    -->
+    <virtual_host>example.org</virtual_host>
+
+    <!--
+         The 'logging' element defines the name and location of the log
+         files. You must define one, and only one.
+
+             The 'general' element specifies the location of general
+             logging (start up, errors, etc). You may define one, and
+             only one.
+
+             The 'c2s' element specifies the location of client-to-server
+             activity logging. You must define one, and only one
+
+             The 's2s' element specifies the location of server-to-server
+             activity logging. You must define one, and only one.
+    -->
+    <logging>
+        <general>var/xmppd.log</general>
+        <c2s>var/c2s.log</c2s>
+        <s2s>var/s2s.log</s2s>
+    </logging>
+
+    <!--
+         The 'listen' element is used to determine what ports on which IPs
+         this daemon will listen on. You may define as many as you like,
+         and you must define at least one.
+
+         The 'host' attribute defines the IP to bind to. If not present,
+         the listener will be bound on all hosts.
+
+         The 'port' element must be an integer within the range 1024-65535.
+
+             The 'type' attribute is required, and specifies the type
+             of connections to listen for. The available values are:
+
+                 'c2s' => client-to-server
+                 's2s' => server-to-server
+
+             You must define at least one of each type.
+    -->
+    <listen host='192.168.1.0'>
+        <port type='c2s'>5222</port>
+        <port type='s2s'>5269</port>
+    </listen>
+
+    <!--
+         The 'auth' elements are used to determine who may connect to this
+         service. You may define as many as you like, and you must
+         define at least one.
+
+         The 'virtual_host' attribute defines which hostname this
+         applies to. If not present, it's applied to all hostnames.
+
+         The 'type' attribute is required and defines the behavior of
+         this auth. The available values are:
+
+             'allow' => allow connections from hosts matching this auth.
+             'deny' => deny connections from hosts matching this auth.
+
+         The order should be allow, deny.
+
+             The 'ip' element is used to define hosts this auth is to match.
+             The value must be a quad dotted IP address. You may define as
+             many as you like, and you must define at least one.
+
+             The 'match' element is used to define hosts this auth is to
+             match. The value must be a Ruby regular expression. You may
+             define as many as you like, and you don't have to define any.
+
+             The 'plain' element doesn't force clients in this auth to
+             secure the stream with TLS. This is ignored in 'deny' auths.
+
+             The 'legacy_auth' element doesn't force clients in this auth
+             to authenticate with SASL (effectively implementing JEP-0078).
+             This is ignored in 'deny' auths.
+    -->
+
+    <!-- This allows all hosts to connect. -->
+    <auth virtual_host='example.org' type='allow'>
+        <match>/(.*)/</match>
+    </auth>
+
+    <!-- This would deny connections from localhost. -->
+    <auth virtual_host='example.org' type='deny'>
+        <ip>127.0.0.1</ip>
+    </auth>
+
+    <!-- This would allow someone with an old client to connect. -->
+    <auth virtual_host='example.org' type='allow'>
+        <ip>192.168.1.12</ip>
+        <plain/>
+        <legacy_auth/>
+    </auth>
+
+    <!--
+         You must remove this in order for the daemon to start.
+         This element is not specified in the schema.
+
+         This is here just to make sure you're reading. :)
+    -->
+    <not-configured/>
+
+    <!--
+         The 'operator' element is used to determine which JIDs are
+         allowed to perform administrative options. You may define as
+         many as you like, and you don't have to define any.
+
+         The 'virtual_host' attribute defines which host this operator
+         applies to. If not present, it will apply to all hosts.
+
+             The 'JID' element specifies the JID this operator matches.
+             You may specify as many as you like, and you must specify at
+             least one in the form of a "bare JID" (user@domain).
+
+             The 'announce' element allows this operator to send
+             server-wide messages.
+    -->
+    <operator virtual_host='example.org'>
+        <jid>rakaur@example.org</jid>
+        <announce/>
+    </operator>
+</configure>

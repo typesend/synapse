@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'
+           targetNamespace='xmppd:configure'
+           elementFormDefault='qualified'>
+
+<xs:group name='authgroup_1' xmlns='xmppd:configure'>
+  <xs:choice>
+    <xs:element name='ip'
+                type='xs:token'
+                minOccurs='1'
+                maxOccurs='unbounded'/>
+                                       
+    <xs:element name='match'           
+                type='xs:token'
+                minOccurs='1'
+                maxOccurs='unbounded'/>
+  </xs:choice>
+</xs:group>
+
+<xs:group name='authgroup_2' xmlns='xmppd:configure'>
+  <xs:all>
+    <xs:element name='plain'
+                minOccurs='0'
+                maxOccurs='1'/>
+                               
+    <xs:element name='legacy_auth'
+                minOccurs='0'
+                maxOccurs='1'/>
+  </xs:all>
+</xs:group>
+
+<xs:group name='operatorgroup_1' xmlns='xmppd:configure'>
+  <xs:choice>
+    <xs:element name='jid'
+                type='xs:token'
+                minOccurs='1'
+                maxOccurs='unbounded'/>
+  </xs:choice>
+</xs:group>
+
+<xs:group name='operatorgroup_2' xmlns='xmppd:configure'>
+  <xs:all>
+    <xs:element name='announce'
+                minOccurs='0'
+                maxOccurs='1'/>
+  </xs:all>
+</xs:group>
+
+<xs:element name='configure'>
+  <xs:complexType>
+    <xs:sequence>
+      <xs:element name='virtual_host'
+                  type='xs:token'
+                  minOccurs='1'
+                  maxOccurs='unbounded'/>
+
+      <xs:element name='logging' minOccurs='1' maxOccurs='1'>
+        <xs:complexType>
+          <xs:all>
+            <xs:element name='general'
+                        type='xs:token'
+                        minOccurs='1'
+                        maxOccurs='1'/>
+
+            <xs:element name='c2s'
+                        type='xs:token'
+                        minOccurs='1'
+                        maxOccurs='1'/>
+
+            <xs:element name='s2s'
+                        type='xs:token'
+                        minOccurs='1'
+                        maxOccurs='1'/>
+          </xs:all>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name='listen' minOccurs='1' maxOccurs='unbounded'>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name='port'
+                        minOccurs='2'
+                        maxOccurs='unbounded'>
+              <xs:complexType>
+                <xs:simpleContent>
+                  <xs:extension base='xs:integer'>
+                    <xs:attribute name='type' type='xs:token' use='required'/>
+                  </xs:extension>
+                </xs:simpleContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute name='host' type='xs:token' use='optional'/>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name='auth' minOccurs='1' maxOccurs='unbounded'>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref='authgroup_1' xmlns='xmppd:configure'/>
+            <xs:group ref='authgroup_2' xmlns='xmppd:configure'/>
+          </xs:sequence>
+          <xs:attribute name='virtual_host' type='xs:token' use='optional'/>
+          <xs:attribute name='type' use='required'/>
+        </xs:complexType>
+      </xs:element>
+
+      <xs:element name='operator' minOccurs='0' maxOccurs='unbounded'>
+        <xs:complexType>
+          <xs:sequence>
+            <xs:group ref='operatorgroup_1' xmlns='xmppd:configure'/>
+            <xs:group ref='operatorgroup_2' xmlns='xmppd:configure'/>
+          </xs:sequence>
+          <xs:attribute name='virtual_host' type='xs:token' use='optional'/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+</xs:element>
+
+</xs:schema>

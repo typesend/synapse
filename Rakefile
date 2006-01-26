@@ -153,6 +153,8 @@ spec = Gem::Specification.new do |s|
 
     s.default_executable = 'xmppd'
     s.executables = ['xmppd']
+
+    s.add_dependency('idn', '>= 0.0.1')
 end
 
 # Makes a .gem package.

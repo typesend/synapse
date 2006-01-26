@@ -1,0 +1,22 @@
+------------------------------------------------------------------------
+r1 | rakaur | 2006-01-24 11:34:28 -0600 (Tue, 24 Jan 2006) | 2 lines
+Changed paths:
+   A /branches
+   A /tags
+   A /trunk
+   A /trunk/ChangeLog
+   A /trunk/Rakefile
+   A /trunk/bin
+   A /trunk/bin/xmppd
+   A /trunk/etc
+   A /trunk/lib
+   A /trunk/lib/xmppd
+   A /trunk/lib/xmppd/var.rb
+   A /trunk/lib/xmppd/version.rb
+   A /trunk/lib/xmppd.rb
+   A /trunk/test
+   A /trunk/var
+
+Initial import.
+
+------------------------------------------------------------------------
