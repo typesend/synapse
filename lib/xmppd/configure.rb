@@ -73,6 +73,10 @@ def do_virtual_host(elem)
 end
 
 def do_logging(elem)
+    unless $config.logging.general.empty?
+        raise ConfigureError, 'multiple logging elements'
+    end
+
     unless elem.respond_to? 'elements'
         raise ConfigureError, 'logging has no elements'
     end

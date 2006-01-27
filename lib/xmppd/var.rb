@@ -16,6 +16,12 @@ $config = nil
 # Our configuration file.
 $config_file = 'etc/configure.xml'
 
+# Fork into the background?
+$fork = false
+
+# Logger.
+$log = nil
+
 # The current epoch time.
 $time = Time.now.to_f
 

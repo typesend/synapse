@@ -15,22 +15,22 @@ thoughts.
 X = completed
 
 MUST BE IN xmppd-1.0a1:
-[ ] - config stuff
-[ ]  . config file parsing
-[ ]  . config class setup
+[X] - config stuff
+[X]  . config file parsing (done via REXML)
+[X]  . config class setup
 [X]  . config file schema
 [ ] - client stream establishment
 [ ]   . TLS
 [ ]   . SASL
 [ ]   . JEP-0078 (legacy auth)
 [ ]   . JEP-0077 (in-band registration)
-[ ] - XML parsing
+[ ] - XML parsing (for streams)
 [ ] - IO stuff
-[ ] - IDN
-[ ]   . Stringprep
-[ ]   . Nameprep
-[ ]   . Nodeprep
-[ ]   . Resourceprep
+[X] - IDN (should be fine just calling IDN::Stringprep.Nameprep, et al)
+[X]   . Stringprep
+[X]   . Nameprep
+[X]   . Nodeprep
+[X]   . Resourceprep
 [ ] - Database stuff
 [ ]   . XML? (fits with XMPP, modern, etc)
 [ ]   . SQLite? (easier, C-like, but has prereqs)
