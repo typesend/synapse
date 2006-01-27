@@ -1,4 +1,33 @@
 ------------------------------------------------------------------------
+r8 | rakaur | 2006-01-27 12:20:42 -0600 (Fri, 27 Jan 2006) | 4 lines
+Changed paths:
+   M /trunk/TODO
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/var.rb
+   M /trunk/lib/xmppd.rb
+
+Worked on the logging for about three hours, unfortunately both Logger and Log4r are pieces of shit, so I had to remove it all.
+Added proper configuration error catching and such.
+Updated TODO.
+
+------------------------------------------------------------------------
+r7 | rakaur | 2006-01-27 00:47:36 -0600 (Fri, 27 Jan 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/Rakefile
+   M /trunk/lib/xmppd/configure/auth.rb
+   M /trunk/lib/xmppd/configure/configuration.rb
+   M /trunk/lib/xmppd/configure/operator.rb
+   M /trunk/lib/xmppd/configure.rb
+   A /trunk/test/bad_config.xml
+   A /trunk/test/ok_config.xml
+   A /trunk/test/tc_config.rb
+   A /trunk/test/ts_xmppd.rb
+
+Added unit tests.
+Finished major work on configure stuff.
+
+------------------------------------------------------------------------
 r6 | rakaur | 2006-01-26 22:44:29 -0600 (Thu, 26 Jan 2006) | 4 lines
 Changed paths:
    M /trunk/ChangeLog

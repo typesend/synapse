@@ -67,6 +67,10 @@ def load(filename)
     end
 end
 
+def do_fork(elem)
+    $fork = true
+end
+
 def do_virtual_host(elem)
     raise ConfigureError, 'virtual_host has no text' unless elem.text
     $config.virtual_host << elem.text
@@ -75,18 +79,35 @@ end
 def do_logging(elem)
     unless $config.logging.general.empty?
         raise ConfigureError, 'multiple logging elements'
-    end
+    end unless $config.logging.general.nil?
 
     unless elem.respond_to? 'elements'
         raise ConfigureError, 'logging has no elements'
     end
 
-    general, c2s, s2s = false
+    level, general, c2s, s2s = false
 
     elem.elements.each do |subelem|
         raise ConfigureError, "{#subelem.name} has no text" unless subelem.text
 
         case subelem.name
+        when 'level'
+            case subelem.text
+            when 'debug'
+                $config.logging.level = Logger::DEBUG
+            when 'info'
+                $config.logging.level = Logger::INFO
+            when 'warn'
+                $config.logging.level = Logger::WARN
+            when 'error'
+                $config.logging.level = Logger::ERROR
+            when 'fatal'
+                $config.logging.level = Logger::FATAL
+            else
+                raise ConfigureError, "unknown logging level: #{subelem.text}"
+            end
+
+            level = true
         when 'general'
             $config.logging.general = subelem.text
             general = true

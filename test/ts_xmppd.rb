@@ -16,3 +16,4 @@ require 'test/unit'
 # Import required xmppd modules.
 #
 require 'tc_config'
+require 'tc_logging'

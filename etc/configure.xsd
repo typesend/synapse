@@ -49,6 +49,8 @@
 <xs:element name='configure'>
   <xs:complexType>
     <xs:sequence>
+      <xs:element name='fork' minOccurs='0' maxOccurs='1'/>
+
       <xs:element name='virtual_host'
                   type='xs:token'
                   minOccurs='1'
@@ -57,6 +59,11 @@
       <xs:element name='logging' minOccurs='1' maxOccurs='1'>
         <xs:complexType>
           <xs:all>
+            <xs:element name='level'
+                        type='xs:token'
+                        minOccurs='1'
+                        maxOccurs='1'/>
+
             <xs:element name='general'
                         type='xs:token'
                         minOccurs='1'

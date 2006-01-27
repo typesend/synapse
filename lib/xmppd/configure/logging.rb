@@ -13,9 +13,10 @@ module Configure
 # Represents a single <logging/> entry.
 #
 class Logging
-    attr_accessor :general, :c2s, :s2s
+    attr_accessor :level, :general, :c2s, :s2s
 
     def initialize
+        @level = nil
         @general = nil
         @c2s = nil
         @s2s = nil

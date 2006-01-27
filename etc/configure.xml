@@ -8,6 +8,7 @@
          Please note that the configuration elements MUST be listed
          in sequence in accordance to the schema:
 
+         <fork/>
          <virtual_host/>
          <listen/>
          <auth/>
@@ -15,6 +16,12 @@
 
          Failure to comply will break this program.
     -->
+
+    <!--
+         Comment this out if you don't want the daemon to fork
+         into the background.
+    -->
+    <fork/>
 
     <!--
          The 'virtual_host' element defines a host this daemon will service.
@@ -27,6 +34,16 @@
          The 'logging' element defines the name and location of the log
          files. You must define one, and only one.
 
+             The 'level' element specifies how paranoid to be about
+             logging. You must define one, and only one. The available
+             values are:
+
+                 'fatal'   => log really bad stuff
+                 'error'   => log bad stuff
+                 'warn'    => log weird stuff
+                 'info'    => log lots of stuff
+                 'debug'   => log everything
+
              The 'general' element specifies the location of general
              logging (start up, errors, etc). You must define one, and
              only one.
@@ -38,6 +55,7 @@
              activity logging. You must define one, and only one.
     -->
     <logging>
+        <level>warn</level>
         <general>var/xmppd.log</general>
         <c2s>var/c2s.log</c2s>
         <s2s>var/s2s.log</s2s>

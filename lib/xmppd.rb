@@ -30,6 +30,7 @@ end
 # Import required xmppd modules.
 #
 require 'xmppd/configure'
+require 'xmppd/log'
 require 'xmppd/var'
 require 'xmppd/version'
 
@@ -75,11 +76,6 @@ class XMPPd
             exit!
         end
 
-        # A cheap trick to fix the configuration stuff.
-        $-w = nil
-        notused = Log4r::Logger.new('xmppd')
-        $-w = true
-
         # Set up our configuration data.
         begin
             Configure.load($config_file)
@@ -87,10 +83,34 @@ class XMPPd
             puts "xmppd: configure error: #{e}"
             exit
         end
+
+        # Initialize logging.
+        $fork = false             #FIXME:debug
+        $config.logging.level = 0 #FIXME:debug
+
+        $log = MyLog::MyLogger.instance
+
+        $log.general.unknown '-!- new logging session started -!-'
+        $log.c2s.unknown '-!- new logging session started -!-'
+        $log.s2s.unknown '-!- new logging session started -!-'
     end
 
     def ioloop
         puts "There is nothing to do yet."
         exit
+
+        # Exiting...
+        my_exit
+    end
+
+    def my_exit
+        # Exiting, clean up.
+        $log.general.unknown '-!- terminating normally -!-'
+        $log.c2s.unknown '-!- terminating normally -!-'
+        $log.s2s.unknown '-!- terminating normally -!-'
+
+        $log.general.close
+        $log.c2s.close
+        $log.s2s.close
     end
 end
