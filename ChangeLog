@@ -1,4 +1,24 @@
 ------------------------------------------------------------------------
+r6 | rakaur | 2006-01-26 22:44:29 -0600 (Thu, 26 Jan 2006) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/TODO
+   M /trunk/etc/configure.xml
+   A /trunk/lib/xmppd/configure
+   A /trunk/lib/xmppd/configure/auth.rb
+   A /trunk/lib/xmppd/configure/configuration.rb
+   A /trunk/lib/xmppd/configure/listen.rb
+   A /trunk/lib/xmppd/configure/logging.rb
+   A /trunk/lib/xmppd/configure/operator.rb
+   A /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/var.rb
+   M /trunk/lib/xmppd.rb
+
+Did a significant amount of work on configure.
+Edited TODO.
+Changed a word in configure.xml.
+
+------------------------------------------------------------------------
 r5 | rakaur | 2006-01-26 16:39:47 -0600 (Thu, 26 Jan 2006) | 2 lines
 Changed paths:
    A /trunk/TODO

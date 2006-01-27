@@ -13,7 +13,7 @@ module Configure
 # Represents a single <operator/> entry.
 #
 class Operator
-    attr_accessor :virtual_host, :jids, :announce
+    attr_accessor :virtual_host, :jid, :announce
 
     def initialize
         @virtual_host = nil

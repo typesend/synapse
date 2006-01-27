@@ -13,7 +13,7 @@ module Configure
 # Represents a single <auth/> entry.
 #
 class Auth
-    attr_accessor :virtual_host, :type, :ips, :matches, :plain, :legacy_auth
+    attr_accessor :virtual_host, :type, :ip, :match, :plain, :legacy_auth
 
     def initialize
         @virtual_host = nil

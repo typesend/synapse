@@ -1,0 +1,17 @@
+<configure>    
+    <virtual_host>unit.test</virtual_host>
+    <logging>  
+        <c2s>unit/test</c2s>
+        <s2s>unit/test</s2s>
+    </logging>     
+    <listen> 
+        <port>9999</port> 
+        <port type='s2s'>9998</port>
+    </listen>  
+    <auth type='allow'>
+        <ip>192.168.1.1</ip>
+    </auth>    
+    <operator>
+        <jid>unit@test/bad</jid>
+    </operator>    
+</configure>

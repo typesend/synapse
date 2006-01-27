@@ -27,8 +27,8 @@ class Configuration
     def initialize
         @virtual_host = []
         @logging = Configure::Logging.new
-        @listen = [Configure::Listen.new]
-        @auth = [Configure::Auth.new]
+        @listen = []
+        @auth = []
         @operator = []
     end
 end

@@ -33,8 +33,9 @@ $stdout.sync = true
 #
 task :default => [:test]
 
-task :test do
-    print '>>> nothing to test yet'
+Rake::TestTask.new do |t|
+    t.libs << 'test'
+    t.test_files = 'test/ts_xmppd.rb'
 end
 
 #
@@ -146,7 +147,7 @@ spec = Gem::Specification.new do |s|
     s.files = PKG_FILES.to_a
     s.require_paths = ['lib']
 
-    #s.test_file = 'test/ts_xmppd.rb' # FIXME:UNIT TEST
+    s.test_file = 'test/ts_xmppd.rb'
     s.has_rdoc = true
     s.extra_rdoc_files = ['README']
 

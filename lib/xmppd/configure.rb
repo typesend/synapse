@@ -125,6 +125,10 @@ def do_listen(elem)
 
         case subelem.name
         when 'port'
+            unless subelem.respond_to? 'attributes'
+                raise ConfigureError, "port has no attributes (need 'type')"
+            end
+
             subelem.attributes.each do |name, value|
                 case name
                 when 'type'
@@ -150,17 +154,109 @@ def do_listen(elem)
     raise ConfigureError, 'missing listen element: port' unless port >= 2
     raise ConfigureError, 'missing port type: c2s' unless c2s
     raise ConfigureError, 'missing port type: s2s' unless s2s
+
+    $config.listen << newlisten
 end
 
 def do_auth(elem)
+    unless elem.respond_to? 'elements'
+        raise ConfigureError, 'auth has no elements'
+    end
+
+    newauth = Configure::Auth.new
+    ip = false
+
+    unless elem.respond_to? 'attributes'
+        raise ConfigureError, "auth has no attributes (need 'type')"
+    end
+
+    elem.attributes.each do |name, value|
+        case name
+        when 'virtual_host'
+            newauth.virtual_host = value
+        when 'type'
+            case value
+            when 'allow'
+                newauth.type = value
+                type = true
+            when 'deny'
+                newauth.type = value
+                type = true
+            end
+        else
+            raise ConfigureError, "unknown auth attribute: #{name}"
+        end
+
+        raise ConfigureError, 'missing auth attribute: type' unless newauth.type
+    end
+
+    elem.elements.each do |subelem|
+        if subelem.name == 'ip' or subelem.name == 'match'
+            unless subelem.text
+                raise ConfigureError, "#{subelem.name} has no text"
+            end
+        end
+
+        case subelem.name
+        when 'ip'
+            newauth.ip << subelem.text
+            ip = true
+        when 'match'
+            newauth.match << /#{subelem.text}/
+            ip = true # ip/match is xs:choice
+        when 'plain'
+            newauth.plain = true
+        when 'legacy_auth'
+            newauth.legacy_auth = true
+        else
+            raise ConfigureError, "unknown auth element: #{subelem.name}"
+        end
+    end
+
+    raise ConfigureError, 'missing auth element: ip' unless ip
+
+    $config.auth << newauth
 end
 
 def do_operator(elem)
+    unless elem.respond_to? 'elements'
+        raise ConfigureError, 'operator has no elements'
+    end
+
+    newop = Configure::Operator.new
+    jid = false
+
+    elem.attributes.each do |name, value|
+        case name
+        when 'virtual_host'
+            newop.virtual_host = value
+        end
+    end if elem.respond_to? 'attributes'
+
+    elem.elements.each do |subelem|
+        case subelem.name
+        when 'jid'
+            unless subelem.text =~ /^(\w+)\@[(\w\.?)]+$/
+                raise ConfigureError, "#{subelem.text} not a valid JID"
+            end
+
+            newop.jid << subelem.text
+            jid = true
+        when 'announce'
+            newop.announce = true
+        else
+            raise ConfigureError, "unknown operator element: #{subelem.name}"
+        end
+    end
+
+    raise ConfigureError, 'missing operator element: jid' unless jid
+
+    $config.operator << newop
 end
 
 def do_not_configured(elem)
-    puts "xmppd: you didn't read the configuration file."
-    exit
+#    puts "xmppd: you didn't read the configuration file."
+#    exit
 end
 
 end # module Configure
