@@ -10,6 +10,12 @@
 # Version information
 require 'xmppd/version'
 
+# A singleton instance of Configure::Configuration.
+$config = nil
+
+# Our configuration file.
+$config_file = 'etc/configure.xml'
+
 # The current epoch time.
 $time = Time.now.to_f
 

@@ -28,7 +28,7 @@
          files. You must define one, and only one.
 
              The 'general' element specifies the location of general
-             logging (start up, errors, etc). You may define one, and
+             logging (start up, errors, etc). You must define one, and
              only one.
 
              The 'c2s' element specifies the location of client-to-server

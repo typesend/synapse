@@ -34,12 +34,14 @@ MUST BE IN xmppd-1.0a1:
 [ ] - Database stuff
 [ ]   . XML? (fits with XMPP, modern, etc)
 [ ]   . SQLite? (easier, C-like, but has prereqs)
+[ ] - logging (log4r should work)
 
 MUST BE IN xmppd-1.0b1:
 [ ] - server stream establishment
 [ ]   . TLS
 [ ]   . SASL
 [ ]   . Dialback
+[ ]   . SRV
 
 xmppd-1.1:
 

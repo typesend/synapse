@@ -16,6 +16,7 @@ require 'singleton'
 #
 # Import required xmppd modules.
 #
+require 'xmppd/configure'
 require 'xmppd/var'
 require 'xmppd/version'
 
@@ -39,6 +40,9 @@ class XMPPd
             puts "xmppd: don't run XMPP as root."
             exit
         end
+
+        # Set up our configuration data.
+        Configure.load($config_file)
     end
 
     def ioloop
