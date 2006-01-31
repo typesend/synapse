@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r10 | rakaur | 2006-01-31 00:25:36 -0600 (Tue, 31 Jan 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+   D /trunk/TODO
+
+Update README for new tracker.
+Removed TODO, as we have a tracker now.
+
+------------------------------------------------------------------------
 r9 | rakaur | 2006-01-27 17:01:07 -0600 (Fri, 27 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
