@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------
+r9 | rakaur | 2006-01-27 17:01:07 -0600 (Fri, 27 Jan 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/etc/configure.xml
+   M /trunk/etc/configure.xsd
+   M /trunk/lib/xmppd/configure/logging.rb
+   M /trunk/lib/xmppd/configure.rb
+   A /trunk/lib/xmppd/log.rb
+   M /trunk/lib/xmppd.rb
+   A /trunk/test/tc_logging.rb
+   M /trunk/test/ts_xmppd.rb
+
+Implemented logging with Logger.
+Added <fork/> and <logging><level/></logging> to the config.
+
+------------------------------------------------------------------------
 r8 | rakaur | 2006-01-27 12:20:42 -0600 (Fri, 27 Jan 2006) | 4 lines
 Changed paths:
    M /trunk/TODO
