@@ -1,6 +1,6 @@
 #
 # xmppd: a small XMPP server
-# listen.rb: port listening configuration
+# deny.rb: client authorization configuration
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
 #
@@ -10,14 +10,14 @@
 module Configure
 
 #
-# Represents listen{} configuration data.
+# Represents deny{} configuration data.
 #
-class Listen
-    attr_accessor :c2s, :s2s
+class Deny
+    attr_accessor :host, :match
 
     def initialize
-        @c2s = []
-        @s2s = []
+        @host = []
+        @match = []
     end
 end
 

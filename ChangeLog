@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r11 | rakaur | 2006-01-31 00:36:00 -0600 (Tue, 31 Jan 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+
+Forgot a <tt/> in the README.
+
+------------------------------------------------------------------------
 r10 | rakaur | 2006-01-31 00:25:36 -0600 (Tue, 31 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

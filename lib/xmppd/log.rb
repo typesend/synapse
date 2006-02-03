@@ -34,7 +34,7 @@ end
 class MyLogger
     include Singleton
 
-    attr_accessor :general, :c2s, :s2s
+    attr_accessor :xmppd, :c2s, :s2s
 
     # I'm not sure why I don't need to prefix Logger:: here,
     # because I'm not including it. Maybe I'm in the same
@@ -43,20 +43,20 @@ class MyLogger
     def initialize
 
         if $fork
-            @general = Logger.new($config.logging.general, 'weekly')
+            @xmppd = Logger.new($config.logging.xmppd, 'weekly')
             @c2s = Logger.new($config.logging.c2s, 'weekly')
             @s2s = Logger.new($config.logging.s2s, 'weekly')
         else
-            @general = Logger.new($stdout)
+            @xmppd = Logger.new($stdout)
             @c2s = Logger.new($stdout)
             @s2s = Logger.new($stdout)
         end
 
-        @general.level, @general.progname  = $config.logging.level, 'xmppd'
+        @xmppd.level, @xmppd.progname  = $config.logging.level, 'xmppd'
         @c2s.level, @c2s.progname = $config.logging.level, 'c2s'
         @s2s.level, @s2s.progname = $config.logging.level, 's2s'
 
-        @general.datetime_format = '%b %d %H:%M:%S '
+        @xmppd.datetime_format = '%b %d %H:%M:%S '
         @c2s.datetime_format = '%b %d %H:%M:%S '
         @s2s.datetime_format = '%b %d %H:%M:%S '
     end

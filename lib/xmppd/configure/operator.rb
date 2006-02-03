@@ -10,15 +10,30 @@
 module Configure
 
 #
-# Represents a single <operator/> entry.
+# Represents operator{} configuration data.
 #
 class Operator
-    attr_accessor :virtual_host, :jid, :announce
+    attr_reader :jid, :announce
 
     def initialize
-        @virtual_host = nil
-        @jid = []
+        @jid = nil
         @announce = false
+    end
+
+    def jid=(value)
+        unless value =~ /\w+\@\w+/
+            raise ArgumentError, "invalid 'jid' syntax"
+        end
+
+        @jid = value
+    end
+
+    def announce=(value)
+        unless value == true || value == false
+            raise ArgumentError, "invalid 'announce' (must be true/false)"
+        end
+
+        @announce = value
     end
 end
 

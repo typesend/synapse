@@ -12,16 +12,18 @@
 #
 require 'xmppd/configure/auth'
 require 'xmppd/configure/configuration'
+require 'xmppd/configure/deny'
 require 'xmppd/configure/listen'
 require 'xmppd/configure/logging'
 require 'xmppd/configure/operator'
+require 'xmppd/configure/parser'
 
-require 'xmppd/var.rb'
+require 'xmppd/var'
 
 #
 # Import required Ruby modules.
 #
-require 'rexml/document'
+require 'idn'
 
 #
 # The configuration namespace.
@@ -31,13 +33,7 @@ module Configure
 extend self
 
 #
-# An exception raised when there's problems with the configuration data.
-#
-class ConfigureError < Exception
-end
-
-#
-# Get the configuration data from a file and feed it to REXML.
+# Get the configuration data from a file and feed it to the parser.
 #
 def load(filename)
     begin
@@ -49,239 +45,183 @@ def load(filename)
 
     $config = Configure::Configuration.new
 
+    parser = Configure::ConfigParser.new
+
     begin
-        xml = REXML::Document.new(File.open(filename))
-    rescue REXML::ParserError => e
+        parser.feed(data)
+        parser.parse
+    rescue Configure::ConfigError => e
         puts 'xmppd: configuration error: %s' % e
         exit
     end
+end
 
-    # Now go through and set everything in our $config.
-    xml.root.elements.each do |elem|
-       meth = 'do_' + elem.name.sub('-', '_')
-       if respond_to? meth
-          send(meth, elem)
-       else
-          raise ConfigureError, "Unknown element: #{elem.name}"
+#
+# Our subclassed ConfigParser. Takes care of setting all the useful
+# little switches in our Configuration.
+#
+class ConfigParser < Configure::Parser
+    def initialize
+        super
+    end
+
+    def handle_hosts(entry)
+       entry.entries.each do |node|
+           $config.hosts << IDN::Stringprep.nameprep(node.name)
        end
     end
-end
 
-def do_fork(elem)
-    $fork = true
-end
+    def handle_logging(entry)
+        entry.entries.each do |node|
+            methname = 'handle_log_%s' % node.name
 
-def do_virtual_host(elem)
-    raise ConfigureError, 'virtual_host has no text' unless elem.text
-    $config.virtual_host << elem.text
-end
-
-def do_logging(elem)
-    unless $config.logging.general.empty?
-        raise ConfigureError, 'multiple logging elements'
-    end unless $config.logging.general.nil?
-
-    unless elem.respond_to? 'elements'
-        raise ConfigureError, 'logging has no elements'
-    end
-
-    level, general, c2s, s2s = false
-
-    elem.elements.each do |subelem|
-        raise ConfigureError, "{#subelem.name} has no text" unless subelem.text
-
-        case subelem.name
-        when 'level'
-            case subelem.text
-            when 'debug'
-                $config.logging.level = Logger::DEBUG
-            when 'info'
-                $config.logging.level = Logger::INFO
-            when 'warn'
-                $config.logging.level = Logger::WARN
-            when 'error'
-                $config.logging.level = Logger::ERROR
-            when 'fatal'
-                $config.logging.level = Logger::FATAL
+            if respond_to? methname
+                send(methname, node)
             else
-                raise ConfigureError, "unknown logging level: #{subelem.text}"
+                unknown_directive(node.name, node.name)
             end
-
-            level = true
-        when 'general'
-            $config.logging.general = subelem.text
-            general = true
-        when 'c2s'
-            $config.logging.c2s = subelem.text
-            c2s = true
-        when 's2s'
-            $config.logging.s2s = subelem.text
-            s2s = true
-        else
-            raise ConfigureError, "unknown logging element: {#subelm.name}"
-        end
-     end
-
-    raise ConfigureError, 'missing logging element: general' unless general
-    raise ConfigureError, 'missing logging element: c2s' unless c2s
-    raise ConfigureError, 'missing logging element: s2s' unless s2s
-end
-
-def do_listen(elem)
-    unless elem.respond_to? 'elements'
-        raise ConfigureError, 'listen has no elements'
-    end
-
-    newlisten = Configure::Listen.new
-    c2s, s2s = false
-    port = 0
-
-    elem.attributes.each do |name, value|
-        case name
-        when 'host'
-            newlisten.host = value
-        else
-            raise ConfigureError, "unknown listen attribute: {#name}"
         end
     end
 
-    elem.elements.each do |subelem|
-        raise ConfigureError, "{#subelem.name} has no text" unless subelem.text
+    def handle_log_enable(entry)
+        $config.logging.enable = true
+    end
 
-        case subelem.name
-        when 'port'
-            unless subelem.respond_to? 'attributes'
-                raise ConfigureError, "port has no attributes (need 'type')"
+    def handle_log_xmppd_path(entry)
+        missing_parameter(entry.name, entry.line) unless entry.data
+        $config.logging.xmppd = entry.data
+    end
+
+    def handle_log_c2s_path(entry)
+        miss_parameter(entry.name, entry.line) unless entry.data
+        $config.logging.c2s = entry.data
+    end
+
+    def handle_log_s2s_path(entry)
+        missing_parameter(entry.name, entry.line) unless entry.data
+        $config.logging.s2s = entry.data
+    end
+
+    def handle_log_level(entry)
+        missing_parameter(entry.name, entry.line) unless entry.data
+        $config.logging.level = entry.data
+    end
+
+    def handle_listen(entry)
+        entry.entries.each do |node|
+            methname = 'handle_ports_%s' % node.name
+
+            if respond_to? methname
+                send(methname, node)
+            else
+                unknown_directive(node.name, node.name)
             end
+        end
+    end
 
-            subelem.attributes.each do |name, value|
-                case name
-                when 'type'
-                    case value
-                    when 'c2s'
-                        newlisten.c2s << subelem.text.to_i
-                        c2s = true
-                    when 's2s'
-                        newlisten.s2s << subelem.text.to_i
-                        s2s = true
+    def handle_ports_c2s(entry)
+        entry.entries.each do |node|
+            host, port = node.name.split(':')
+
+            $config.listen.c2s << { 'host' => host,
+                                    'port' => port.to_i }
+        end
+    end
+
+    def handle_ports_s2s(entry)
+        entry.entries.each do |node|
+            host, port = node.name.split(':')
+
+            $config.listen.s2s << { 'host' => host,
+                                    'port' => port.to_i }
+        end
+    end
+
+    def handle_auth(entry)
+        newauth = Configure::Auth.new
+
+        entry.entries.each do |node|
+            case node.name
+            when 'host'
+                missing_parameter(node.name, node.line) unless node.data
+                newauth.host = node.data
+
+            when 'match'
+                missing_parameter(node.name, node.line) unless node.data
+                newauth.match = /#{node.data}/
+
+            when 'flags'
+                node.entries.each do |flag|
+                    case flag.name
+                    when 'plain'
+                        newauth.plain = true
+
+                    when 'legacy_auth'
+                        newauth.legacy_auth = true
+
+                    else
+                        unknown_directive(node.name, node.name)
                     end
-                else
-                    raise ConfigureError, "unknown port attribute: #{name}"
                 end
-            end
-
-            port += 1
-        else
-            raise ConfigureError, "unknown listen element: #{subelem.name}"
-        end
-    end
-
-    raise ConfigureError, 'missing listen element: port' unless port >= 2
-    raise ConfigureError, 'missing port type: c2s' unless c2s
-    raise ConfigureError, 'missing port type: s2s' unless s2s
-
-    $config.listen << newlisten
-end
-
-def do_auth(elem)
-    unless elem.respond_to? 'elements'
-        raise ConfigureError, 'auth has no elements'
-    end
-
-    newauth = Configure::Auth.new
-    ip = false
-
-    unless elem.respond_to? 'attributes'
-        raise ConfigureError, "auth has no attributes (need 'type')"
-    end
-
-    elem.attributes.each do |name, value|
-        case name
-        when 'virtual_host'
-            newauth.virtual_host = value
-        when 'type'
-            case value
-            when 'allow'
-                newauth.type = value
-                type = true
-            when 'deny'
-                newauth.type = value
-                type = true
-            end
-        else
-            raise ConfigureError, "unknown auth attribute: #{name}"
-        end
-
-        raise ConfigureError, 'missing auth attribute: type' unless newauth.type
-    end
-
-    elem.elements.each do |subelem|
-        if subelem.name == 'ip' or subelem.name == 'match'
-            unless subelem.text
-                raise ConfigureError, "#{subelem.name} has no text"
+            else
+                unknown_directive(node.name, node.name)
             end
         end
 
-        case subelem.name
-        when 'ip'
-            newauth.ip << subelem.text
-            ip = true
-        when 'match'
-            newauth.match << /#{subelem.text}/
-            ip = true # ip/match is xs:choice
-        when 'plain'
-            newauth.plain = true
-        when 'legacy_auth'
-            newauth.legacy_auth = true
-        else
-            raise ConfigureError, "unknown auth element: #{subelem.name}"
-        end
+        $config.auth << newauth
     end
 
-    raise ConfigureError, 'missing auth element: ip' unless ip
+    def handle_deny(entry)
+        newdeny = Configure::Deny.new
 
-    $config.auth << newauth
-end
+        entry.entries.each do |node|
+            missing_parameter(node.name, node.line) unless node.data
 
-def do_operator(elem)
-    unless elem.respond_to? 'elements'
-        raise ConfigureError, 'operator has no elements'
-    end
+            case node.name
+            when 'host'
+                newdeny.host = node.data
 
-    newop = Configure::Operator.new
-    jid = false
+            when 'match'
+                newdeny.match = /#{node.data}/
 
-    elem.attributes.each do |name, value|
-        case name
-        when 'virtual_host'
-            newop.virtual_host = value
-        end
-    end if elem.respond_to? 'attributes'
-
-    elem.elements.each do |subelem|
-        case subelem.name
-        when 'jid'
-            unless subelem.text =~ /^(\w+)\@[(\w\.?)]+$/
-                raise ConfigureError, "#{subelem.text} not a valid JID"
+            else
+                unknown_directive(node.name, node.name)
             end
-
-            newop.jid << subelem.text
-            jid = true
-        when 'announce'
-            newop.announce = true
-        else
-            raise ConfigureError, "unknown operator element: #{subelem.name}"
         end
+
+        $config.deny << newdeny
     end
 
-    raise ConfigureError, 'missing operator element: jid' unless jid
+    def handle_operator(entry)
+        newoper = Configure::Operator.new
 
-    $config.operator << newop
-end
+        missing_parameter(entry.name, entry.line) unless entry.data
 
-def do_not_configured(elem)
-#    puts "xmppd: you didn't read the configuration file."
-#    exit
+        newoper.jid = entry.data
+
+        entry.entries.each do |node|
+            case node.name
+            when 'flags'
+                node.entries.each do |flag|
+                    case flag.name
+                    when 'announce'
+                        newoper.announce = true
+                    else
+                        unknown_directive(flag.name, flag.name)
+                    end
+                end
+            else
+                unknown_directive(node.name, node.name)
+            end
+        end
+
+        $config.operator << newoper
+    end
+
+    def handle_die(entry)
+        puts "xmppd: you didn't read the configuration file."
+        exit
+    end
 end
 
 end # module Configure

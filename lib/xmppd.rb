@@ -80,17 +80,16 @@ class XMPPd
         begin
             Configure.load($config_file)
         rescue Exception => e
+            puts '----------------------------'
             puts "xmppd: configure error: #{e}"
-            exit
+            puts '----------------------------'
+            raise
         end
 
         # Initialize logging.
-        $fork = false             #FIXME:debug
-        $config.logging.level = 0 #FIXME:debug
-
         $log = MyLog::MyLogger.instance
 
-        $log.general.unknown '-!- new logging session started -!-'
+        $log.xmppd.unknown '-!- new logging session started -!-'
         $log.c2s.unknown '-!- new logging session started -!-'
         $log.s2s.unknown '-!- new logging session started -!-'
     end
@@ -105,11 +104,11 @@ class XMPPd
 
     def my_exit
         # Exiting, clean up.
-        $log.general.unknown '-!- terminating normally -!-'
+        $log.xmppd.unknown '-!- terminating normally -!-'
         $log.c2s.unknown '-!- terminating normally -!-'
         $log.s2s.unknown '-!- terminating normally -!-'
 
-        $log.general.close
+        $log.xmppd.close
         $log.c2s.close
         $log.s2s.close
     end

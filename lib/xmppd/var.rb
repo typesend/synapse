@@ -14,10 +14,10 @@ require 'xmppd/version'
 $config = nil
 
 # Our configuration file.
-$config_file = 'etc/configure.xml'
+$config_file = 'etc/xmppd.conf'
 
 # Fork into the background?
-$fork = false
+$fork = true
 
 # Logger.
 $log = nil

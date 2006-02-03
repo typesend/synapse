@@ -22,13 +22,14 @@ module Configure
 # A singleton class that holds all of our configuration data.
 #
 class Configuration
-    attr_accessor :virtual_host, :logging, :listen, :auth, :operator
+    attr_accessor :hosts, :logging, :listen, :auth, :deny, :operator
 
     def initialize
-        @virtual_host = []
+        @hosts = []
         @logging = Configure::Logging.new
-        @listen = []
+        @listen = Configure::Listen.new
         @auth = []
+        @deny = []
         @operator = []
     end
 end

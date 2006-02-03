@@ -10,18 +10,33 @@
 module Configure
 
 #
-# Represents a single <auth/> entry.
+# Represents auth{} configuration data.
 #
 class Auth
-    attr_accessor :virtual_host, :type, :ip, :match, :plain, :legacy_auth
+    attr_accessor :host, :match
+    attr_reader :plain, :legacy_auth
 
     def initialize
-        @virtual_host = nil
-        @type = nil
-        @ip = []
+        @host = []
         @match = []
         @plain = false
         @legacy_auth = false
+    end
+
+    def plain=(value)
+        unless value == true || value == false
+            raise ArgumentError, "invalid 'plain' (must be true/false)"
+        end
+           
+        @plain = value
+    end    
+
+    def legacy_auth=(value)
+        unless value == true || value == false
+            raise ArgumentError, "invalid 'legacy_auth' (must be true/false)"
+        end
+
+        @legacy_auth = value
     end
 end
 
