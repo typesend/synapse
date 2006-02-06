@@ -1,4 +1,30 @@
 ------------------------------------------------------------------------
+r12 | rakaur | 2006-02-02 18:36:01 -0600 (Thu, 02 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   D /trunk/etc/configure.xml
+   D /trunk/etc/configure.xsd
+   A /trunk/etc/example.conf
+   M /trunk/lib/xmppd/configure/auth.rb
+   M /trunk/lib/xmppd/configure/configuration.rb
+   A /trunk/lib/xmppd/configure/deny.rb
+   M /trunk/lib/xmppd/configure/listen.rb
+   M /trunk/lib/xmppd/configure/logging.rb
+   M /trunk/lib/xmppd/configure/operator.rb
+   A /trunk/lib/xmppd/configure/parser.rb
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/log.rb
+   M /trunk/lib/xmppd/var.rb
+   M /trunk/lib/xmppd.rb
+   D /trunk/test/bad_config.xml
+   D /trunk/test/ok_config.xml
+   M /trunk/test/tc_config.rb
+   A /trunk/var/logs
+   A /trunk/var/streams
+
+First attempt at changing config stuff from XML to easier bind-style.
+
+------------------------------------------------------------------------
 r11 | rakaur | 2006-01-31 00:36:00 -0600 (Tue, 31 Jan 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
