@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r15 | rakaur | 2006-02-06 23:27:29 -0600 (Mon, 06 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Did some more stream stuff. Devided Stream into ServerStream and ClientStream.
+
+------------------------------------------------------------------------
 r14 | rakaur | 2006-02-06 21:45:52 -0600 (Mon, 06 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

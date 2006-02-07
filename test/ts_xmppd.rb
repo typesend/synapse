@@ -17,3 +17,4 @@ require 'test/unit'
 #
 require 'tc_config'
 require 'tc_logging'
+require 'tc_stream'

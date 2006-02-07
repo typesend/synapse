@@ -43,7 +43,8 @@ end
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    STREAM_NAMESPACE  = 'http://etherx.jabber.org/streams'
+    CLIENT_PORT = 5222
+    SERVER_PORT = 5269
 
     attr_accessor :socket
     attr_reader :host, :type, :realhost
@@ -79,6 +80,11 @@ class Stream
     #######
 
     def send(stanza)
+        begin
+            @socket.send(stanza.to_s, 0)
+        rescue Errno::EAGAIN
+            retry
+        end
     end
 
     #
@@ -204,9 +210,6 @@ class Stream
 end
 
 class ClientStream < Stream
-    CLIENT_NAMESPACE = 'jabber:client'
-    CLIENT_PORT = 5222
-
     def initialize(host)
         super(host, 'client')
     end
@@ -219,7 +222,7 @@ class ClientStream < Stream
         addr, port = resolve
                     
         begin
-            @socket = TCPSocket.new(addr, port)
+            @socket = TCPSocket.new(addr.to_s, port)
         rescue SocketError => e
             @dead = true  
         else
@@ -230,53 +233,74 @@ class ClientStream < Stream
         end
     end
 
+    def send(stanza)
+        $log.c2s.debug "#{@host} <- #{stanza.to_s}"
+        super(stanza)
+    end
+
     #######
     private
     #######
 
+    #
+    # Manually build and send the opening stream XML.
+    # We can't use REXML here because it closes all
+    # of the tags on its own.
+    #
     def establish
-        xml = REXML::Document.new
-        xml << REXML::XMLDecl.new
+        stanza = %(<?xml version='1.0'?>) +
+                 %(<stream:stream to='#{@host}' ) +
+                 %(xmlns='jabber:client' ) +
+                 %(xmlns:stream='http://etherx.jabber.org/streams' ) +
+                 %(version='1.0' ) +
+                 %(xml:lang='en'>)
 
-        stream = REXML::Element.new('stream:stream')
-        stream.add_attribute('to', @host)
-        stream.add_attribute('version', '1.0')
-        stream.add_attribute('xml:lang', 'en')
-        stream.add_namespace('stream', STREAM_NAMESPACE)
-        stream.add_namespace(CLIENT_NAMESPACE)
-
-        xml << stream
+        send(stanza)
     end
 end
 
 class ServerStream < Stream
-    SERVER_NAMESPACE = 'jabber:server'
-    SERVER_PORT = 5269
+    attr_reader :myhost
 
-    def initialize(host)
+    def initialize(host, myhost)
         super(host, 'server')
+        @myhost = myhost
     end
+
+    ######
+    public
+    ######
 
     def connect
         raise RuntimeError, 'no socket set to connect' unless @socket
+
+        establish
+    end
+
+    def send(stanza)
+        $log.s2s.debug "#{@host} <- #{stanza.to_s}"
+        super(stanza)
     end
 
     #######
     private
     #######
 
+    #      
+    # Manually build and send the opening stream XML.
+    # We can't use REXML here because it closes all  
+    # of the tags on its own.                      
+    #                        
     def establish
-        xml = REXML::Document.new
-        xml << REXML::XMLDecl.new
+        stanza = %(<?xml version='1.0'?>) +
+                 %(<stream:stream to='#{@host}' ) +
+                 %(from='#{@myhost}' ) +
+                 %(xmlns='jabber:server' ) +
+                 %(xmlns:stream='http://etherx.jabber.org/streams' ) +
+                 %(version='1.0' ) +
+                 %(xml:lang='en'>)
 
-        stream = REXML::Element.new('stream:stream')
-        stream.add_attribute('to', @host)
-        stream.add_attribute('version', '1.0')
-        stream.add_attribute('xml:lang', 'en')
-        stream.add_namespace('stream', STREAM_NAMESPACE)
-        stream.add_namespace(SERVER_NAMESPACE)
-
-        xml << stream
+        send(stanza)
     end
 end
 

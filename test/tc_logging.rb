@@ -21,23 +21,23 @@ require 'xmppd/var'
 
 class TestLog < Test::Unit::TestCase
     def test_log
-        generalt = 'test/generalt.log'
+        xmppdt = 'test/xmppt.log'
         c2st = 'test/c2st.log'
         s2st = 'test/s2st.log'
 
         assert_nothing_raised do
-            @general = Logger.new(generalt)
+            @xmppd = Logger.new(xmppdt)
             @c2s = Logger.new(c2st)
             @s2s = Logger.new(s2st)
         end
 
         assert_nothing_raised do
-            @general.fatal 'some fatal error'
-            @general.error 'some error'
-            @general.warn 'some warning'
-            @general.info 'some info'
-            @general.debug 'some debug info'
-            @general.unknown 'some important info'
+            @xmppd.fatal 'some fatal error'
+            @xmppd.error 'some error'
+            @xmppd.warn 'some warning'
+            @xmppd.info 'some info'
+            @xmppd.debug 'some debug info'
+            @xmppd.unknown 'some important info'
         end
 
         assert_nothing_raised do
@@ -59,13 +59,13 @@ class TestLog < Test::Unit::TestCase
         end 
 
         assert_nothing_raised do
-            @general.close
+            @xmppd.close
             @c2s.close
             @s2s.close
         end
 
         assert_nothing_raised do
-            File.delete(generalt)
+            File.delete(xmppdt)
             File.delete(c2st)
             File.delete(s2st)
         end

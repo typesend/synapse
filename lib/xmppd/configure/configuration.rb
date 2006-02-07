@@ -11,7 +11,6 @@
 # Import required xmppd modules.
 #
 require 'xmppd/configure/auth'
-require 'xmppd/configure/configuration'
 require 'xmppd/configure/listen'
 require 'xmppd/configure/logging'
 require 'xmppd/configure/operator'
