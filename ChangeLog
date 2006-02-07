@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r13 | rakaur | 2006-02-06 14:40:24 -0600 (Mon, 06 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/lib/xmppd/xmpp
+   A /trunk/lib/xmppd/xmpp/stream.rb
+   A /trunk/lib/xmppd/xmpp.rb
+
+Did some work on library stuff. Not a whole lot of free time lately.
+
+------------------------------------------------------------------------
 r12 | rakaur | 2006-02-02 18:36:01 -0600 (Thu, 02 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

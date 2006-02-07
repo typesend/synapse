@@ -36,11 +36,14 @@ class MyLogger
 
     attr_accessor :xmppd, :c2s, :s2s
 
-    # I'm not sure why I don't need to prefix Logger:: here,
-    # because I'm not including it. Maybe I'm in the same
-    # namespace as Ruby's Logger somewhere, but I don't
-    # really care and it works, so, neener.
     def initialize
+        unless $config.logging.enable
+            @xmppd = DeadLogger.new
+            @c2s = DeadLogger.new
+            @s2s = DeadLogger.new
+
+            return
+        end
 
         if $fork
             @xmppd = Logger.new($config.logging.xmppd, 'weekly')
@@ -59,6 +62,11 @@ class MyLogger
         @xmppd.datetime_format = '%b %d %H:%M:%S '
         @c2s.datetime_format = '%b %d %H:%M:%S '
         @s2s.datetime_format = '%b %d %H:%M:%S '
+    end
+end
+
+class DeadLogger
+    def method_missing(n, *a)
     end
 end
 

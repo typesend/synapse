@@ -43,27 +43,81 @@ end
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    DEFAULT_NAMESPACE = 'jabber:client'
+    CLIENT_NAMESPACE = 'jabber:client'
+    SERVER_NAMESPACE = 'jabber:server'
     STREAM_NAMESPACE  = 'http://etherx.jabber.org/streams'
 
-    attr_accessor :socket
-    attr_reader :host, :realhost
+    CLIENT_PORT = 5222
+    SERVER_PORT = 5269
 
-    def initialize(host)
+    attr_reader :host, :type, :realhost, :socket
+
+    def initialize(host, type)
         @socket = nil
         @host = host
+        @dead = false
+
+        if type != 'client' && type != 'server'
+            raise ArgumentError, "type must be 'client' or 'server'"
+        else
+            @type = type
+        end
     end
 
-    def establish
-        addr, port = resolve
+    ######
+    public
+    ######
+
+    def dead?
+        @dead
     end
+
+    def connect
+        unless @type
+            raise RuntimeError, "no 'type' set"
+        end
+
+        addr, port = resolve
+
+        begin
+            @socket = TCPSocket.new(addr, port)
+        rescue SocketError => e
+            @dead = true
+        else
+            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+            @socket.nonblock = true
+
+            establish
+        end
+    end
+
+    def close
+        @socket.shutdown
+        @socket.close
+        @dead = true
+    end
+
+    #######
+    private
+    #######
+
+    def establish
+    end
+
+    def send(stanza)
+    end    
 
     #
     # First tries DNS SRV RR as per RFC3920.
     # On failure, falls back to regular DNS.
     #
     def resolve
-        rrname = 'xmpp-client._tcp.' + @host
+        if @type == 'client'
+            rrname = '_xmpp-client._tcp.' + @host
+        else
+            rrname = '_xmpp-server._tcp.' + @host
+        end
+
         resolver = Resolv::DNS.new
         original_recs = []
         weighted_recs = []
@@ -79,8 +133,6 @@ class Stream
         end
 
         begin
-            $log.xmppd.debug('attempting SRV lookup on %s' % rrname)
-
             resources = resolver.getresources(rrname, type)
 
             if srv_support
@@ -158,8 +210,11 @@ class Stream
                 end
             end
         rescue Resolv::ResolvError
-            $log.xmppd.debug('SRV lookup failed, using regular DNS')
-            weighted_recs << [name, 5222]
+            if @type == 'client'
+                weighted_recs << [name, CLIENT_PORT]
+            else
+                weighted_recs << [name, SERVER_PORT]
+            end
         end
 
         if block_given?
