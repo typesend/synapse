@@ -43,14 +43,10 @@ end
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    CLIENT_NAMESPACE = 'jabber:client'
-    SERVER_NAMESPACE = 'jabber:server'
     STREAM_NAMESPACE  = 'http://etherx.jabber.org/streams'
 
-    CLIENT_PORT = 5222
-    SERVER_PORT = 5269
-
-    attr_reader :host, :type, :realhost, :socket
+    attr_accessor :socket
+    attr_reader :host, :type, :realhost
 
     def initialize(host, type)
         @socket = nil
@@ -72,25 +68,6 @@ class Stream
         @dead
     end
 
-    def connect
-        unless @type
-            raise RuntimeError, "no 'type' set"
-        end
-
-        addr, port = resolve
-
-        begin
-            @socket = TCPSocket.new(addr, port)
-        rescue SocketError => e
-            @dead = true
-        else
-            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-            @socket.nonblock = true
-
-            establish
-        end
-    end
-
     def close
         @socket.shutdown
         @socket.close
@@ -101,11 +78,8 @@ class Stream
     private
     #######
 
-    def establish
-    end
-
     def send(stanza)
-    end    
+    end
 
     #
     # First tries DNS SRV RR as per RFC3920.
@@ -226,6 +200,83 @@ class Stream
         else
             return weighted_recs.first[0, 2]
         end
+    end
+end
+
+class ClientStream < Stream
+    CLIENT_NAMESPACE = 'jabber:client'
+    CLIENT_PORT = 5222
+
+    def initialize(host)
+        super(host, 'client')
+    end
+
+    ######
+    public
+    ######
+
+    def connect         
+        addr, port = resolve
+                    
+        begin
+            @socket = TCPSocket.new(addr, port)
+        rescue SocketError => e
+            @dead = true  
+        else
+            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+            @socket.nonblock = true
+                                       
+            establish
+        end
+    end
+
+    #######
+    private
+    #######
+
+    def establish
+        xml = REXML::Document.new
+        xml << REXML::XMLDecl.new
+
+        stream = REXML::Element.new('stream:stream')
+        stream.add_attribute('to', @host)
+        stream.add_attribute('version', '1.0')
+        stream.add_attribute('xml:lang', 'en')
+        stream.add_namespace('stream', STREAM_NAMESPACE)
+        stream.add_namespace(CLIENT_NAMESPACE)
+
+        xml << stream
+    end
+end
+
+class ServerStream < Stream
+    SERVER_NAMESPACE = 'jabber:server'
+    SERVER_PORT = 5269
+
+    def initialize(host)
+        super(host, 'server')
+    end
+
+    def connect
+        raise RuntimeError, 'no socket set to connect' unless @socket
+    end
+
+    #######
+    private
+    #######
+
+    def establish
+        xml = REXML::Document.new
+        xml << REXML::XMLDecl.new
+
+        stream = REXML::Element.new('stream:stream')
+        stream.add_attribute('to', @host)
+        stream.add_attribute('version', '1.0')
+        stream.add_attribute('xml:lang', 'en')
+        stream.add_namespace('stream', STREAM_NAMESPACE)
+        stream.add_namespace(SERVER_NAMESPACE)
+
+        xml << stream
     end
 end
 

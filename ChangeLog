@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r14 | rakaur | 2006-02-06 21:45:52 -0600 (Mon, 06 Feb 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/log.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Fix logging so that 'enable' actually has meaning.
+Add some more socket stuff and XMPP library stuff.
+
+------------------------------------------------------------------------
 r13 | rakaur | 2006-02-06 14:40:24 -0600 (Mon, 06 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
