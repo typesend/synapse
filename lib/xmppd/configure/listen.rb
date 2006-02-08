@@ -13,11 +13,12 @@ module Configure
 # Represents listen{} configuration data.
 #
 class Listen
-    attr_accessor :c2s, :s2s
+    attr_accessor :c2s, :s2s, :certfile
 
     def initialize
         @c2s = []
         @s2s = []
+        @certfile = nil
     end
 end
 

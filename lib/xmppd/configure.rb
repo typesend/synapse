@@ -117,6 +117,21 @@ class ConfigParser < Configure::Parser
                 unknown_directive(node.name, node.name)
             end
         end
+
+        unless $config.listen.certfile
+            puts "xmppd: no certfile set, starttls will not be implemented"
+        else
+            begin
+                f = File.open($config.listen.certfile)
+            rescue Errno::ENOENT
+                puts "xmppd: specified certfile does not exist, " +
+                     "starttls will not be implemented"
+
+                $config.listen.certfile = false
+            else
+                f.close
+            end
+        end
     end
 
     def handle_ports_c2s(entry)
@@ -135,6 +150,12 @@ class ConfigParser < Configure::Parser
             $config.listen.s2s << { 'host' => host,
                                     'port' => port.to_i }
         end
+    end
+
+    def handle_ports_certfile(entry)
+        missing_parameter(entry.name, entry.line) unless entry.data
+
+        $config.listen.certfile = entry.data
     end
 
     def handle_auth(entry)
