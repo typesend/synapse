@@ -76,6 +76,24 @@ class XMPPd
             exit!
         end
 
+        # Handle signals and such.
+        Signal.trap('INT') do
+            $log.xmppd.info 'caught interrupt'
+            exit
+        end
+
+        Signal.trap('HUP') do
+            # XXX - rehash
+        end
+
+        Signal.trap('PIPE', 'SIG_IGN')
+        Signal.trap('ALRM', 'SIG_IGN')
+        Signal.trap('CHLD', 'SIG_IGN')
+        Signal.trap('WINCH', 'SIG_IGN')
+        Signal.trap('TTIN', 'SIG_IGN')
+        Signal.trap('TTOU', 'SIG_IGN')
+        Signal.trap('TSTP', 'SIG_IGN')
+
         # Set up our configuration data.
         begin
             Configure.load($config_file)
@@ -109,13 +127,13 @@ class XMPPd
             $connections.delete_if { |c| c.dead? }
 
             if $connections.empty?
-                sleep(60)
+                sleep(1)
                 next
             end
 
             readfds = $connections.collect { |c| c.socket }
 
-            ret = select(readfds, [], [], 60)
+            ret = select(readfds, [], [], 1)
 
             next unless ret
             next if ret[0].empty?
