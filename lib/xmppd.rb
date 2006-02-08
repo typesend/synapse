@@ -108,7 +108,6 @@ class XMPPd
             # Kill off any dead connections.
             $connections.delete_if { |c| c.dead? }
 
-
             if $connections.empty?
                 sleep(60)
                 next

@@ -141,6 +141,8 @@ class Stream
                 send(methname, elem)
             end
         end
+
+        @recvq = []
     end
 
     #
