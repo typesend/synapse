@@ -92,11 +92,40 @@ class XMPPd
         $log.xmppd.unknown '-!- new logging session started -!-'
         $log.c2s.unknown '-!- new logging session started -!-'
         $log.s2s.unknown '-!- new logging session started -!-'
+
+        # XXX - this is testing
+        require 'xmppd/xmpp/stream'
+        s = XMPP::ServerStream.new('malkier.net', 'example.org')
+        $connections << s
+        s.connect
     end
 
     def ioloop
-        puts "There is nothing to do yet."
-        exit
+        loop do
+            # Update the current time.
+            $time = Time.now.to_f
+
+            # Kill off any dead connections.
+            $connections.delete_if { |c| c.dead? }
+
+
+            if $connections.empty?
+                sleep(60)
+                next
+            end
+
+            readfds = $connections.collect { |c| c.socket }
+
+            ret = select(readfds, [], [], 60)
+
+            next unless ret
+            next if ret[0].empty?
+
+            ret[0].each do |s|
+                c = $connections.find { |tc| tc.socket == s }
+                c.read
+            end
+        end
 
         # Exiting...
         my_exit

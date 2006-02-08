@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r16 | rakaur | 2006-02-07 12:12:54 -0600 (Tue, 07 Feb 2006) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/configure/configuration.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/test/tc_logging.rb
+   A /trunk/test/tc_stream.rb
+   M /trunk/test/ts_xmppd.rb
+
+Fix up some bugs in configuration and logging.
+Add a test case for streams.
+More work on streams.
+
+------------------------------------------------------------------------
 r15 | rakaur | 2006-02-06 23:27:29 -0600 (Mon, 06 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

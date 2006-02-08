@@ -48,24 +48,24 @@ class TestStream < Test::Unit::TestCase
         end
     end
 
-    def test_clientstream
+    def test_serverstream
         assert_nothing_raised do
-            stream = XMPP::ClientStream.new('malkier.net')
+            stream = XMPP::ServerStream.new('malkier.net', 'example.org')
             stream.connect
             stream.close
         end
     end
 
-    def test_serverstream
+    def test_clientstream
         assert_nothing_raised do
-            stream = XMPP::ServerStream.new('malkier.net', 'example.org')
-            stream.socket = TCPSocket.new('malkier.net', 5269)
+            stream = XMPP::ClientStream.new('malkier.net')
+            stream.socket = TCPSocket.new('malkier.net', 5222)
             stream.connect
             stream.close
         end
 
         assert_raises(RuntimeError) do
-            stream = XMPP::ServerStream.new('malkier.net', 'example.org')
+            stream = XMPP::ClientStream.new('malkier.net')
             stream.connect
             stream.close 
         end

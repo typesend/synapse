@@ -10,4 +10,4 @@
 #
 # Import required xmppd modules.
 #
-require 'xmppd/xmpp'
+require 'xmppd/xmpp/stream'

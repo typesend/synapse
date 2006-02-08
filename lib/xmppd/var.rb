@@ -16,6 +16,9 @@ $config = nil
 # Our configuration file.
 $config_file = 'etc/xmppd.conf'
 
+# List of active connections.
+$connections = []
+
 # Fork into the background?
 $fork = true
 

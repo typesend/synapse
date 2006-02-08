@@ -43,9 +43,6 @@ end
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    CLIENT_PORT = 5222
-    SERVER_PORT = 5269
-
     attr_accessor :socket
     attr_reader :host, :type, :realhost
 
@@ -53,6 +50,7 @@ class Stream
         @socket = nil
         @host = host
         @dead = false
+        @recvq = []
 
         if type != 'client' && type != 'server'
             raise ArgumentError, "type must be 'client' or 'server'"
@@ -70,20 +68,78 @@ class Stream
     end
 
     def close
-        @socket.shutdown
+        # Close the stream.
+        write '</stream:stream>'
+
         @socket.close
         @dead = true
+    end
+
+    def read
+        begin
+            data = @socket.recv(8192)
+        rescue Errno::EAGAIN
+            return
+        end
+
+        if data.empty?
+            close
+            return
+        end
+
+        if @type == 'client'
+            $log.c2s.debug "#{@host} -> #{data}"
+        else
+            $log.s2s.debug "#{@host} -> #{data}"
+        end
+
+        @recvq << data
+
+        parse
     end
 
     #######
     private
     #######
 
-    def send(stanza)
+    def write(stanza)
         begin
             @socket.send(stanza.to_s, 0)
         rescue Errno::EAGAIN
             retry
+        end
+    end
+
+    def parse
+        @recvq.each do |stanza|
+            begin
+                xml = REXML::Document.new(stanza)
+            rescue REXML::ParseException
+                # XXX - not-well-formed error
+                close
+                return
+            end
+
+            xml.elements.each do |elem|
+                methname = "handle_#{elem.name}"
+                methname.sub!(':', '_')
+
+                unless respond_to? methname
+                    if @type == 'client'
+                        $log.c2s.error "Unknown stanza from #{@host}: " +
+                                       "'#{elem.name}' (no '#{methname}')"
+                    else
+                        $log.s2s.error "Unknown stanza from #{@host}: " +
+                                       "'#{elem.name}' (no '#{methname}')"
+                    end
+
+                    # XXX - stream error
+                    close
+                    return
+                end
+
+                send(methname, elem)
+            end
         end
     end
 
@@ -218,22 +274,18 @@ class ClientStream < Stream
     public
     ######
 
-    def connect         
-        addr, port = resolve
-                    
-        begin
-            @socket = TCPSocket.new(addr.to_s, port)
-        rescue SocketError => e
-            @dead = true  
-        else
-            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-            @socket.nonblock = true
-                                       
-            establish
-        end
+    def connect
+        raise RuntimeError, "no client socket to connect with" unless @socket
+
+        @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+        @socket.nonblock = true
+
+        $log.c2s.info "#{@host} -> TCP connection established"
+
+        establish
     end
 
-    def send(stanza)
+    def write(stanza)
         $log.c2s.debug "#{@host} <- #{stanza.to_s}"
         super(stanza)
     end
@@ -252,10 +304,9 @@ class ClientStream < Stream
                  %(<stream:stream to='#{@host}' ) +
                  %(xmlns='jabber:client' ) +
                  %(xmlns:stream='http://etherx.jabber.org/streams' ) +
-                 %(version='1.0' ) +
-                 %(xml:lang='en'>)
+                 %(version='1.0'>)
 
-        send(stanza)
+        write(stanza)
     end
 end
 
@@ -272,12 +323,27 @@ class ServerStream < Stream
     ######
 
     def connect
-        raise RuntimeError, 'no socket set to connect' unless @socket
+        $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
 
-        establish
+        addr, port = resolve
+
+        begin
+            @socket = TCPSocket.new(addr.to_s, port)
+        rescue SocketError => e
+            $log.s2s.info "#{host}:#{port} -> TCP connection failed"
+
+            @dead = true
+        else
+            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+            @socket.nonblock = true
+
+            $log.s2s.info "#{addr}:#{port} -> TCP connection established"
+
+            establish
+        end
     end
 
-    def send(stanza)
+    def write(stanza)
         $log.s2s.debug "#{@host} <- #{stanza.to_s}"
         super(stanza)
     end
@@ -291,16 +357,29 @@ class ServerStream < Stream
     # We can't use REXML here because it closes all  
     # of the tags on its own.                      
     #                        
+    # ejabberd claims '1.0' but won't even let you
+    # connect without an xmlns:db attribute. If
+    # it's 1.0 then how does it expect servers
+    # to initiate TLS connections?
+    #
     def establish
         stanza = %(<?xml version='1.0'?>) +
                  %(<stream:stream to='#{@host}' ) +
                  %(from='#{@myhost}' ) +
                  %(xmlns='jabber:server' ) +
                  %(xmlns:stream='http://etherx.jabber.org/streams' ) +
-                 %(version='1.0' ) +
-                 %(xml:lang='en'>)
+                 %(xmlns:db='jabber:server:dialback' ) +
+                 %(version='1.0'>)
 
-        send(stanza)
+        write(stanza)
+    end
+
+    #########
+    protected
+    #########
+
+    def handle_stream(elem)
+        $log.s2s.info "#{@host} -> stream established"
     end
 end
 
