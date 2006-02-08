@@ -19,6 +19,9 @@ $config_file = 'etc/xmppd.conf'
 # List of active connections.
 $connections = []
 
+# Debug mode?
+$debug = false
+
 # Fork into the background?
 $fork = true
 

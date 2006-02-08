@@ -59,11 +59,13 @@ class XMPPd
         opts = OptionParser.new
 
         cd = 'Use specified configuration file.'
+        dd = 'Enable debug mode.'
         nd = 'Do not fork into the background.'
         hd = 'Display usage information.'
         vd = 'Display version information.'
 
         opts.on('-c', '--config FILE', String, cd) { |s| $config_file = s }
+        opts.on('-d', '--debug', dd) { $debug = true }
         opts.on('-n', '--nofork', nd) { $fork = false }
         opts.on('-h', '-?', '--help', hd) { puts opts.to_s; exit! }
         opts.on('-v', '--version', vd) { exit! } # Already displayed.
@@ -104,8 +106,19 @@ class XMPPd
             raise
         end
 
+        if $debug
+            puts 'xmppd: warning: debug mode enabled'
+            puts 'xmppd: warning: all streams will be logged in the clear!'
+        end
+
         # Initialize logging.
         $log = MyLog::MyLogger.instance
+
+        if $debug
+            $log.xmppd.level = 0
+            $log.c2s.level = 0
+            $log.s2s.level = 0
+        end
 
         $log.xmppd.unknown '-!- new logging session started -!-'
         $log.c2s.unknown '-!- new logging session started -!-'

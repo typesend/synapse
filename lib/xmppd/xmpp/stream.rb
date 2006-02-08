@@ -11,6 +11,7 @@
 # Import required Ruby modules.
 #
 require 'io/nonblock'
+require 'logger'
 require 'resolv'
 require 'rexml/document'
 require 'socket'
@@ -18,26 +19,13 @@ require 'socket'
 #
 # Import required xmppd modules.
 #
+require 'xmppd/log'
 require 'xmppd/var'
 
 #
 # The XMPP namespace.
 #
 module XMPP
-
-#
-# The REXML Listener class.
-#
-class StreamListener
-    def tag_start(name, attrs)
-    end
-
-    def tag_end(name)
-    end
-
-    def text(text)
-    end
-end
 
 #
 # Our Stream class. This handles socket I/O, etc.
@@ -51,11 +39,36 @@ class Stream
         @host = host
         @dead = false
         @recvq = []
+        @logger = nil
 
         if type != 'client' && type != 'server'
             raise ArgumentError, "type must be 'client' or 'server'"
         else
             @type = type
+        end
+
+        if $debug
+            Dir.mkdir('var/streams') unless File.exists?('var/streams')
+
+            if @type == 'client'
+                unless File.exists?('var/streams/c2s')
+                    Dir.mkdir('var/streams/c2s')
+                end
+
+                @logger = Logger.new("var/streams/c2s/#{@host}")
+            else
+                unless File.exists?('var/streams/s2s')
+                    Dir.mkdir('var/streams/s2s')
+                end
+
+                @logger = Logger.new("var/streams/s2s/#{@host}")
+            end
+
+            @logger.level = Logger::UNKNOWN
+            @logger.progname = @host
+            @logger.datetime_format = '%b %d %H:%M:%S '
+        else
+            @logger = MyLog::DeadLogger.new
         end
     end
 
@@ -87,11 +100,7 @@ class Stream
             return
         end
 
-        if @type == 'client'
-            $log.c2s.debug "#{@host} -> #{data}"
-        else
-            $log.s2s.debug "#{@host} -> #{data}"
-        end
+        @logger.unknown "-> #{data}"
 
         @recvq << data
 
@@ -288,7 +297,7 @@ class ClientStream < Stream
     end
 
     def write(stanza)
-        $log.c2s.debug "#{@host} <- #{stanza.to_s}"
+        @logger.unknown "<- #{stanza.to_s}"
         super(stanza)
     end
 
@@ -346,7 +355,7 @@ class ServerStream < Stream
     end
 
     def write(stanza)
-        $log.s2s.debug "#{@host} <- #{stanza.to_s}"
+        @logger.unknown "<- #{stanza.to_s}"
         super(stanza)
     end
 
