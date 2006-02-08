@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'idn'
 require 'io/nonblock'
 require 'logger'
 require 'resolv'
@@ -36,7 +37,7 @@ class Stream
 
     def initialize(host, type)
         @socket = nil
-        @host = host
+        @host = IDN::Stringprep.nameprep(host)
         @dead = false
         @recvq = []
         @logger = nil
@@ -326,7 +327,7 @@ class ServerStream < Stream
 
     def initialize(host, myhost)
         super(host, 'server')
-        @myhost = myhost
+        @myhost = IDN::Stringprep.nameprep(myhost)
     end
 
     ######
