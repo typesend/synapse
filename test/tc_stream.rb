@@ -50,7 +50,7 @@ class TestStream < Test::Unit::TestCase
 
     def test_serverstream
         assert_nothing_raised do
-            stream = XMPP::ServerStream.new('malkier.net', 'example.org')
+            stream = XMPP::ServerStreamOut.new('malkier.net', 'example.org')
             stream.connect
             stream.close
         end

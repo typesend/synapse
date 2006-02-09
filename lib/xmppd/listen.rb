@@ -15,8 +15,9 @@ require 'socket'
 #
 # Import required xmppd modules.
 #
-require 'xmppd/xmpp/stream'
+require 'xmppd/auth'
 require 'xmppd/var'
+require 'xmppd/xmpp/stream'
 
 # The Listen namespace.
 module Listen
@@ -49,6 +50,60 @@ def init
             $listeners << nl
         end
     end 
+end
+
+#
+# Handles a new connection.
+#
+def handle_new(listener)
+    # Accept the new connection.
+    ns = listener.accept
+
+    # This is to get around some silly IPv6 stuff.
+    host = ns.peeraddr[3].sub('::ffff:', '')
+
+    if listener.type == 'client'
+        handle_client(ns, host)
+    else
+        handle_server(ns, host)
+    end
+end
+
+#
+# Handles a new connection on a server port.
+#
+def handle_server(socket, host)
+    # Establish a new stream.
+    nss = XMPP::ServerStreamIn.new(host, socket)
+    nss.connect
+
+    # Run through auth.
+    unless Auth::check(host)
+        $log.s2s.warn "#{host} -> unauthorized connection"
+
+        Auth::not_authorized(nss)
+    else
+        $connections << nss
+    end
+end
+
+#
+# Handles a new connection on a client port.
+#
+def handle_client(socket, host)
+    # Establish a new stream.
+    ncs = XMPP::ClientStream.new(host)
+    ncs.socket = socket
+    ncs.connect
+
+    # Run through auth.
+    unless Auth::check(host)
+        $log.c2s.warn "#{host} -> unauthorized connection"
+
+        Auth::not_authorized(ncs)
+    else
+        $connections << ncs
+    end
 end
 
 class Listener < TCPServer

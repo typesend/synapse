@@ -165,11 +165,11 @@ class ConfigParser < Configure::Parser
             case node.name
             when 'host'
                 missing_parameter(node.name, node.line) unless node.data
-                newauth.host = node.data
+                newauth.host << node.data
 
             when 'match'
                 missing_parameter(node.name, node.line) unless node.data
-                newauth.match = /#{node.data}/
+                newauth.match << /#{node.data}/
 
             when 'flags'
                 node.entries.each do |flag|
@@ -200,10 +200,10 @@ class ConfigParser < Configure::Parser
 
             case node.name
             when 'host'
-                newdeny.host = node.data
+                newdeny.host << node.data
 
             when 'match'
-                newdeny.match = /#{node.data}/
+                newdeny.match << /#{node.data}/
 
             else
                 unknown_directive(node.name, node.name)

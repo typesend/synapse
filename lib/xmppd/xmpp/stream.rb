@@ -293,6 +293,9 @@ class ClientStream < Stream
         @socket.nonblock = true
 
         $log.c2s.info "#{@host} -> TCP connection established"
+
+        # We don't send the first stanza, so establish isn't
+        # called until they try to establish a stream first.
     end
 
     def write(stanza)
@@ -323,19 +326,10 @@ class ClientStream < Stream
 
         write(stanza)
     end
-
-    #########
-    protected
-    #########
-
-    def handle_stream(elem)
-        $log.c2s.info "#{@host} -> stream established"
-    end
 end
 
 class ServerStream < Stream
-    attr_accessor :socket
-    attr_reader :myhost
+    attr_reader :host, :myhost, :socket
 
     def initialize(host, myhost = nil)
         super(host, 'server')
@@ -348,34 +342,6 @@ class ServerStream < Stream
 
     def myhost=(value)
         @myhost = IDN::Stringprep.nameprep(value)
-    end
-
-    def connect
-        if @socket
-            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-            @socket.nonblock = true
-
-            $log.c2s.info "#{@host} -> TCP connection established"
-        else
-            $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
-
-            addr, port = resolve
-
-            begin
-                @socket = TCPSocket.new(addr.to_s, port)
-            rescue SocketError => e
-                $log.s2s.info "#{host}:#{port} -> TCP connection failed"
-
-                @dead = true
-            else
-                @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-                @socket.nonblock = true
-
-                $log.s2s.info "#{addr}:#{port} -> TCP connection established"
-
-                establish
-            end
-        end
     end
 
     def write(stanza)
@@ -413,13 +379,74 @@ class ServerStream < Stream
 
         write(stanza)
     end
+end
 
-    #########
-    protected
-    #########
+#
+# This class handles incoming s2s streams.
+#
+class ServerStreamIn < ServerStream
+    attr_reader :host, :socket
 
-    def handle_stream(elem)
-        $log.s2s.info "#{@host} -> stream established"
+    def initialize(host, socket)
+        super(host)
+
+        @host = IDN::Stringprep.nameprep(host)
+        @socket = socket
+    end
+
+    ######
+    public
+    ######
+
+    # This is an incoming socket, so stuff should be connected.
+    def connect
+        @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+        @socket.nonblock = true
+
+        $log.c2s.info "#{@host} -> TCP connection established"
+
+        # We don't send the first stanza, so establish isn't
+        # called until they try to establish a stream first.
+    end
+end
+
+#
+# This class handles outgoing s2s streams.
+#
+class ServerStreamOut < ServerStream
+    attr_reader :host, :myhost, :socket
+
+    def initialize(host, myhost)
+        super(host, myhost)
+
+        @host = IDN::Stringprep.nameprep(host)
+        @myhost = IDN::Stringprep.nameprep(myhost)
+    end
+
+    ######
+    public
+    ######
+
+    # This is an outgoing socket, so we need to connect out.
+    def connect
+        $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
+
+        addr, port = resolve
+
+        begin
+            @socket = TCPSocket.new(addr.to_s, port)
+        rescue SocketError => e
+            $log.s2s.info "#{host}:#{port} -> TCP connection failed"
+
+            @dead = true
+        else
+            @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+            @socket.nonblock = true
+
+            $log.s2s.info "#{addr}:#{port} -> TCP connection established"
+
+            establish
+        end
     end
 end
 

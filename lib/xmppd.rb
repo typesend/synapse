@@ -34,7 +34,6 @@ require 'xmppd/listen'
 require 'xmppd/log'
 require 'xmppd/var'
 require 'xmppd/version'
-require 'xmppd/xmpp/stream'
 
 #
 # The main program class.
@@ -82,7 +81,7 @@ class XMPPd
 
         # Handle signals and such.
         Signal.trap('INT') do
-            $log.xmppd.info 'caught interrupt'
+            puts 'xmppd: caught interrupt'
             exit
         end
 
@@ -153,21 +152,7 @@ class XMPPd
 
             ret[0].each do |s|
                 if s.class == Listen::Listener
-                    if s.type == 'client'
-                        ns = s.accept
-                        nhost = ns.peeraddr[3].sub('::ffff:', '')
-                        ncs = XMPP::ClientStream.new(nhost)
-                        ncs.socket = ns
-                        $connections << ncs
-                        ncs.connect
-                    else
-                        ns = s.accept
-                        nhost = ns.peeraddr[3].sub('::ffff:', '')
-                        nss = XMPP::ServerStream.new(nhost)
-                        nss.socket = ns
-                        $connections << nss
-                        nss.connect
-                    end
+                    Listen::handle_new(s)
                 else
                     c = $connections.find { |tc| tc.socket == s }
                     c.read
