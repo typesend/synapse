@@ -25,6 +25,9 @@ $debug = false
 # Fork into the background?
 $fork = true
 
+# List of listening sockets.
+$listeners = []
+
 # Logger.
 $log = nil
 

@@ -23,11 +23,6 @@ require 'xmppd/var'
 #
 module MyLog
 
-class MyFormatter < Logger::Formatter
-    def f
-    end
-end
-
 #
 # Our logging class.
 #

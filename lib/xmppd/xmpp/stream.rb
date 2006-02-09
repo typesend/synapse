@@ -293,13 +293,16 @@ class ClientStream < Stream
         @socket.nonblock = true
 
         $log.c2s.info "#{@host} -> TCP connection established"
-
-        establish
     end
 
     def write(stanza)
         @logger.unknown "<- #{stanza.to_s}"
         super(stanza)
+    end
+
+    def close
+        $log.c2s.info "#{@host} -> TCP connection broken"
+        super
     end
 
     #######
@@ -320,44 +323,69 @@ class ClientStream < Stream
 
         write(stanza)
     end
+
+    #########
+    protected
+    #########
+
+    def handle_stream(elem)
+        $log.c2s.info "#{@host} -> stream established"
+    end
 end
 
 class ServerStream < Stream
+    attr_accessor :socket
     attr_reader :myhost
 
-    def initialize(host, myhost)
+    def initialize(host, myhost = nil)
         super(host, 'server')
-        @myhost = IDN::Stringprep.nameprep(myhost)
+        @myhost = IDN::Stringprep.nameprep(myhost) if myhost
     end
 
     ######
     public
     ######
 
+    def myhost=(value)
+        @myhost = IDN::Stringprep.nameprep(value)
+    end
+
     def connect
-        $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
-
-        addr, port = resolve
-
-        begin
-            @socket = TCPSocket.new(addr.to_s, port)
-        rescue SocketError => e
-            $log.s2s.info "#{host}:#{port} -> TCP connection failed"
-
-            @dead = true
-        else
+        if @socket
             @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
             @socket.nonblock = true
 
-            $log.s2s.info "#{addr}:#{port} -> TCP connection established"
+            $log.c2s.info "#{@host} -> TCP connection established"
+        else
+            $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
 
-            establish
+            addr, port = resolve
+
+            begin
+                @socket = TCPSocket.new(addr.to_s, port)
+            rescue SocketError => e
+                $log.s2s.info "#{host}:#{port} -> TCP connection failed"
+
+                @dead = true
+            else
+                @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
+                @socket.nonblock = true
+
+                $log.s2s.info "#{addr}:#{port} -> TCP connection established"
+
+                establish
+            end
         end
     end
 
     def write(stanza)
         @logger.unknown "<- #{stanza.to_s}"
         super(stanza)
+    end
+
+    def close
+        $log.s2s.info "#{@host} -> TCP connection broken"
+        super
     end
 
     #######

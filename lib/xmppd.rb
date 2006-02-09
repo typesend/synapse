@@ -30,9 +30,11 @@ end
 # Import required xmppd modules.
 #
 require 'xmppd/configure'
+require 'xmppd/listen'
 require 'xmppd/log'
 require 'xmppd/var'
 require 'xmppd/version'
+require 'xmppd/xmpp/stream'
 
 #
 # The main program class.
@@ -124,11 +126,8 @@ class XMPPd
         $log.c2s.unknown '-!- new logging session started -!-'
         $log.s2s.unknown '-!- new logging session started -!-'
 
-        # XXX - this is testing
-        require 'xmppd/xmpp/stream'
-        s = XMPP::ServerStream.new('malkier.net', 'example.org')
-        $connections << s
-        s.connect
+        # Set up listening ports.
+        Listen::init
     end
 
     def ioloop
@@ -139,12 +138,13 @@ class XMPPd
             # Kill off any dead connections.
             $connections.delete_if { |c| c.dead? }
 
-            if $connections.empty?
+            if $connections.empty? && $listeners.empty?
                 sleep(1)
                 next
             end
 
             readfds = $connections.collect { |c| c.socket }
+            readfds += $listeners
 
             ret = select(readfds, [], [], 1)
 
@@ -152,8 +152,26 @@ class XMPPd
             next if ret[0].empty?
 
             ret[0].each do |s|
-                c = $connections.find { |tc| tc.socket == s }
-                c.read
+                if s.class == Listen::Listener
+                    if s.type == 'client'
+                        ns = s.accept
+                        nhost = ns.peeraddr[3].sub('::ffff:', '')
+                        ncs = XMPP::ClientStream.new(nhost)
+                        ncs.socket = ns
+                        $connections << ncs
+                        ncs.connect
+                    else
+                        ns = s.accept
+                        nhost = ns.peeraddr[3].sub('::ffff:', '')
+                        nss = XMPP::ServerStream.new(nhost)
+                        nss.socket = ns
+                        $connections << nss
+                        nss.connect
+                    end
+                else
+                    c = $connections.find { |tc| tc.socket == s }
+                    c.read
+                end
             end
         end
 
