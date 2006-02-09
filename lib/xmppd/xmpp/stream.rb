@@ -22,6 +22,7 @@ require 'socket'
 #
 require 'xmppd/log'
 require 'xmppd/var'
+require 'xmppd/xmpp/client'
 
 #
 # The XMPP namespace.
@@ -33,19 +34,24 @@ module XMPP
 #
 class Stream
     attr_accessor :socket
-    attr_reader :host, :type, :realhost
+    attr_reader :host, :myhost, :type, :realhost, :established
 
-    def initialize(host, type)
+    def initialize(host, type, myhost = nil)
         @socket = nil
         @host = IDN::Stringprep.nameprep(host)
         @dead = false
         @recvq = []
         @logger = nil
+        @established = false
 
         if type != 'client' && type != 'server'
             raise ArgumentError, "type must be 'client' or 'server'"
         else
             @type = type
+        end
+
+        unless myhost
+            @myhost = $config.hosts.first
         end
 
         if $debug
@@ -76,6 +82,10 @@ class Stream
     ######
     public
     ######
+
+    def myhost=(value)      
+        @myhost = IDN::Stringprep.nameprep(value)
+    end
 
     def dead?
         @dead
@@ -108,6 +118,21 @@ class Stream
         parse
     end
 
+    def error(defined_condition)
+        xml = REXML::Document.new
+        err = REXML::Element.new('stream:error')
+        na = REXML::Element.new(defined_condition)
+        na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
+        err << na
+        xml << err
+
+        establish unless @established
+
+        write(xml)
+        close     
+    end
+
+
     #######
     private
     #######
@@ -125,8 +150,7 @@ class Stream
             begin
                 xml = REXML::Document.new(stanza)
             rescue REXML::ParseException
-                # XXX - not-well-formed error
-                close
+                error('xml-not-well-formed')
                 return
             end
 
@@ -143,8 +167,7 @@ class Stream
                                        "'#{elem.name}' (no '#{methname}')"
                     end
 
-                    # XXX - stream error
-                    close
+                    error('xml-not-well-formed')
                     return
                 end
 
@@ -278,8 +301,8 @@ class Stream
 end
 
 class ClientStream < Stream
-    def initialize(host)
-        super(host, 'client')
+    def initialize(host, myhost = nil)
+        super(host, 'client', myhost)
     end
 
     ######
@@ -308,6 +331,11 @@ class ClientStream < Stream
         super
     end
 
+    def error(defined_condition)
+        $log.c2s.error "#{@host} -> #{defined_condition}"
+        super(defined_condition)
+    end
+
     #######
     private
     #######
@@ -319,30 +347,32 @@ class ClientStream < Stream
     #
     def establish
         stanza = %(<?xml version='1.0'?>) +
-                 %(<stream:stream to='#{@host}' ) +
+                 %(<stream:stream' ) +
                  %(xmlns='jabber:client' ) +
                  %(xmlns:stream='http://etherx.jabber.org/streams' ) +
+                 %(from='#{@myhost}' )+
                  %(version='1.0'>)
 
         write(stanza)
+
+        $log.c2s.info "#{@host} -> stream established"
+
+        @established = true
     end
+
+    include XMPP::Client
 end
 
 class ServerStream < Stream
     attr_reader :host, :myhost, :socket
 
     def initialize(host, myhost = nil)
-        super(host, 'server')
-        @myhost = IDN::Stringprep.nameprep(myhost) if myhost
+        super(host, 'server', myhost)
     end
 
     ######
     public
     ######
-
-    def myhost=(value)
-        @myhost = IDN::Stringprep.nameprep(value)
-    end
 
     def write(stanza)
         @logger.unknown "<- #{stanza.to_s}"
@@ -352,6 +382,11 @@ class ServerStream < Stream
     def close
         $log.s2s.info "#{@host} -> TCP connection broken"
         super
+    end
+
+    def error(defined_condition)
+        $log.s2s.error "#{@host} -> #{defined_condition}"
+        super(defined_condition)
     end
 
     #######
@@ -378,6 +413,10 @@ class ServerStream < Stream
                  %(version='1.0'>)
 
         write(stanza)
+
+        $log.s2s.info "#{@host} -> stream established"
+
+        @established = true
     end
 end
 

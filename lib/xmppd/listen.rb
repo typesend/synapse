@@ -81,7 +81,7 @@ def handle_server(socket, host)
     unless Auth::check(host)
         $log.s2s.warn "#{host} -> unauthorized connection"
 
-        Auth::not_authorized(nss)
+        nss.error('not-authorized')
     else
         $connections << nss
     end
@@ -100,7 +100,7 @@ def handle_client(socket, host)
     unless Auth::check(host)
         $log.c2s.warn "#{host} -> unauthorized connection"
 
-        Auth::not_authorized(ncs)
+        ncs.error('not-authorized')
     else
         $connections << ncs
     end

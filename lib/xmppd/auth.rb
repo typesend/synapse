@@ -68,16 +68,4 @@ def check_deny(host)
     return false
 end
 
-def not_authorized(stream)
-    xml = REXML::Document.new
-    error = REXML::Element.new('stream:error')
-    na = REXML::Element.new('not-authorized')
-    na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
-    error << na
-    xml << error
-
-    stream.write(xml) 
-    stream.close
-end
-
 end # module Auth
