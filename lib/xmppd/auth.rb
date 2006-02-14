@@ -27,13 +27,14 @@ extend self
 #
 def check(host)
     # First check to see whether they match any auths.
-    return false unless check_auth(host)
+    auth = check_auth(host)
+    return false unless auth
 
     # Now see if they match a deny.
     return false if check_deny(host)
 
     # If we get here then we passed.
-    return true
+    return auth
 end
 
 def check_auth(host)
@@ -42,11 +43,11 @@ def check_auth(host)
     $config.auth.each do |auth|
         m = auth.host.find { |h| h == host }
 
-        return true if m
+        return auth if m
 
         m = auth.match.find { |a| host =~ a }
 
-        return true if m
+        return auth if m
     end
 
     return false

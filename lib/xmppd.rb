@@ -16,7 +16,7 @@ require 'singleton'
 # Check for libidn.
 begin
     require 'idn'
-rescue LoadErrror
+rescue LoadError
     puts 'xmppd: there was an error loading the IDN library'
     puts "xmppd: chances are you just don't have it"
     puts 'xmppd: gem install --remote idn'

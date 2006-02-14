@@ -78,11 +78,13 @@ def handle_server(socket, host)
     nss.connect
 
     # Run through auth.
-    unless Auth::check(host)
+    auth = Auth::check(host)
+    unless auth
         $log.s2s.warn "#{host} -> unauthorized connection"
 
         nss.error('not-authorized')
     else
+        nss.auth = auth
         $connections << nss
     end
 end
@@ -97,11 +99,13 @@ def handle_client(socket, host)
     ncs.connect
 
     # Run through auth.
-    unless Auth::check(host)
+    auth = Auth::check(host)
+    unless auth
         $log.c2s.warn "#{host} -> unauthorized connection"
 
         ncs.error('not-authorized')
     else
+        ncs.auth = auth
         $connections << ncs
     end
 end

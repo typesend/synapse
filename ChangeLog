@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------
+r25 | rakaur | 2006-02-09 13:09:31 -0600 (Thu, 09 Feb 2006) | 6 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/auth.rb
+   M /trunk/lib/xmppd/listen.rb
+   A /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   A /trunk/lib/xmppd/xmpp/tls.rb
+
+Fix the @myhost stuff.
+Add handler for initial client stream stanza.
+Add xmpp/client.rb mixin for XMPP::ClientStream.
+Add XMPP::Stream#error.
+Add provisional TLS stuff.
+
+------------------------------------------------------------------------
 r24 | rakaur | 2006-02-09 11:19:21 -0600 (Thu, 09 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog

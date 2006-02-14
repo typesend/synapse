@@ -13,6 +13,7 @@
 require 'idn'
 require 'io/nonblock'
 require 'logger'
+require 'openssl'
 require 'resolv'
 require 'rexml/document'
 require 'socket'
@@ -33,8 +34,8 @@ module XMPP
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    attr_accessor :socket
-    attr_reader :host, :myhost, :type, :realhost, :established
+    attr_accessor :socket, :auth
+    attr_reader :host, :myhost, :type, :realhost, :established, :tls
 
     def initialize(host, type, myhost = nil)
         @socket = nil
@@ -43,6 +44,8 @@ class Stream
         @recvq = []
         @logger = nil
         @established = false
+        @auth = nil
+        @tls = false
 
         if type != 'client' && type != 'server'
             raise ArgumentError, "type must be 'client' or 'server'"
@@ -101,8 +104,16 @@ class Stream
 
     def read
         begin
-            data = @socket.recv(8192)
+            if @tls
+                data = @socket.readpartial(8192)
+            else
+                data = @socket.recv(8192)
+            end
         rescue Errno::EAGAIN
+            return
+        rescue Exception => e
+            @logger.unknown "-> read error: #{e}"
+            close
             return
         end
 
@@ -139,9 +150,23 @@ class Stream
 
     def write(stanza)
         begin
-            @socket.send(stanza.to_s, 0)
+            if @tls
+                @socket.write(stanza.to_s)
+            else
+                @socket.send(stanza.to_s, 0)
+            end
         rescue Errno::EAGAIN
             retry
+        rescue Exception => e
+            @logger.unknown "<- write error: #{e}"
+
+            # Can't use `close` here because it will just
+            # call `write` for </stream:stream> which will just
+            # call `close` until we get a stack overflow.
+            @socket.close
+            @dead = true
+
+            return
         end
     end
 
@@ -301,8 +326,11 @@ class Stream
 end
 
 class ClientStream < Stream
+    attr_reader :id
+
     def initialize(host, myhost = nil)
         super(host, 'client', myhost)
+        @id = rand(rand(1000000))
     end
 
     ######
@@ -347,10 +375,11 @@ class ClientStream < Stream
     #
     def establish
         stanza = %(<?xml version='1.0'?>) +
-                 %(<stream:stream' ) +
+                 %(<stream:stream ) +
                  %(xmlns='jabber:client' ) +
                  %(xmlns:stream='http://etherx.jabber.org/streams' ) +
-                 %(from='#{@myhost}' )+
+                 %(from='#{@myhost}' ) +
+                 %(id='#{@id}' ) +
                  %(version='1.0'>)
 
         write(stanza)

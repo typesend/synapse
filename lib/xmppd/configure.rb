@@ -119,18 +119,13 @@ class ConfigParser < Configure::Parser
         end
 
         unless $config.listen.certfile
-            puts "xmppd: no certfile set, starttls will not be implemented"
-        else
-            begin
-                f = File.open($config.listen.certfile)
-            rescue Errno::ENOENT
-                puts "xmppd: specified certfile does not exist, " +
-                     "starttls will not be implemented"
+            puts 'xmppd: no certfile set'
+            exit
+        end
 
-                $config.listen.certfile = false
-            else
-                f.close
-            end
+        unless File.exists?($config.listen.certfile)
+            puts 'xmppd: specified certfile does not exist'
+            exit
         end
     end
 
@@ -240,7 +235,7 @@ class ConfigParser < Configure::Parser
     end
 
     def handle_die(entry)
-        puts "xmppd: you didn't read the configuration file."
+        puts "xmppd: you didn't read the configuration file"
         exit
     end
 end
