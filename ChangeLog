@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r27 | rakaur | 2006-02-13 21:56:28 -0600 (Mon, 13 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/lib/xmppd/xmpp/features.rb
+
+Forgot to add this file in [26].
+
+------------------------------------------------------------------------
 r26 | rakaur | 2006-02-13 21:50:14 -0600 (Mon, 13 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -42,8 +42,14 @@ class XMPPd
     include Singleton
 
     def initialize
-        if RUBY_VERSION.to_f < 1.8
-            puts 'xmppd: requires at least ruby 1.8'
+        if RUBY_VERSION.to_f == 1.8
+            if RUBY_VERSION.split('.')[2].to_i < 3
+                puts 'xmppd: requires at least ruby 1.8.3'
+                puts 'xmppd: you have: %s' % `ruby -v`
+                exit
+            end
+        elsif RUBY_VERSION.to_f < 1.8
+            puts 'xmppd: requires at least ruby 1.8.3'
             puts 'xmppd: you have: %s' % `ruby -v`
             exit
         end
