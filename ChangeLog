@@ -1,4 +1,20 @@
 ------------------------------------------------------------------------
+r26 | rakaur | 2006-02-13 21:50:14 -0600 (Mon, 13 Feb 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/auth.rb
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/listen.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   D /trunk/lib/xmppd/xmpp/tls.rb
+   M /trunk/lib/xmppd.rb
+
+After much, much trouble, client TLS now works, closing #2.
+Fixed some minor stuff.
+
+------------------------------------------------------------------------
 r25 | rakaur | 2006-02-09 13:09:31 -0600 (Thu, 09 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog
