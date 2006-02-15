@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r28 | rakaur | 2006-02-14 10:28:53 -0600 (Tue, 14 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd.rb
+
+Updated Ruby version requirements.
+
+------------------------------------------------------------------------
 r27 | rakaur | 2006-02-13 21:56:28 -0600 (Mon, 13 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

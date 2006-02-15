@@ -35,22 +35,33 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :type, :realhost, :established, :tls
+    attr_reader :host, :myhost, :type, :state
+
+    TYPE_NONE   = 0x00000000
+    TYPE_CLIENT = 0x00000001
+    TYPE_SERVER = 0x00000002
+
+    STATE_NONE  = 0x00000000
+    STATE_DEAD  = 0x00000001
+    STATE_PLAIN = 0x00000002
+    STATE_ESTAB = 0x00000004
+    STATE_TLS   = 0x00000008
+    STATE_SASL  = 0x00000010
 
     def initialize(host, type, myhost = nil)
         @socket = nil
         @host = IDN::Stringprep.nameprep(host)
-        @dead = false
         @recvq = []
         @logger = nil
-        @established = false
         @auth = nil
-        @tls = false
+        @state = STATE_NONE
 
-        if type != 'client' && type != 'server'
-            raise ArgumentError, "type must be 'client' or 'server'"
+        if type == 'server'
+            @type = TYPE_SERVER
+        elsif type == 'client'
+            @type = TYPE_CLIENT
         else
-            @type = type
+            raise ArgumentError, "type must be 'client' or 'server'"
         end
 
         unless myhost
@@ -60,7 +71,7 @@ class Stream
         if $debug
             Dir.mkdir('var/streams') unless File.exists?('var/streams')
 
-            if @type == 'client'
+            if @type == TYPE_CLIENT
                 unless File.exists?('var/streams/c2s')
                     Dir.mkdir('var/streams/c2s')
                 end
@@ -86,12 +97,16 @@ class Stream
     public
     ######
 
-    def myhost=(value)      
+    def myhost=(value)
         @myhost = IDN::Stringprep.nameprep(value)
     end
 
     def dead?
-        @dead
+        if STATE_DEAD & @state != 0
+            true
+        else
+            false
+        end
     end
 
     def close
@@ -99,12 +114,12 @@ class Stream
         write '</stream:stream>'
 
         @socket.close
-        @dead = true
+        @state |= STATE_DEAD
     end
 
     def read
         begin
-            if @tls
+            if STATE_TLS & @state != 0
                 data = @socket.readpartial(8192)
             else
                 data = @socket.recv(8192)
@@ -137,7 +152,7 @@ class Stream
         err << na
         xml << err
 
-        establish unless @established
+        establish unless STATE_ESTAB & @state != 0
 
         write(xml)
         close     
@@ -150,7 +165,7 @@ class Stream
 
     def write(stanza)
         begin
-            if @tls
+            if STATE_TLS & @state != 0
                 @socket.write(stanza.to_s)
             else
                 @socket.send(stanza.to_s, 0)
@@ -164,7 +179,7 @@ class Stream
             # call `write` for </stream:stream> which will just
             # call `close` until we get a stack overflow.
             @socket.close
-            @dead = true
+            @state |= STATE_DEAD
 
             return
         end
@@ -174,9 +189,14 @@ class Stream
         @recvq.each do |stanza|
             begin
                 xml = REXML::Document.new(stanza)
-            rescue REXML::ParseException
-                error('xml-not-well-formed')
-                return
+            rescue REXML::ParseException => e
+                if e.message =~ /stream:stream/ # Closing stream tag.
+                    close
+                    return
+                else
+                    error('xml-not-well-formed')
+                    return
+                end
             end
 
             xml.elements.each do |elem|
@@ -184,7 +204,7 @@ class Stream
                 methname.sub!(':', '_')
 
                 unless respond_to? methname
-                    if @type == 'client'
+                    if @type == TYPE_CLIENT
                         $log.c2s.error "Unknown stanza from #{@host}: " +
                                        "'#{elem.name}' (no '#{methname}')"
                     else
@@ -208,7 +228,7 @@ class Stream
     # On failure, falls back to regular DNS.
     #
     def resolve
-        if @type == 'client'
+        if @type == TYPE_CLIENT
             rrname = '_xmpp-client._tcp.' + @host
         else
             rrname = '_xmpp-server._tcp.' + @host
@@ -306,10 +326,10 @@ class Stream
                 end
             end
         rescue Resolv::ResolvError
-            if @type == 'client'
-                weighted_recs << [name, CLIENT_PORT]
+            if @type == TYPE_CLIENT
+                weighted_recs << [name, 5222]
             else
-                weighted_recs << [name, SERVER_PORT]
+                weighted_recs << [name, 5269]
             end
         end
 
@@ -384,9 +404,13 @@ class ClientStream < Stream
 
         write(stanza)
 
-        $log.c2s.info "#{@host} -> stream established"
+        if STATE_TLS & @state != 0
+            $log.c2s.info "#{@host} -> TLS stream established"
+        else
+            $log.c2s.info "#{@host} -> stream established"
+        end
 
-        @established = true
+        @state |= STATE_ESTAB
     end
 
     include XMPP::Client
@@ -445,7 +469,7 @@ class ServerStream < Stream
 
         $log.s2s.info "#{@host} -> stream established"
 
-        @established = true
+        @state |= STATE_ESTAB
     end
 end
 
@@ -506,7 +530,7 @@ class ServerStreamOut < ServerStream
         rescue SocketError => e
             $log.s2s.info "#{host}:#{port} -> TCP connection failed"
 
-            @dead = true
+            @state |= STATE_DEAD
         else
             @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
             @socket.nonblock = true

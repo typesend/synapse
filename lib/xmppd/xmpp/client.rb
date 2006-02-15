@@ -19,6 +19,7 @@ require 'rexml/document'
 #
 require 'xmppd/var'
 require 'xmppd/xmpp/features'
+require 'xmppd/xmpp/stream'
 
 #
 # The XMPP namespace.
@@ -74,7 +75,7 @@ end
 
 def handle_starttls(elem)
     # First verify that we have an open stream.
-    unless @established
+    unless Stream::STATE_ESTAB & @state != 0
         error('invalid-namespace')
         close
     end
@@ -114,8 +115,8 @@ def handle_starttls(elem)
     end
            
     @socket = tlssock
-    @tls = true
-    @established = false
+    @state |= Stream::STATE_TLS
+    @state &= ~Stream::STATE_ESTAB
 
     @logger.unknown "-> TLS established"
 end
