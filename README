@@ -37,6 +37,19 @@ Special thanks to:
      endless questions on the RFCs that you so kindly published,
      and of course for all the hard work you put into XMPP.
 
+== References
+
+* [XMPP-CORE ] -- RFC 3920 -- XMPP: Core
+* [XMPP-IM]    -- RFC 3921 -- XMPP: Instant Messaging and Presence
+* [BASE64]     -- RFC 3548 -- The Base16, Base32, and Base64 Data Encodings
+* [DIGEST-MD5] -- RFC 2831 -- Using Digest Authentication as a SASL Mechanism
+* [STRINGPREP] -- RFC 3454 -- Preparation of Internationalized Strings
+* [IDN]        -- RFC 3491 -- Stringprep Profile for Domain Names
+* [SASL]       -- RFC 2222 -- Simple Authentication and Security Layer
+* [SRV]        -- RFC 2782 -- DNS RR SRV
+* [TLS]        -- RFC 2246 -- Transport Layer Security
+
+
 == Presentation
 
 +xmppd+ is a small, lightweight, strictly RFC-compliant Jabber/XMPP server.

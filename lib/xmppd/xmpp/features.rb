@@ -70,9 +70,9 @@ def sasl
     mech_1.text = 'DIGEST-MD5'
     mechs << mech_1     
                             
-    mech_2 = REXML::Element.new('mechanism')
-    mech_2.text = 'PLAIN'
-    mechs << mech_2     
+    #mech_2 = REXML::Element.new('mechanism')
+    #mech_2.text = 'PLAIN'
+    #mechs << mech_2     
 
     return mechs
 end

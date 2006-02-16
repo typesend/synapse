@@ -35,7 +35,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :type, :state
+    attr_reader :host, :myhost, :type, :state, :nonce
 
     TYPE_NONE   = 0x00000000
     TYPE_CLIENT = 0x00000001
@@ -55,6 +55,7 @@ class Stream
         @logger = nil
         @auth = nil
         @state = STATE_NONE
+        @nonce = nil
 
         if type == 'server'
             @type = TYPE_SERVER
@@ -404,8 +405,12 @@ class ClientStream < Stream
 
         write(stanza)
 
-        if STATE_TLS & @state != 0
+        if STATE_TLS & @state != 0 && STATE_SASL & @state != 0
+            $log.c2s.info "#{host} -> TLS/SASL stream established"
+        elsif STATE_TLS & @state != 0
             $log.c2s.info "#{@host} -> TLS stream established"
+        elsif STATE_SASL & @state != 0
+            $log.c2s.info "#{@host} -> SASL stream established"
         else
             $log.c2s.info "#{@host} -> stream established"
         end

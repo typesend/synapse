@@ -1,4 +1,19 @@
 ------------------------------------------------------------------------
+r29 | rakaur | 2006-02-14 23:37:04 -0600 (Tue, 14 Feb 2006) | 6 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Fixed a problem in XMPP::Stream#resolve.
+Rearranged auth/deny in example.conf.
+Cleaned up state machine in XMPP::Stream classes.
+Added handling for closing stream tag.
+Fixed up feature listing.
+
+------------------------------------------------------------------------
 r28 | rakaur | 2006-02-14 10:28:53 -0600 (Tue, 14 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
