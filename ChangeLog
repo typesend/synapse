@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r30 | rakaur | 2006-02-15 23:00:55 -0600 (Wed, 15 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+SASL works. I'm going to clean it up, but I'm commiting it now in case I break something.
+
+------------------------------------------------------------------------
 r29 | rakaur | 2006-02-14 23:37:04 -0600 (Tue, 14 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog

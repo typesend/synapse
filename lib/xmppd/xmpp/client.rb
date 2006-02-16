@@ -10,10 +10,7 @@
 #
 # Import required Ruby modules.
 #
-require 'base64'
-require 'digest/md5'
 require 'idn'
-require 'openssl'
 require 'rexml/document'
 
 #
@@ -21,7 +18,9 @@ require 'rexml/document'
 #
 require 'xmppd/var'
 require 'xmppd/xmpp/features'
+require 'xmppd/xmpp/sasl'
 require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp/tls'
 
 #
 # The XMPP namespace.
@@ -33,6 +32,8 @@ module XMPP
 # This is meant to be a mixin to a Stream.
 #
 module Client
+include XMPP::SASL
+include XMPP::TLS
 
 def handle_stream(elem)
     # First verify namespaces.
@@ -96,31 +97,7 @@ def handle_starttls(elem)
 
     write xml
 
-    # Ready the SSL stuff.
-    cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
-    pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    ctx.cert = cert
-    ctx.key = pkey
-
-    $-w = false # Turn warnings off because we get a meaningless SSL warning.
-    tlssock = OpenSSL::SSL::SSLSocket.new(@socket, ctx)
-    $-w = true
-
-    begin
-        tlssock.accept
-    rescue Exception => e
-        @logger.unknown "-> TLS error: #{e}"
-        close
-        return
-    end
-           
-    @socket = tlssock
-    @state |= Stream::STATE_TLS
-    @state &= ~Stream::STATE_ESTAB
-
-    @logger.unknown "-> TLS established"
+    starttls
 end
 
 def handle_auth(elem)
@@ -150,7 +127,7 @@ def handle_auth(elem)
         return
     end
 
-    @nonce = rand(rand(1000000)).to_s
+    @nonce = Stream.genid
     chal = 'nonce="%s",qop="auth",charset=utf-8,algorithm=md5-sess' % @nonce
     chal = Base64.encode64(chal)
     chal.gsub!("\n", '')
@@ -265,52 +242,8 @@ def handle_response(elem)
         return
     end
 
-    # Compute response and see if it matches.
-    # Sorry, but there's no pretty way to do this.
-    a1_h = "%s:%s:%s" % [response['username'], response['realm'], 'VeMasa5ew']
-    a1_h = h(a1_h)
-
-    a1 = "%s:%s:%s" % [a1_h, response['nonce'], response['cnonce']]
-    a2 = "AUTHENTICATE:%s" % response['digest-uri']
-
-    myresp = "%s:%s:%s:%s:auth:%s" % [hh(a1), response['nonce'],
-                                      response['nc'], response['cnonce'],
-                                      hh(a2)]
-    myresp = hh(myresp)
-
-    # Are they authorized?
-    unless myresp == response['response']
-        xml = REXML::Document.new
-        fai = REXML::Element.new('failure')
-        fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-        fai << REXML::Element.new('not-authorized')
-        xml << fai
-
-        write xml
-
-        close
-        return
-    end
-
-    # Now do it all over again.
-    a2 = ":%s" % response['digest-uri']
-    rspauth = "%s:%s:%s:%s:auth:%s" % [hh(a1), response['nonce'],
-                                        response['nc'], response['cnonce'],
-                                        hh(a2)]
-
-    rspauth = "rspauth=%s" % hh(rspauth)
-    rspauth = Base64.encode64(rspauth)
-    rspauth.gsub!("\n", '')
-
-    xml = REXML::Document.new
-    chal = REXML::Element.new('challenge')
-    chal.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-    chal.text = rspauth
-    xml << chal
-
-    @state |= Stream::STATE_SASL
-
-    write xml
+    # Start SASL.
+    startsasl(response)
 end
 
 def h(s); Digest::MD5.digest(s); end

@@ -33,22 +33,25 @@ def list(stream)
     xml = REXML::Document.new
     feat = REXML::Element.new('stream:features')
 
-    unless Stream::STATE_TLS & stream.state != 0
+    # They're not in TLS.
+    if Stream::STATE_TLS & stream.state == 0
         # They're not required to have TLS, so advertise SASL.
         feat << sasl if stream.auth.plain && !stream.auth.legacy_auth
 
         # They're required to have TLS, but they're not in it,
         # so advertise that.
         feat << starttls if !stream.auth.plain
-    else
-        # They're in TLS, and are required to use SASL,
-        # so advertise that.
-        feat << sasl if !stream.auth.legacy_auth
-    end
 
-    # They're not required to do TLS, or SASL, so they don't
-    # need a feature list.
-    return unless feat.has_elements?
+    # They're in TLS, but not SASL.
+    elsif Stream::STATE_SASL & stream.state == 0
+        feat << sasl if !stream.auth.legacy_auth 
+
+    # They're in both.
+    else
+        # XXX - until we have resource binding.
+        stream.error('internal-server-error')
+        return
+    end
 
     xml << feat
     stream.write(xml)

@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'digest/md5'
 require 'idn'
 require 'io/nonblock'
 require 'logger'
@@ -97,6 +98,30 @@ class Stream
     ######
     public
     ######
+
+    def Stream.genid
+        @@id_changed = Time.now.to_i
+        @@id_counter = 0
+
+        time = Time.now.to_i
+        tid = Thread.current.object_id
+        @@id_counter += 1
+
+        nid = (time << 48) | (tid << 16) | @@id_counter
+        id = ''
+
+        while nid > 0
+            id += (nid & 0xFF).chr
+            nid >>= 8
+        end
+
+        unless @@id_changed == time
+            @@id_changed = time
+            @@id_counter = 0
+        end
+
+        Digest::MD5.hexdigest(id)
+    end
 
     def myhost=(value)
         @myhost = IDN::Stringprep.nameprep(value)
@@ -351,7 +376,7 @@ class ClientStream < Stream
 
     def initialize(host, myhost = nil)
         super(host, 'client', myhost)
-        @id = rand(rand(1000000))
+        @id = Stream.genid
     end
 
     ######
