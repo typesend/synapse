@@ -30,15 +30,26 @@ module XMPP
 #
 module SASL
 
+def h(s)
+    Digest::MD5.digest(s)
+end
+
+def hh(s)
+    Digest::MD5.hexdigest(s)
+end
+
 def startsasl(response)
     # XXX - do a lookup on the username to grab the password.
+    #       natrually i need to write a database about now. sigh.
+    #       password needs to be stored as:
+    #           h({ "username", ":", "realm", ":", "password" })
+    #
+    #       and then for non-sasl we'll just have to pick out
+    #       the realm and check against that.
     #a1_h = password lookup
 
     # Compute response and see if it matches.
     # Sorry, but there's no pretty way to do this.
-    a1_h = "%s:%s:%s" % [response['username'], response['realm'], 'VeMasa5ew']
-    a1_h = h(a1_h)
-
     a1 = "%s:%s:%s" % [a1_h, response['nonce'], response['cnonce']]
     a2 = "AUTHENTICATE:%s" % response['digest-uri']
 
