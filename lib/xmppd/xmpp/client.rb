@@ -36,6 +36,12 @@ include XMPP::SASL
 include XMPP::TLS
 
 def handle_stream(elem)
+    # Is the stream open?
+    if Steam::STATE_ESTAB & @state != 0
+        error('invalid-namespace')
+        return
+    end
+
     # First verify namespaces.
     unless elem.attributes['stream'] == 'http://etherx.jabber.org/streams'
         error('invalid-namespace')
@@ -168,6 +174,8 @@ def handle_response(elem)
             xml << suc
 
             write xml
+
+            @state &= ~Stream::STATE_ESTAB
 
             @logger.unknown '-> SASL established'
 

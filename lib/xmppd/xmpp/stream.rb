@@ -376,7 +376,6 @@ class ClientStream < Stream
 
     def initialize(host, myhost = nil)
         super(host, 'client', myhost)
-        @id = Stream.genid
     end
 
     ######
@@ -420,6 +419,8 @@ class ClientStream < Stream
     # of the tags on its own.
     #
     def establish
+        @id = Stream.genid
+
         stanza = %(<?xml version='1.0'?>) +
                  %(<stream:stream ) +
                  %(xmlns='jabber:client' ) +
