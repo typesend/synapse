@@ -22,8 +22,8 @@ require 'xmppd/var'
 class TestTimer < Test::Unit::TestCase
     @ts = nil
     @tn = nil
-    # This just sets up logging for the test.
 
+    # This just sets up logging for the test.
     def test_1_sulog                         
         assert_nothing_raised do
             $config = Configure::Configuration.new

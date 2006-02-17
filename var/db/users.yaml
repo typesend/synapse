@@ -1,2 +1,9 @@
---- {}
-
+--- 
+scorpwanna@malkier.net: !ruby/object:DB::User 
+  domain: malkier.net
+  node: scorpwanna
+  password: "&\x12\r\xEAnA\x84\xBBU]\x04\xE4\xD1t\xD32"
+rakaur@malkier.net: !ruby/object:DB::User 
+  domain: malkier.net
+  node: rakaur
+  password: "\xF1\xA4\a\xA0g\x8DL\x03\x849\xF6CUA\xE0\x8C"

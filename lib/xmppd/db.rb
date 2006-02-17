@@ -52,6 +52,8 @@ class User
         raise DBError, "#{jid} already exists" if @@users[jid]
 
         @@users[jid] = self
+
+        $log.xmppd.info 'new user: %s' % jid
     end
 
     ######
@@ -68,7 +70,9 @@ class User
     def User.load
         begin
             File.open('var/db/users.yaml') do |f|
-                @@users ||= YAML.load(f)
+                @@users = YAML.load(f)
+
+                @@users ||= {}
             end
         rescue Exception => e
             puts "xmppd: failed to load user database: #{e}"
@@ -94,6 +98,24 @@ class User
         end
     end
 
+    def User.auth(jid, password, plain = false)
+        unless @@users[jid]
+            return false
+        end
+
+        if plain
+            node, domain = jid.split('@')
+            check = "%s:%s:%s" % [node, domain, password]
+            check = Digest::MD5.digest(check)
+
+            return true if check == @@users[jid].password
+        else
+            return true if password == @@users[jid].password
+        end
+
+        return false
+    end
+
     def User.delete(jid)
         raise DBError, "#{jid} does not exist" unless @@users[jid]
 
@@ -102,6 +124,13 @@ class User
 
     def jid
         @node + '@' + @domain
+    end
+
+    def password=(newpass)
+        newpass = "%s:%s:%s" % [@node, @domain, newpass]
+        @password = Digest::MD5.digest(newpass)
+
+        $log.xmppd.info 'password change for %s' % jid
     end
 end
 

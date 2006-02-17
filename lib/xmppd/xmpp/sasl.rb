@@ -17,6 +17,8 @@ require 'rexml/document'
 #
 # Import required xmppd modules.
 #
+require 'xmppd/db'
+
 require 'xmppd/xmpp/stream'
 
 #
@@ -39,14 +41,8 @@ def hh(s)
 end
 
 def startsasl(response)
-    # XXX - do a lookup on the username to grab the password.
-    #       natrually i need to write a database about now. sigh.
-    #       password needs to be stored as:
-    #           h({ "username", ":", "realm", ":", "password" })
-    #
-    #       and then for non-sasl we'll just have to pick out
-    #       the realm and check against that.
-    #a1_h = password lookup
+    jid = response['username'] + '@' + response['realm']
+    a1_h = DB::User.users[jid].password
 
     # Compute response and see if it matches.
     # Sorry, but there's no pretty way to do this.
