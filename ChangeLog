@@ -1,4 +1,22 @@
 ------------------------------------------------------------------------
+r34 | rakaur | 2006-02-16 18:51:59 -0600 (Thu, 16 Feb 2006) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/lib/xmppd/db.rb
+   A /trunk/lib/xmppd/timer.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd.rb
+   A /trunk/test/tc_db.rb
+   A /trunk/test/tc_timer.rb
+   M /trunk/test/ts_xmppd.rb
+   A /trunk/var/db
+   A /trunk/var/db/users.yaml
+
+Added unit testing for both.
+Added clever little timers, closing #36.
+Added basic DB stuff using YAML. Closes #9.
+
+------------------------------------------------------------------------
 r33 | rakaur | 2006-02-16 12:35:55 -0600 (Thu, 16 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

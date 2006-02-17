@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'digest/md5'
 require 'test/unit'
 
 #
@@ -22,22 +23,25 @@ class TestDB < Test::Unit::TestCase
         newuser = nil
 
         assert_nothing_raised do
-            newuser = DB::User.new('unit', 'example.org')
+            newuser = DB::User.new('unit', 'example.org', 'secret')
         end
 
         assert_equal('unit@example.org', newuser.jid)
         assert_equal(newuser, DB::User.users['unit@example.org'])
+
+        passwd = Digest::MD5.digest('unit:example.org:secret')
+        assert_equal(passwd, newuser.password)
     end
 
     def test_dupeuser
         newuser = nil
 
         assert_nothing_raised do
-            newuser = DB::User.new('test', 'example.net')
+            newuser = DB::User.new('test', 'example.net', 'secret')
         end
 
         assert_raises(DB::DBError) do
-            newuser = DB::User.new('test', 'example.net')
+            newuser = DB::User.new('test', 'example.net', 'secret')
         end
     end
 
@@ -45,7 +49,7 @@ class TestDB < Test::Unit::TestCase
         newuser = nil
 
         assert_nothing_raised do
-            newuser = DB::User.new('unit', 'example.com')
+            newuser = DB::User.new('unit', 'example.com', 'secret')
         end
 
         assert_nothing_raised do

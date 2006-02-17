@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'digest/md5'
 require 'idn'
 require 'yaml'
 
@@ -36,14 +37,17 @@ end
 class User
     @@users = {}
 
-    attr_reader :node, :domain
+    attr_reader :node, :domain, :password
 
-    def initialize(node, domain)
+    def initialize(node, domain, password)
         @node = IDN::Stringprep.nodeprep(node)
 
         unless domain =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
             @domain = IDN::Stringprep.nameprep(domain)
         end
+
+        @password = "%s:%s:%s" % [@node, @domain, password]
+        @password = Digest::MD5.digest(@password)
 
         raise DBError, "#{jid} already exists" if @@users[jid]
 

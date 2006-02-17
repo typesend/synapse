@@ -135,6 +135,7 @@ def handle_auth(elem)
 
     @nonce = Stream.genid
     chal = 'nonce="%s",qop="auth",charset=utf-8,algorithm=md5-sess' % @nonce
+    chal = "realm=#{@myhost}," + chal
     chal = Base64.encode64(chal)
     chal.gsub!("\n", '')
 
