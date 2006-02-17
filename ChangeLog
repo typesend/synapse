@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r37 | rakaur | 2006-02-17 12:39:20 -0600 (Fri, 17 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   D /trunk/var/db/users.yaml
+
+This should have never been in the repos.
+
+------------------------------------------------------------------------
 r36 | rakaur | 2006-02-17 12:37:53 -0600 (Fri, 17 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -60,6 +60,10 @@ class User
     public
     ######
 
+    def to_yaml_properties
+        %w( @node @domain @password )
+    end
+
     def User.users
         # Prune away empty entries.
         @@users.delete_if { |k, v| v.nil? } if @@users.has_value?(nil)
