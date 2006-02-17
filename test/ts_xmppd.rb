@@ -16,5 +16,7 @@ require 'test/unit'
 # Import required xmppd modules.
 #
 require 'tc_config'
+require 'tc_db'
 require 'tc_logging'
 require 'tc_stream'
+require 'tc_timer'

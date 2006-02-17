@@ -37,7 +37,7 @@ include XMPP::TLS
 
 def handle_stream(elem)
     # Is the stream open?
-    if Steam::STATE_ESTAB & @state != 0
+    if Stream::STATE_ESTAB & @state != 0
         error('invalid-namespace')
         return
     end

@@ -12,6 +12,7 @@
 #
 require 'optparse'
 require 'singleton'
+require 'timeout'
 
 # Check for libidn.
 begin
@@ -30,8 +31,10 @@ end
 # Import required xmppd modules.
 #
 require 'xmppd/configure'
+require 'xmppd/db'
 require 'xmppd/listen'
 require 'xmppd/log'
+require 'xmppd/timer'
 require 'xmppd/var'
 require 'xmppd/version'
 
@@ -88,7 +91,7 @@ class XMPPd
         # Handle signals and such.
         Signal.trap('INT') do
             puts 'xmppd: caught interrupt'
-            exit
+            my_exit
         end
 
         Signal.trap('HUP') do
@@ -131,6 +134,12 @@ class XMPPd
         $log.c2s.unknown '-!- new logging session started -!-'
         $log.s2s.unknown '-!- new logging session started -!-'
 
+        # Load the databases.
+        DB::User.load
+
+        # Save the db every five minutes.
+        Timer::Timer.new('save user db', 300, true) { DB::User.dump }
+
         # Set up listening ports.
         Listen::init
     end
@@ -172,12 +181,15 @@ class XMPPd
 
     def my_exit
         # Exiting, clean up.
-        $log.xmppd.unknown '-!- terminating normally -!-'
-        $log.c2s.unknown '-!- terminating normally -!-'
-        $log.s2s.unknown '-!- terminating normally -!-'
+        DB::User.dump
 
-        $log.xmppd.close
-        $log.c2s.close
-        $log.s2s.close
+        $log.xmppd.unknown '-!- terminating -!-'
+        $log.c2s.unknown '-!- terminating -!-'
+        $log.s2s.unknown '-!- terminating -!-'
+
+        # Trying to close the logs gives me
+        # an exception saying they're closed...
+
+        exit
     end
 end
