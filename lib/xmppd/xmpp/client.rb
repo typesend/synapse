@@ -17,6 +17,7 @@ require 'rexml/document'
 # Import required xmppd modules.
 #
 require 'xmppd/var'
+require 'xmppd/xmpp/client_iq'
 require 'xmppd/xmpp/features'
 require 'xmppd/xmpp/sasl'
 require 'xmppd/xmpp/stream'
@@ -254,9 +255,6 @@ def handle_response(elem)
     # Start SASL.
     startsasl(response)
 end
-
-def h(s); Digest::MD5.digest(s); end
-def hh(s); Digest::MD5.hexdigest(s); end
 
 end # module Client
 end # module XMPP

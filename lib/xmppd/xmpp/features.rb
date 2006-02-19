@@ -48,9 +48,7 @@ def list(stream)
 
     # They're in both.
     else
-        # XXX - until we have resource binding.
-        stream.error('internal-server-error')
-        return
+        feat << bind
     end
 
     xml << feat
@@ -78,6 +76,13 @@ def sasl
     #mechs << mech_2     
 
     return mechs
+end
+
+def bind
+    recbind = REXML::Element.new('bind')
+    recbind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
+
+    return recbind
 end
 
 end # module Features

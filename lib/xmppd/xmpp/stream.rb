@@ -36,7 +36,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :type, :state, :nonce
+    attr_reader :host, :myhost, :jid, :type, :state, :nonce
 
     TYPE_NONE   = 0x00000000
     TYPE_CLIENT = 0x00000001
@@ -52,6 +52,7 @@ class Stream
     def initialize(host, type, myhost = nil)
         @socket = nil
         @host = IDN::Stringprep.nameprep(host)
+        @jid = nil
         @recvq = []
         @logger = nil
         @auth = nil
