@@ -17,6 +17,8 @@ require 'rexml/document'
 # Import required xmppd modules.
 #
 require 'xmppd/var'
+
+require 'xmppd/xmpp/resource'
 require 'xmppd/xmpp/stream'
 
 #
@@ -137,6 +139,9 @@ def handle_iq_set_bind(stanza)
     result << iq
 
     write result
+
+    user = DB::User.users[@jid]
+    @resource = Resource.new(resource, self, user, 0)
 end
 
 end # module Client

@@ -36,7 +36,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :jid, :type, :state, :nonce
+    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource
 
     TYPE_NONE   = 0x00000000
     TYPE_CLIENT = 0x00000001
@@ -58,6 +58,7 @@ class Stream
         @auth = nil
         @state = STATE_NONE
         @nonce = nil
+        @resource = nil
 
         if type == 'server'
             @type = TYPE_SERVER

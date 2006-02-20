@@ -37,9 +37,11 @@ end
 class User
     @@users = {}
 
-    attr_reader :node, :domain, :password
+    attr_reader :node, :domain, :password, :resources
 
     def initialize(node, domain, password)
+        @resources = {}
+
         @node = IDN::Stringprep.nodeprep(node)
 
         unless domain =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
@@ -135,6 +137,14 @@ class User
         @password = Digest::MD5.digest(newpass)
 
         $log.xmppd.info 'password change for %s' % jid
+    end
+
+    def add_resource(resource)
+        unless resource.class == Resource
+            raise DBError, "resource isn't a Resource class"
+        end
+
+        @resources[resource.name] = resource
     end
 end
 

@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------
+r39 | rakaur | 2006-02-19 11:41:15 -0600 (Sun, 19 Feb 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   A /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Added 'support' for resource binding. Still have a lot to fix up on this but I'm pretty busy until Tuesday.
+Added basic iq stanza handling.
+
+------------------------------------------------------------------------
 r38 | rakaur | 2006-02-17 13:22:45 -0600 (Fri, 17 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
