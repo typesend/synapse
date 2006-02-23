@@ -48,7 +48,8 @@ def list(stream)
 
     # They're in both.
     else
-        feat << bind
+        feat << bind if Stream::STATE_BIND & stream.state == 0
+        feat << session if Stream::STATE_SESSION & stream.state == 0
     end
 
     xml << feat
@@ -83,6 +84,13 @@ def bind
     recbind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
 
     return recbind
+end
+
+def session
+    sess = REXML::Element.new('session')
+    sess.add_namespace('urn:ietf:params:xml:ns:xmpp-session')
+
+    return sess
 end
 
 end # module Features

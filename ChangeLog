@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r40 | rakaur | 2006-02-20 11:43:42 -0600 (Mon, 20 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   A /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Add resource handling. Must go to work now...
+
+------------------------------------------------------------------------
 r39 | rakaur | 2006-02-19 11:41:15 -0600 (Sun, 19 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

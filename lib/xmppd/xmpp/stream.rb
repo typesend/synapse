@@ -36,18 +36,20 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource
+    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource, :session
 
-    TYPE_NONE   = 0x00000000
-    TYPE_CLIENT = 0x00000001
-    TYPE_SERVER = 0x00000002
+    TYPE_NONE     = 0x00000000
+    TYPE_CLIENT   = 0x00000001
+    TYPE_SERVER   = 0x00000002
 
-    STATE_NONE  = 0x00000000
-    STATE_DEAD  = 0x00000001
-    STATE_PLAIN = 0x00000002
-    STATE_ESTAB = 0x00000004
-    STATE_TLS   = 0x00000008
-    STATE_SASL  = 0x00000010
+    STATE_NONE    = 0x00000000
+    STATE_DEAD    = 0x00000001
+    STATE_PLAIN   = 0x00000002
+    STATE_ESTAB   = 0x00000004
+    STATE_TLS     = 0x00000008
+    STATE_SASL    = 0x00000010
+    STATE_BIND    = 0x00000020
+    STATE_SESSION = 0x00000040
 
     def initialize(host, type, myhost = nil)
         @socket = nil
@@ -59,6 +61,7 @@ class Stream
         @state = STATE_NONE
         @nonce = nil
         @resource = nil
+        @session = nil
 
         if type == 'server'
             @type = TYPE_SERVER
@@ -106,7 +109,8 @@ class Stream
         @@id_counter = 0
 
         time = Time.now.to_i
-        tid = Thread.current.object_id
+        tid = Thread.new {}
+        tid = tid.object_id
         @@id_counter += 1
 
         nid = (time << 48) | (tid << 16) | @@id_counter

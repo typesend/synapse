@@ -19,6 +19,7 @@ require 'rexml/document'
 require 'xmppd/var'
 
 require 'xmppd/xmpp/resource'
+require 'xmppd/xmpp/session'
 require 'xmppd/xmpp/stream'
 
 #
@@ -89,6 +90,10 @@ def handle_iq_set(elem)
     end
 end
 
+def handle_iq_get(elem)
+    error('internal-server-error')
+end
+
 def handle_iq_set_bind(stanza)
     elem = stanza.xml.elements['bind']
 
@@ -142,6 +147,35 @@ def handle_iq_set_bind(stanza)
 
     user = DB::User.users[@jid]
     @resource = Resource.new(resource, self, user, 0)
+    @resource.state |= Resource::STATE_CONNECT
+    @state |= Stream::STATE_BIND
+end
+
+def handle_iq_set_session(stanza)
+    elem = stanza.xml.elements['session']
+
+    # Verify namespace.
+    unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-session'
+        error('invalid-namespace') # XXX - iq_error
+        return
+    end
+
+    stanza.state |= IQStanza::STATE_RESULT
+
+    result = REXML::Document.new
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.id)
+
+    result << iq
+
+    write result
+
+    user = DB::User.users[@jid]
+    @session = Session.new(self, user)
+    @resource.state |= Resource::STATE_ACTIVE
+    @state |= Stream::STATE_SESSION
 end
 
 end # module Client
