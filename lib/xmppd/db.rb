@@ -199,10 +199,11 @@ class User
     end
 
     def add_resource(resource)
-        unless resource.class == Resource
+        unless resource.class == XMPP::Resource
             raise DBError, "resource isn't a Resource class"
         end
 
+        @resources ||= {}
         @resources[resource.name] = resource
     end
 

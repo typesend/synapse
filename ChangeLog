@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r42 | rakaur | 2006-02-23 23:40:55 -0600 (Thu, 23 Feb 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+
+Add a bunch of database stuff for rosters.
+Still a lot of work left on rosters...
+
+------------------------------------------------------------------------
 r41 | rakaur | 2006-02-23 09:56:26 -0600 (Thu, 23 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
