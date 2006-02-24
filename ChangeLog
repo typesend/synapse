@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------
+r41 | rakaur | 2006-02-23 09:56:26 -0600 (Thu, 23 Feb 2006) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   A /trunk/lib/xmppd/xmpp/session.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Add support for sessions, closing #38.
+Fix Stream.genid.
+
+------------------------------------------------------------------------
 r40 | rakaur | 2006-02-20 11:43:42 -0600 (Mon, 20 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

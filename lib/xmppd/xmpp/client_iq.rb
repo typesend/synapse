@@ -34,6 +34,10 @@ module XMPP
 module Client
 
 class IQStanza
+    @@stanzas = {}
+
+    attr_accessor :type, :state, :id, :xml
+
     TYPE_GET     = 0x00000001
     TYPE_SET     = 0x00000002
 
@@ -41,10 +45,6 @@ class IQStanza
     STATE_SET    = 0x00000001
     STATE_GET    = 0x00000002
     STATE_RESULT = 0x00000004
-
-    @@stanzas = {}
-
-    attr_accessor :type, :state, :id, :xml
 
     def initialize(id)
         # Prune out all the finished ones.
@@ -91,7 +91,50 @@ def handle_iq_set(elem)
 end
 
 def handle_iq_get(elem)
-    error('internal-server-error')
+    stanza = IQStanza.new(elem.attributes['id'])
+    stanza.type = IQStanza::TYPE_GET
+    stanza.state = IQStanza::STATE_GET
+    stanza.xml = elem
+
+    unless elem.attributes['id']
+        error('xml-not-well-formed')
+        return
+    end
+
+    elem.elements.each do |e|
+        methname = 'handle_iq_get_' + e.name
+
+        unless respond_to? methname
+            error('xml-not-well-formed')
+            return
+        else
+            send(methname, stanza)
+        end
+    end
+end
+
+def handle_iq_get_query(stanza)
+    elem = stanza.xml.elements['query']
+
+    # Verify namespace.
+    unless elem.attributes['xmlns'] == 'jabber:iq:roster'
+        error('invalid-namespace')
+        return
+    end
+
+    result = REXML::Document.new
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.id)
+
+    query = DB::User.users[@jid].roster_to_xml
+    iq << query
+    result << iq
+
+    write result
+
+    # XXX - what to do with IQStanza objects
 end
 
 def handle_iq_set_bind(stanza)

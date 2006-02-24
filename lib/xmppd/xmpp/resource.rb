@@ -27,12 +27,12 @@ class ResourceError
 end
 
 class Resource
+    attr_accessor :state
+    attr_reader :name, :stream, :user, :priority
+
     STATE_NONE    = 0x00000000
     STATE_CONNECT = 0x00000001
     STATE_ACTIVE  = 0x00000002
-
-    attr_accessor :state
-    attr_reader :name, :stream, :user, :priority
 
     def initialize(name, stream, user, priority = 0)
         @name = name
