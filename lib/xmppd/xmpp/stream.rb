@@ -12,7 +12,7 @@
 #
 require 'digest/md5'
 require 'idn'
-require 'io/nonblock'
+#require 'io/nonblock' -- I don't think we need this. I handle blocking myself.
 require 'logger'
 require 'openssl'
 require 'resolv'
@@ -392,7 +392,7 @@ class ClientStream < Stream
         raise RuntimeError, "no client socket to connect with" unless @socket
 
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-        @socket.nonblock = true
+        #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
         $log.c2s.info "#{@host} -> TCP connection established"
 
@@ -530,7 +530,7 @@ class ServerStreamIn < ServerStream
     # This is an incoming socket, so stuff should be connected.
     def connect
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-        @socket.nonblock = true
+        #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
         $log.c2s.info "#{@host} -> TCP connection established"
 
@@ -570,7 +570,7 @@ class ServerStreamOut < ServerStream
             @state |= STATE_DEAD
         else
             @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-            @socket.nonblock = true
+            #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
             $log.s2s.info "#{addr}:#{port} -> TCP connection established"
 
