@@ -41,7 +41,6 @@ def starttls
 
     $-w = false # Turn warnings off because we get a meaningless SSL warning.
     tlssock = OpenSSL::SSL::SSLSocket.new(@socket, ctx)
-    $-w = true
 
     begin
         tlssock.accept
@@ -50,6 +49,7 @@ def starttls
         close
         return
     end
+    $-w = true # Get them back.
 
     @socket = tlssock
     @state |= Stream::STATE_TLS

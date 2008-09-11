@@ -1,5 +1,20 @@
 ------------------------------------------------------------------------
-r42 | rakaur | 2006-02-23 23:40:55 -0600 (Thu, 23 Feb 2006) | 3 lines
+r44 | rakaur | 2008-09-10 13:05:14 -0400 (Wed, 10 Sep 2008) | 1 line
+Changed paths:
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Commented out the io/nonblock stuff for now. It doesn't work on windows, and I don't think we need it. I handle blocking myself.
+------------------------------------------------------------------------
+r43 | rakaur | 2006-02-24 13:09:31 -0500 (Fri, 24 Feb 2006) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+
+Add iq stanza errors, closing #39.
+
+------------------------------------------------------------------------
+r42 | rakaur | 2006-02-24 00:40:55 -0500 (Fri, 24 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/db.rb
@@ -10,7 +25,7 @@ Add a bunch of database stuff for rosters.
 Still a lot of work left on rosters...
 
 ------------------------------------------------------------------------
-r41 | rakaur | 2006-02-23 09:56:26 -0600 (Thu, 23 Feb 2006) | 3 lines
+r41 | rakaur | 2006-02-23 10:56:26 -0500 (Thu, 23 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/client_iq.rb
@@ -23,7 +38,7 @@ Add support for sessions, closing #38.
 Fix Stream.genid.
 
 ------------------------------------------------------------------------
-r40 | rakaur | 2006-02-20 11:43:42 -0600 (Mon, 20 Feb 2006) | 2 lines
+r40 | rakaur | 2006-02-20 12:43:42 -0500 (Mon, 20 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/db.rb
@@ -34,7 +49,7 @@ Changed paths:
 Add resource handling. Must go to work now...
 
 ------------------------------------------------------------------------
-r39 | rakaur | 2006-02-19 11:41:15 -0600 (Sun, 19 Feb 2006) | 3 lines
+r39 | rakaur | 2006-02-19 12:41:15 -0500 (Sun, 19 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/client.rb
@@ -47,7 +62,7 @@ Added 'support' for resource binding. Still have a lot to fix up on this but I'm
 Added basic iq stanza handling.
 
 ------------------------------------------------------------------------
-r38 | rakaur | 2006-02-17 13:22:45 -0600 (Fri, 17 Feb 2006) | 2 lines
+r38 | rakaur | 2006-02-17 14:22:45 -0500 (Fri, 17 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/db.rb
@@ -55,7 +70,7 @@ Changed paths:
 Add some YAML stuff.
 
 ------------------------------------------------------------------------
-r37 | rakaur | 2006-02-17 12:39:20 -0600 (Fri, 17 Feb 2006) | 2 lines
+r37 | rakaur | 2006-02-17 13:39:20 -0500 (Fri, 17 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    D /trunk/var/db/users.yaml
@@ -63,7 +78,7 @@ Changed paths:
 This should have never been in the repos.
 
 ------------------------------------------------------------------------
-r36 | rakaur | 2006-02-17 12:37:53 -0600 (Fri, 17 Feb 2006) | 3 lines
+r36 | rakaur | 2006-02-17 13:37:53 -0500 (Fri, 17 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/db.rb
@@ -76,7 +91,7 @@ SASL now auths against the DB.
 Add authorization stuff.
 
 ------------------------------------------------------------------------
-r35 | rakaur | 2006-02-16 19:10:00 -0600 (Thu, 16 Feb 2006) | 2 lines
+r35 | rakaur | 2006-02-16 20:10:00 -0500 (Thu, 16 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/db.rb
@@ -86,7 +101,7 @@ Changed paths:
 Should probably let users have passwords. Stored a la SASL.
 
 ------------------------------------------------------------------------
-r34 | rakaur | 2006-02-16 18:51:59 -0600 (Thu, 16 Feb 2006) | 4 lines
+r34 | rakaur | 2006-02-16 19:51:59 -0500 (Thu, 16 Feb 2006) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
    A /trunk/lib/xmppd/db.rb
@@ -104,7 +119,7 @@ Added clever little timers, closing #36.
 Added basic DB stuff using YAML. Closes #9.
 
 ------------------------------------------------------------------------
-r33 | rakaur | 2006-02-16 12:35:55 -0600 (Thu, 16 Feb 2006) | 3 lines
+r33 | rakaur | 2006-02-16 13:35:55 -0500 (Thu, 16 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/client.rb
@@ -114,7 +129,7 @@ Fix already-established-stream bug.
 Fix stream id bug.
 
 ------------------------------------------------------------------------
-r32 | rakaur | 2006-02-16 12:27:04 -0600 (Thu, 16 Feb 2006) | 2 lines
+r32 | rakaur | 2006-02-16 13:27:04 -0500 (Thu, 16 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/sasl.rb
@@ -122,7 +137,7 @@ Changed paths:
 Quick fix to SASL.
 
 ------------------------------------------------------------------------
-r31 | rakaur | 2006-02-16 12:20:22 -0600 (Thu, 16 Feb 2006) | 3 lines
+r31 | rakaur | 2006-02-16 13:20:22 -0500 (Thu, 16 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/client.rb
@@ -135,7 +150,7 @@ Implemented #34.
 Cleaned up SASL, closing #3.
 
 ------------------------------------------------------------------------
-r30 | rakaur | 2006-02-15 23:00:55 -0600 (Wed, 15 Feb 2006) | 2 lines
+r30 | rakaur | 2006-02-16 00:00:55 -0500 (Thu, 16 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/README
@@ -146,7 +161,7 @@ Changed paths:
 SASL works. I'm going to clean it up, but I'm commiting it now in case I break something.
 
 ------------------------------------------------------------------------
-r29 | rakaur | 2006-02-14 23:37:04 -0600 (Tue, 14 Feb 2006) | 6 lines
+r29 | rakaur | 2006-02-15 00:37:04 -0500 (Wed, 15 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/example.conf
@@ -161,7 +176,7 @@ Added handling for closing stream tag.
 Fixed up feature listing.
 
 ------------------------------------------------------------------------
-r28 | rakaur | 2006-02-14 10:28:53 -0600 (Tue, 14 Feb 2006) | 2 lines
+r28 | rakaur | 2006-02-14 11:28:53 -0500 (Tue, 14 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd.rb
@@ -169,7 +184,7 @@ Changed paths:
 Updated Ruby version requirements.
 
 ------------------------------------------------------------------------
-r27 | rakaur | 2006-02-13 21:56:28 -0600 (Mon, 13 Feb 2006) | 2 lines
+r27 | rakaur | 2006-02-13 22:56:28 -0500 (Mon, 13 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    A /trunk/lib/xmppd/xmpp/features.rb
@@ -177,7 +192,7 @@ Changed paths:
 Forgot to add this file in [26].
 
 ------------------------------------------------------------------------
-r26 | rakaur | 2006-02-13 21:50:14 -0600 (Mon, 13 Feb 2006) | 3 lines
+r26 | rakaur | 2006-02-13 22:50:14 -0500 (Mon, 13 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/example.conf
@@ -193,7 +208,7 @@ After much, much trouble, client TLS now works, closing #2.
 Fixed some minor stuff.
 
 ------------------------------------------------------------------------
-r25 | rakaur | 2006-02-09 13:09:31 -0600 (Thu, 09 Feb 2006) | 6 lines
+r25 | rakaur | 2006-02-09 14:09:31 -0500 (Thu, 09 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/auth.rb
@@ -209,7 +224,7 @@ Add XMPP::Stream#error.
 Add provisional TLS stuff.
 
 ------------------------------------------------------------------------
-r24 | rakaur | 2006-02-09 11:19:21 -0600 (Thu, 09 Feb 2006) | 6 lines
+r24 | rakaur | 2006-02-09 12:19:21 -0500 (Thu, 09 Feb 2006) | 6 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/example.conf
@@ -227,7 +242,7 @@ Fix the unit test for streams.
 Further devide streams by ServerStreamIn and ServerStreamOut.
 
 ------------------------------------------------------------------------
-r23 | rakaur | 2006-02-08 22:32:01 -0600 (Wed, 08 Feb 2006) | 3 lines
+r23 | rakaur | 2006-02-08 23:32:01 -0500 (Wed, 08 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    A /trunk/lib/xmppd/listen.rb
@@ -240,7 +255,7 @@ All socket stuff should be done, closing #6.
 Add listening and accepting. Basic functionality seems to be working.
 
 ------------------------------------------------------------------------
-r22 | rakaur | 2006-02-08 14:55:34 -0600 (Wed, 08 Feb 2006) | 2 lines
+r22 | rakaur | 2006-02-08 15:55:34 -0500 (Wed, 08 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/stream.rb
@@ -248,7 +263,7 @@ Changed paths:
 Make sure to nameprep hosts for Streams.
 
 ------------------------------------------------------------------------
-r21 | rakaur | 2006-02-08 12:50:56 -0600 (Wed, 08 Feb 2006) | 2 lines
+r21 | rakaur | 2006-02-08 13:50:56 -0500 (Wed, 08 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/example.conf
@@ -263,7 +278,7 @@ Changed paths:
 Implement stream debugging, closing #29.
 
 ------------------------------------------------------------------------
-r20 | rakaur | 2006-02-08 12:24:42 -0600 (Wed, 08 Feb 2006) | 2 lines
+r20 | rakaur | 2006-02-08 13:24:42 -0500 (Wed, 08 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd.rb
@@ -271,7 +286,7 @@ Changed paths:
 Add signal handling, closing #28.
 
 ------------------------------------------------------------------------
-r19 | rakaur | 2006-02-08 11:45:57 -0600 (Wed, 08 Feb 2006) | 2 lines
+r19 | rakaur | 2006-02-08 12:45:57 -0500 (Wed, 08 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/example.conf
@@ -281,7 +296,7 @@ Changed paths:
 Add support for specifying a certfile for starttls.
 
 ------------------------------------------------------------------------
-r18 | rakaur | 2006-02-08 00:54:34 -0600 (Wed, 08 Feb 2006) | 3 lines
+r18 | rakaur | 2006-02-08 01:54:34 -0500 (Wed, 08 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/stream.rb
@@ -291,7 +306,7 @@ Actually empty the recvq when finished with it.
 Fix a spacing error.
 
 ------------------------------------------------------------------------
-r17 | rakaur | 2006-02-08 00:32:45 -0600 (Wed, 08 Feb 2006) | 4 lines
+r17 | rakaur | 2006-02-08 01:32:45 -0500 (Wed, 08 Feb 2006) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/var.rb
@@ -305,7 +320,7 @@ XMPP::ClientStream#connect and XMPP::ServerStream#connect were kind of backwards
 Add reading, writing, and parsing to XMPP::Stream.
 Add socket handling, so ioloop actually does something.
 ------------------------------------------------------------------------
-r16 | rakaur | 2006-02-07 12:12:54 -0600 (Tue, 07 Feb 2006) | 4 lines
+r16 | rakaur | 2006-02-07 13:12:54 -0500 (Tue, 07 Feb 2006) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/configure/configuration.rb
@@ -319,7 +334,7 @@ Add a test case for streams.
 More work on streams.
 
 ------------------------------------------------------------------------
-r15 | rakaur | 2006-02-06 23:27:29 -0600 (Mon, 06 Feb 2006) | 2 lines
+r15 | rakaur | 2006-02-07 00:27:29 -0500 (Tue, 07 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/xmpp/stream.rb
@@ -327,7 +342,7 @@ Changed paths:
 Did some more stream stuff. Devided Stream into ServerStream and ClientStream.
 
 ------------------------------------------------------------------------
-r14 | rakaur | 2006-02-06 21:45:52 -0600 (Mon, 06 Feb 2006) | 3 lines
+r14 | rakaur | 2006-02-06 22:45:52 -0500 (Mon, 06 Feb 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/lib/xmppd/log.rb
@@ -337,7 +352,7 @@ Fix logging so that 'enable' actually has meaning.
 Add some more socket stuff and XMPP library stuff.
 
 ------------------------------------------------------------------------
-r13 | rakaur | 2006-02-06 14:40:24 -0600 (Mon, 06 Feb 2006) | 2 lines
+r13 | rakaur | 2006-02-06 15:40:24 -0500 (Mon, 06 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    A /trunk/lib/xmppd/xmpp
@@ -347,7 +362,7 @@ Changed paths:
 Did some work on library stuff. Not a whole lot of free time lately.
 
 ------------------------------------------------------------------------
-r12 | rakaur | 2006-02-02 18:36:01 -0600 (Thu, 02 Feb 2006) | 2 lines
+r12 | rakaur | 2006-02-02 19:36:01 -0500 (Thu, 02 Feb 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    D /trunk/etc/configure.xml
@@ -373,7 +388,7 @@ Changed paths:
 First attempt at changing config stuff from XML to easier bind-style.
 
 ------------------------------------------------------------------------
-r11 | rakaur | 2006-01-31 00:36:00 -0600 (Tue, 31 Jan 2006) | 2 lines
+r11 | rakaur | 2006-01-31 01:36:00 -0500 (Tue, 31 Jan 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/README
@@ -381,7 +396,7 @@ Changed paths:
 Forgot a <tt/> in the README.
 
 ------------------------------------------------------------------------
-r10 | rakaur | 2006-01-31 00:25:36 -0600 (Tue, 31 Jan 2006) | 3 lines
+r10 | rakaur | 2006-01-31 01:25:36 -0500 (Tue, 31 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/README
@@ -391,7 +406,7 @@ Update README for new tracker.
 Removed TODO, as we have a tracker now.
 
 ------------------------------------------------------------------------
-r9 | rakaur | 2006-01-27 17:01:07 -0600 (Fri, 27 Jan 2006) | 3 lines
+r9 | rakaur | 2006-01-27 18:01:07 -0500 (Fri, 27 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/etc/configure.xml
@@ -407,7 +422,7 @@ Implemented logging with Logger.
 Added <fork/> and <logging><level/></logging> to the config.
 
 ------------------------------------------------------------------------
-r8 | rakaur | 2006-01-27 12:20:42 -0600 (Fri, 27 Jan 2006) | 4 lines
+r8 | rakaur | 2006-01-27 13:20:42 -0500 (Fri, 27 Jan 2006) | 4 lines
 Changed paths:
    M /trunk/TODO
    M /trunk/lib/xmppd/configure.rb
@@ -419,7 +434,7 @@ Added proper configuration error catching and such.
 Updated TODO.
 
 ------------------------------------------------------------------------
-r7 | rakaur | 2006-01-27 00:47:36 -0600 (Fri, 27 Jan 2006) | 3 lines
+r7 | rakaur | 2006-01-27 01:47:36 -0500 (Fri, 27 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/Rakefile
@@ -436,7 +451,7 @@ Added unit tests.
 Finished major work on configure stuff.
 
 ------------------------------------------------------------------------
-r6 | rakaur | 2006-01-26 22:44:29 -0600 (Thu, 26 Jan 2006) | 4 lines
+r6 | rakaur | 2006-01-26 23:44:29 -0500 (Thu, 26 Jan 2006) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/TODO
@@ -456,14 +471,14 @@ Edited TODO.
 Changed a word in configure.xml.
 
 ------------------------------------------------------------------------
-r5 | rakaur | 2006-01-26 16:39:47 -0600 (Thu, 26 Jan 2006) | 2 lines
+r5 | rakaur | 2006-01-26 17:39:47 -0500 (Thu, 26 Jan 2006) | 2 lines
 Changed paths:
    A /trunk/TODO
 
 Added a brief TODO list.
 
 ------------------------------------------------------------------------
-r4 | rakaur | 2006-01-26 16:14:49 -0600 (Thu, 26 Jan 2006) | 2 lines
+r4 | rakaur | 2006-01-26 17:14:49 -0500 (Thu, 26 Jan 2006) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/README
@@ -471,7 +486,7 @@ Changed paths:
 Set the svn:keywords on README.
 
 ------------------------------------------------------------------------
-r3 | rakaur | 2006-01-26 16:13:59 -0600 (Thu, 26 Jan 2006) | 3 lines
+r3 | rakaur | 2006-01-26 17:13:59 -0500 (Thu, 26 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    A /trunk/README
@@ -481,7 +496,7 @@ Added an early README, in rdoc format.
 Touched up the Rakefile.
 
 ------------------------------------------------------------------------
-r2 | rakaur | 2006-01-26 01:29:49 -0600 (Thu, 26 Jan 2006) | 3 lines
+r2 | rakaur | 2006-01-26 02:29:49 -0500 (Thu, 26 Jan 2006) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
    M /trunk/Rakefile
@@ -492,7 +507,7 @@ Did some work on the configuration file format.
 Touched up the Rakefile.
 
 ------------------------------------------------------------------------
-r1 | rakaur | 2006-01-24 11:34:28 -0600 (Tue, 24 Jan 2006) | 2 lines
+r1 | rakaur | 2006-01-24 12:34:28 -0500 (Tue, 24 Jan 2006) | 2 lines
 Changed paths:
    A /branches
    A /tags

@@ -222,7 +222,11 @@ class Stream
             begin
                 xml = REXML::Document.new(stanza)
             rescue REXML::ParseException => e
-                if e.message =~ /stream:stream/ # Closing stream tag.
+                if e.message =~ /no close tag/i # REXML is quite strict.
+                  stanza.chop!.chop!
+                  stanza += '/>'
+                  retry
+                elsif e.message =~ /stream:stream/ # Closing stream tag.
                     close
                     return
                 else
