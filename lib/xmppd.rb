@@ -7,6 +7,8 @@
 # $Id$
 #
 
+require 'rubygems'
+
 #
 # Import required Ruby modules.
 #
@@ -142,6 +144,41 @@ class XMPPd
 
         # Set up listening ports.
         Listen::init
+
+        # Fork into the background.
+        if $fork
+            begin
+                pid = fork
+            rescue Exception => e
+                # XXX - do stuff here...
+                raise
+            end
+
+            # This is the child process.
+            if pid.nil?
+                Dir.chdir $wd
+                File.umask 0
+            else
+                puts 'xmppd: pid ' + pid.to_s
+                puts 'xmppd: running in background mode from ' + Dir.getwd
+                exit!
+            end
+
+            # XXX - pid file
+
+            # Try to close all open file descriptors.
+            #fds = Array.new(8192) { |i| IO.for_fd(i) rescue nil }.compact
+            #fds.each { |fd| fd.close if fd.kind_of? IO }
+
+            $stdin.close
+            $stdout.close
+            $stderr.close
+
+            # Redirect the standard file descriptors to /dev/null.
+        else
+            puts 'xmppd: pid ' + Process.pid.to_s
+            puts 'xmppd: running in foreground mode from ' + Dir.getwd
+        end
     end
 
     def ioloop

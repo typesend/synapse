@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------
+r45 | rakaur | 2008-09-11 08:28:17 -0400 (Thu, 11 Sep 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+
+Fixed some stuff to work with the new REXML kinks. Back where we were, at least.
+
+------------------------------------------------------------------------
 r44 | rakaur | 2008-09-10 13:05:14 -0400 (Wed, 10 Sep 2008) | 1 line
 Changed paths:
    M /trunk/lib/xmppd/xmpp/stream.rb
