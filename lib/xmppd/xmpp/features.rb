@@ -16,6 +16,7 @@ require 'rexml/document'
 # Import required xmppd modules.
 #
 require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp/sasl'
 
 #
 # The XMPP namespace.
@@ -67,14 +68,12 @@ end
 def sasl
     mechs = REXML::Element.new('mechanisms')
     mechs.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-                            
-    mech_1 = REXML::Element.new('mechanism')
-    mech_1.text = 'DIGEST-MD5'
-    mechs << mech_1     
-                            
-    #mech_2 = REXML::Element.new('mechanism')
-    #mech_2.text = 'PLAIN'
-    #mechs << mech_2     
+    
+    SASL::MECHANISMS.each do |mech|
+        mechxml = REXML::Element.new('mechanism')
+        mechxml.text = mech
+        mechs << mechxml
+    end
 
     return mechs
 end

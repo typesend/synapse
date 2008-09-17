@@ -46,7 +46,8 @@ def starttls
         tlssock.accept
     rescue Exception => e
         @logger.unknown "-> TLS error: #{e}"
-        close
+        @socket.close
+        @state |= STATE_DEAD
         return
     end
     $-w = true # Get them back.

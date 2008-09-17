@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'base64'
 require 'idn'
 require 'rexml/document'
 
@@ -92,7 +93,14 @@ def handle_starttls(elem)
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-tls'
-        error('invalid-namespace')
+        xml = REXML::Document.new
+        fai = REXML::Element.new('failure')
+        fai.add_namespace('urn:ietf:params:xml:ns:xmpp-tls')
+        xml << fai
+
+        write xml
+        
+        close
         return
     end
 
@@ -121,7 +129,7 @@ def handle_auth(elem)
     end
 
     # Make sure they're using a mechanism we support.
-    unless elem.attributes['mechanism'] == 'DIGEST-MD5'
+    unless SASL::MECHANISMS.include? elem.attributes['mechanism']
         xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
@@ -131,6 +139,41 @@ def handle_auth(elem)
         write xml
 
         close
+        return
+    end
+    
+    # If they're using PLAIN, we can finish up right here.
+    if elem.attributes['mechanism'] == 'PLAIN'
+        authzid, authcid, passwd = Base64.decode64(elem.text).split("\000")
+
+        unless DB::User.auth(authzid, passwd, true)
+            xml = REXML::Document.new
+            fai = REXML::Element.new('failure')
+            fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+            fai << REXML::Element.new('not-authorized')
+            xml << fai
+
+            write xml
+
+            close
+            return
+        end
+        
+        xml = REXML::Document.new
+        suc = REXML::Element.new('success')
+        suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+        suc.text = '='
+        xml << suc
+        
+        write xml
+        
+        @state &= ~Stream::STATE_ESTAB
+        @state |= Stream::STATE_SASL
+        
+        @jid = authzid
+
+        @logger.unknown '-> SASL established'
+
         return
     end
 
@@ -254,6 +297,33 @@ def handle_response(elem)
 
     # Start SASL.
     startsasl(response)
+end
+
+def handle_abort(elem)
+    # First verify that we have an open stream.
+    unless Stream::STATE_ESTAB & @state != 0
+        error('invalid-namespace')
+        return
+    end
+
+    # Verify that we've sent a challenge.
+    unless @nonce
+        error('invalid-namespace')
+    end
+
+    # Verify namespace.
+    unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-sasl'
+        error('invalid-namespace')
+        return
+    end
+    
+    xml = REXML::Document.new
+    fai = REXML::Element.new('failure')
+    fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+    fai << REXML::Element.new('aborted')
+    xml << fai
+
+    write xml
 end
 
 end # module Client

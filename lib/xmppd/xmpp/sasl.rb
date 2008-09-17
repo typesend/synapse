@@ -32,6 +32,8 @@ module XMPP
 #
 module SASL
 
+MECHANISMS = ['DIGEST-MD5', 'PLAIN']
+
 def h(s)
     Digest::MD5.digest(s)
 end

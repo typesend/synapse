@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------
+r46 | rakaur | 2008-09-15 16:12:12 -0400 (Mon, 15 Sep 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd.rb
+
+Does forking now.
+
+------------------------------------------------------------------------
 r45 | rakaur | 2008-09-11 08:28:17 -0400 (Thu, 11 Sep 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

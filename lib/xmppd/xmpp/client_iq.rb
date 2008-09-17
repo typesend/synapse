@@ -251,6 +251,9 @@ def handle_iq_set_bind(stanza)
     @resource.state |= Resource::STATE_CONNECT
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND
+    
+    # Send the updated features list.
+    XMPP::Features::list(self)
 end
 
 def handle_iq_set_session(stanza)
@@ -286,6 +289,9 @@ def handle_iq_set_session(stanza)
     @session = Session.new(self, user)
     @resource.state |= Resource::STATE_ACTIVE
     @state |= Stream::STATE_SESSION
+    
+    # Send the updated features list.
+    XMPP::Features::list(self)
 end
 
 end # module Client
