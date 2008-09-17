@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r47 | rakaur | 2008-09-17 15:29:07 -0400 (Wed, 17 Sep 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+
+Added some RFC-required stuff to current code.
+Implemented SASL [PLAIN] rather hackily. Haven't read the spec, just guessed.
+I'm now referencing the new "draft" of the RFC for all of this.
+
+------------------------------------------------------------------------
 r46 | rakaur | 2008-09-15 16:12:12 -0400 (Mon, 15 Sep 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -145,6 +145,7 @@ def handle_auth(elem)
     # If they're using PLAIN, we can finish up right here.
     if elem.attributes['mechanism'] == 'PLAIN'
         authzid, authcid, passwd = Base64.decode64(elem.text).split("\000")
+        authzid = authcid + '@' + @myhost if authzid.empty?
 
         unless DB::User.auth(authzid, passwd, true)
             xml = REXML::Document.new
@@ -162,7 +163,7 @@ def handle_auth(elem)
         xml = REXML::Document.new
         suc = REXML::Element.new('success')
         suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-        suc.text = '='
+        #suc.text = '=' # According to the RFC, this is how it's done. Psi doesn't like it, and no one else seems to care...
         xml << suc
         
         write xml

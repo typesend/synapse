@@ -223,9 +223,13 @@ class Stream
                 xml = REXML::Document.new(stanza)
             rescue REXML::ParseException => e
                 if e.message =~ /no close tag/i # REXML is quite strict.
-                  stanza.chop!.chop!
-                  stanza += '/>'
-                  retry
+                    stanza[stanza.rindex('>')] = ''
+                    stanza += '/>'
+                    retry
+                elsif e.message =~ /must not be bound/i # Psi is breaking the rules.
+                    str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
+                    stanza.sub!(str, '')
+                    retry
                 elsif e.message =~ /stream:stream/ # Closing stream tag.
                     close
                     return
