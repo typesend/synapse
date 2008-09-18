@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r49 | rakaur | 2008-09-18 13:12:56 -0400 (Thu, 18 Sep 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+
+Made resource binding required.
+Fixed DIGEST-MD5 parsing. It's ugly, but necessary, thanks to stupid clients being stupid and the spec being retarded.
+
+------------------------------------------------------------------------
 r48 | rakaur | 2008-09-17 17:27:31 -0400 (Wed, 17 Sep 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

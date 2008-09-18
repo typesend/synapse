@@ -143,7 +143,7 @@ end
 #    parser.parse
 #
 # Of course, you don't *have* to dispatch them like I showed in the
-# example, you but different settings sometimes need different
+# example, but different settings sometimes need different
 # operations performed on them before they're used (such as +to_i+)
 # so I tend to stick with this example.
 #

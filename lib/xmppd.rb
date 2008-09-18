@@ -150,8 +150,8 @@ class XMPPd
             begin
                 pid = fork
             rescue Exception => e
-                # XXX - do stuff here...
-                raise
+                puts 'xmppd: cannot fork into the background'
+                exit
             end
 
             # This is the child process.
@@ -173,12 +173,16 @@ class XMPPd
             $stdin.close
             $stdout.close
             $stderr.close
-
-            # Redirect the standard file descriptors to /dev/null.
         else
             puts 'xmppd: pid ' + Process.pid.to_s
             puts 'xmppd: running in foreground mode from ' + Dir.getwd
         end
+        
+        # XXX
+        #
+        # If you want to add users, do this for now:
+        #
+        #DB::User.new('username',  'host', 'password')
     end
 
     def ioloop

@@ -19,7 +19,6 @@ require 'rexml/document'
 require 'xmppd/var'
 
 require 'xmppd/xmpp/resource'
-require 'xmppd/xmpp/session'
 require 'xmppd/xmpp/stream'
 
 #
@@ -198,11 +197,15 @@ def handle_iq_set_bind(stanza)
 
     resource = nil
 
-    # They want us to generate one for them.
+    #
+    # If it's empty they want us to generate one for them, if not
+    # they've supplied a string to use. The new draft RFC says we should
+    # add random text onto that anyhow, so we do.
+    #
     unless elem.has_elements?
-        resource = @jid.split('@')[0] + rand(rand(1000000)).to_s
+        resource = @jid.split('@')[0] + Stream.genid
     else
-        resource = elem.elements['resource'].text
+        resource = elem.elements['resource'].text + Stream.genid
 
         unless resource
             stanza.error('bad-request', IQStanza::ERR_MODIFY)
@@ -248,7 +251,6 @@ def handle_iq_set_bind(stanza)
 
     user = DB::User.users[@jid]
     @resource = Resource.new(resource, self, user, 0)
-    @resource.state |= Resource::STATE_CONNECT
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND
     
@@ -256,6 +258,16 @@ def handle_iq_set_bind(stanza)
     XMPP::Features::list(self)
 end
 
+# XXX
+#
+# Session has been removed in the latest draft RFC.
+# I'm keeping this here because none of the clients
+# I tested actually bother to look for it in <features/>
+# and just send the iq stanza anyway.
+#
+# Do the standard checks, tell them it succeeded, and
+# never think about it again.
+#
 def handle_iq_set_session(stanza)
     elem = stanza.xml.elements['session']
 
@@ -284,12 +296,10 @@ def handle_iq_set_session(stanza)
     result << iq
 
     write result
-
-    user = DB::User.users[@jid]
-    @session = Session.new(self, user)
-    @resource.state |= Resource::STATE_ACTIVE
-    @state |= Stream::STATE_SESSION
     
+    # This only serves to let Features::list() know what to do.
+    @state |= Stream::STATE_SESSION
+
     # Send the updated features list.
     XMPP::Features::list(self)
 end

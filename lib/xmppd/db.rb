@@ -83,7 +83,6 @@ class User
         begin
             File.open('var/db/users.yaml') do |f|
                 @@users = YAML.load(f)
-
                 @@users ||= {}
             end
         rescue Exception => e
@@ -107,9 +106,7 @@ class User
         begin
             Dir.mkdir('var/db') unless File.exists?('var/db')
 
-            File.open('var/db/users.yaml', 'w') do |f|
-                YAML.dump(@@users, f)
-            end
+            File.open('var/db/users.yaml', 'w') { |f| YAML.dump(@@users, f) }
         rescue Exception => e
             $log.xmppd.warn "failed to write user database: #{e}"
             return false
@@ -121,9 +118,7 @@ class User
     end
 
     def User.auth(jid, password, plain = false)
-        unless @@users[jid]
-            return false
-        end
+        return false unless @@users[jid]
 
         if plain
             node, domain = jid.split('@')

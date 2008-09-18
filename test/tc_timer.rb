@@ -24,7 +24,7 @@ class TestTimer < Test::Unit::TestCase
     @tn = nil
 
     # This just sets up logging for the test.
-    def test_1_sulog                         
+    def setup                        
         assert_nothing_raised do
             $config = Configure::Configuration.new
             $config.logging.enable = false
@@ -35,7 +35,7 @@ class TestTimer < Test::Unit::TestCase
         end
     end    
        
-    def test_z_tdlog
+    def teardown
         assert_nothing_raised do
             $log.xmppd.close
             $log.c2s.close

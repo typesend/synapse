@@ -10,6 +10,11 @@
 # Version information
 require 'xmppd/version'
 
+#
+# Yes I know, global variables are evil, whatever. I thought about moving
+# these to be class variables of XMPPd but I just really don't care.
+#
+
 # A singleton instance of Configure::Configuration.
 $config = nil
 

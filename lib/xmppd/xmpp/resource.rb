@@ -27,12 +27,7 @@ class ResourceError
 end
 
 class Resource
-    attr_accessor :state
     attr_reader :name, :stream, :user, :priority
-
-    STATE_NONE    = 0x00000000
-    STATE_CONNECT = 0x00000001
-    STATE_ACTIVE  = 0x00000002
 
     def initialize(name, stream, user, priority = 0)
         @name = name
@@ -49,12 +44,11 @@ class Resource
 
         @user = user
 
-        if priority < -128 || priority > 127
-            raise ResourceError, "priority isn't within range (-128 - 127)"
+        if (priority < -128) or (priority > 127)
+            raise ResourceError, "priority isn't within range (-128 .. 127)"
         end
 
         @priority = priority
-        @state = STATE_NONE
     end
 end
 

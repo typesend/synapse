@@ -241,7 +241,7 @@ def handle_response(elem)
     end
 
     #
-    # I know this sucks, but you have the guy that designed SASL's DIGEST-MD5 for it.
+    # I know this sucks, but you have the guy that designed SASL's DIGEST-MD5 to blame for it.
     # For some reason he decided it'd be a good idea to allow the 'cnonce' field
     # be able to consist of ANYTHING, which makes tokenizing this string a bitch.
     #

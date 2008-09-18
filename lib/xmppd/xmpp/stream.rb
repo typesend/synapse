@@ -12,7 +12,6 @@
 #
 require 'digest/md5'
 require 'idn'
-#require 'io/nonblock' -- I don't think we need this. I handle blocking myself.
 require 'logger'
 require 'openssl'
 require 'resolv'
@@ -36,7 +35,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource, :session
+    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource
 
     TYPE_NONE     = 0x00000000
     TYPE_CLIENT   = 0x00000001
@@ -49,7 +48,7 @@ class Stream
     STATE_TLS     = 0x00000008
     STATE_SASL    = 0x00000010
     STATE_BIND    = 0x00000020
-    STATE_SESSION = 0x00000040
+    STATE_SESSION = 0x00000040 # This is only here for state in Features::list().
 
     def initialize(host, type, myhost = nil)
         @socket = nil
@@ -61,7 +60,6 @@ class Stream
         @state = STATE_NONE
         @nonce = nil
         @resource = nil
-        @session = nil
 
         if type == 'server'
             @type = TYPE_SERVER
@@ -134,11 +132,7 @@ class Stream
     end
 
     def dead?
-        if STATE_DEAD & @state != 0
-            true
-        else
-            false
-        end
+        return (STATE_DEAD & @state != 0) ? true : false
     end
 
     def close
@@ -165,6 +159,7 @@ class Stream
         end
 
         if data.empty?
+            @logger.unknown "-> empty read"
             close
             return
         end
@@ -226,7 +221,7 @@ class Stream
                     stanza[stanza.rindex('>')] = ''
                     stanza += '/>'
                     retry
-                elsif e.message =~ /must not be bound/i # Psi is breaking the rules.
+                elsif e.message =~ /must not be bound/i # REXML bug. Reported.
                     str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
                     stanza.sub!(str, '')
                     retry
@@ -400,7 +395,6 @@ class ClientStream < Stream
         raise RuntimeError, "no client socket to connect with" unless @socket
 
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-        #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
         $log.c2s.info "#{@host} -> TCP connection established"
 
@@ -538,7 +532,6 @@ class ServerStreamIn < ServerStream
     # This is an incoming socket, so stuff should be connected.
     def connect
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-        #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
         $log.c2s.info "#{@host} -> TCP connection established"
 
@@ -578,7 +571,6 @@ class ServerStreamOut < ServerStream
             @state |= STATE_DEAD
         else
             @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
-            #@socket.nonblock = true -- I don't think we need this. I handle blocking myself.
 
             $log.s2s.info "#{addr}:#{port} -> TCP connection established"
 

@@ -117,7 +117,7 @@ class Listener < TCPServer
         @host = host
         @port = port
 
-        if type != 'client' && type != 'server'
+        if type != 'client' and type != 'server'
             raise ArgumentError, "type must be 'client' or 'server'"
         else
             @type = type

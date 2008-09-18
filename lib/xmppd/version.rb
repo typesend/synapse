@@ -8,5 +8,5 @@
 #
 
 $version = '0.1'
-$release_date = '2006-1-24'
-$svn_version = 'rexported'
+$release_date = '2008-9-18'
+$svn_version = 'r49'

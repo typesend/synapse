@@ -51,10 +51,11 @@ def list(stream)
     else
         if stream.type == Stream::TYPE_CLIENT
             feat << bind(true) if Stream::STATE_BIND & stream.state == 0
-        else
+        else # Servers aren't required to bind a resource.
             feat << bind(false) if Stream::STATE_BIND & stream.state == 0
         end
         
+        # Session has been removed in the new draft RFC.
         feat << session if Stream::STATE_SESSION & stream.state == 0
     end
 
@@ -91,9 +92,11 @@ def bind(type_client)
     return recbind
 end
 
+# XXX - depreciated
 def session
     sess = REXML::Element.new('session')
     sess.add_namespace('urn:ietf:params:xml:ns:xmpp-session')
+    sess.add_element(REXML::Element.new('optional'))
 
     return sess
 end
