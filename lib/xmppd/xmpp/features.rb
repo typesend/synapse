@@ -49,7 +49,12 @@ def list(stream)
 
     # They're in both.
     else
-        feat << bind if Stream::STATE_BIND & stream.state == 0
+        if stream.type == Stream::TYPE_CLIENT
+            feat << bind(true) if Stream::STATE_BIND & stream.state == 0
+        else
+            feat << bind(false) if Stream::STATE_BIND & stream.state == 0
+        end
+        
         feat << session if Stream::STATE_SESSION & stream.state == 0
     end
 
@@ -78,9 +83,10 @@ def sasl
     return mechs
 end
 
-def bind
+def bind(type_client)
     recbind = REXML::Element.new('bind')
     recbind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
+    recbind.add_element(REXML::Element.new('required')) if type_client
 
     return recbind
 end

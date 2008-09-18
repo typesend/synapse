@@ -163,7 +163,6 @@ def handle_auth(elem)
         xml = REXML::Document.new
         suc = REXML::Element.new('success')
         suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-        #suc.text = '=' # According to the RFC, this is how it's done. Psi doesn't like it, and no one else seems to care...
         xml << suc
         
         write xml
@@ -241,17 +240,21 @@ def handle_response(elem)
         end
     end
 
+    #
+    # I know this sucks, but you have the guy that designed SASL's DIGEST-MD5 for it.
+    # For some reason he decided it'd be a good idea to allow the 'cnonce' field
+    # be able to consist of ANYTHING, which makes tokenizing this string a bitch.
+    #
+    # This took four people on the jdev mailing list a while to sort out.
+    #
     resp = Base64.decode64(elem.text)
-    resp = resp.split(',')
-
+    re = /((?:[\w-]+)\s*=\s*(?:(?:"[^"]+")|(?:[^,]+)))/
+    
     response = {}
-    resp.each do |kv|
-        k, v = kv.split('=')
-        v.gsub!(/^"/, '')
-        v.gsub!(/"$/, '')
-
+    resp.scan(re) do |kv|
+        k, v = kv[0].split('=', 2)
+        v.gsub!(/^"(.*)"$/, '\1')
         response[k] = v
-
     end
 
     # Is our key the same?

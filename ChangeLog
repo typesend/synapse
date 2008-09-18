@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r48 | rakaur | 2008-09-17 17:27:31 -0400 (Wed, 17 Sep 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Apparently I should have read the PLAIN spec. Works with other clients now.
+Psi is crappy. It breaks XML rules and so far fails to work with my implementation of DIGEST-MD5. Gajim and Digsby work fine. Also, it doesn't follow the RFC with SASL PLAIN's success return. Bummer.
+
+------------------------------------------------------------------------
 r47 | rakaur | 2008-09-17 15:29:07 -0400 (Wed, 17 Sep 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
