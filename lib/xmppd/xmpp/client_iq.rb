@@ -33,7 +33,7 @@ module XMPP
 module Client
 
 class IQStanza
-    @@stanzas = {}
+    @@stanzas = {} # XXX - not sure if this is necessary
 
     attr_accessor :type, :state, :id, :xml, :stream
 
@@ -105,7 +105,7 @@ end
 def handle_iq(elem)
     # Is the stream open?
     if Stream::STATE_ESTAB & @state == 0
-        error('invalid-namespace')
+        error('unexpected-request')
         return
     end
 
@@ -167,7 +167,7 @@ def handle_iq_get_query(stanza)
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'jabber:iq:roster'
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        stanza.error('feature-not-implemented', IQStanza::ERR_MODIFY)
         return
     end
 
@@ -254,6 +254,8 @@ def handle_iq_set_bind(stanza)
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND
     
+    @logger.unknown "-> resource bound to #{resource}"
+    
     # Send the updated features list.
     XMPP::Features::list(self)
 end
@@ -299,6 +301,8 @@ def handle_iq_set_session(stanza)
     
     # This only serves to let Features::list() know what to do.
     @state |= Stream::STATE_SESSION
+    
+    @logger.unknown "-> session silently ignored"
 
     # Send the updated features list.
     XMPP::Features::list(self)

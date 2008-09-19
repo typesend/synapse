@@ -112,7 +112,7 @@ end
 # $ rake rdoc
 #
 Rake::RDocTask.new do |r|
-    r.rdoc_dir = 'doc'
+    r.rdoc_dir = 'doc/rdoc'
     r.options << '--line-numbers' << '--inline-source'
     r.rdoc_files.include('lib/**/*', 'README')
 end

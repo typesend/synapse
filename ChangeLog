@@ -1,4 +1,47 @@
 ------------------------------------------------------------------------
+r51 | rakaur | 2008-09-18 16:14:15 -0400 (Thu, 18 Sep 2008) | 1 line
+Changed paths:
+   A /trunk/doc
+   A /trunk/doc/drafts
+   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.html
+   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.txt
+   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.html
+   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.txt
+   A /trunk/doc/rfcs
+   A /trunk/doc/rfcs/rfc3920.html
+   A /trunk/doc/rfcs/rfc3920.txt
+   A /trunk/doc/rfcs/rfc3921.html
+   A /trunk/doc/rfcs/rfc3921.txt
+
+Adding some reference docs.
+------------------------------------------------------------------------
+r50 | rakaur | 2008-09-18 16:09:56 -0400 (Thu, 18 Sep 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/configure/parser.rb
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/listen.rb
+   M /trunk/lib/xmppd/var.rb
+   M /trunk/lib/xmppd/version.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   D /trunk/lib/xmppd/xmpp/session.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+   M /trunk/test/tc_db.rb
+   M /trunk/test/tc_stream.rb
+   M /trunk/test/tc_timer.rb
+
+Removed sessions. The handlers are basic noops for backwards-compatibility.
+Resources no longer have states (re: lack of sessions).
+Cleaned lots of stuff up. Still lots of work to do.
+
+------------------------------------------------------------------------
 r49 | rakaur | 2008-09-18 13:12:56 -0400 (Thu, 18 Sep 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

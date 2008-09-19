@@ -19,6 +19,7 @@ require 'rexml/document'
 #
 require 'xmppd/var'
 require 'xmppd/xmpp/client_iq'
+require 'xmppd/xmpp/client_presence'
 require 'xmppd/xmpp/features'
 require 'xmppd/xmpp/sasl'
 require 'xmppd/xmpp/stream'
