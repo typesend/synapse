@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r53 | rakaur | 2008-09-22 14:27:29 -0400 (Mon, 22 Sep 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+
+Carrying over shrike's CLIENTINFO legacy... :)
+
+------------------------------------------------------------------------
 r52 | rakaur | 2008-09-19 17:02:16 -0400 (Fri, 19 Sep 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog

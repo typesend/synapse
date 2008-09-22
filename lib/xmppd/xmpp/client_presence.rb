@@ -72,8 +72,6 @@ class PresenceStanza
         iq.add_attribute('type', 'error')
         iq.add_attribute('id', @id)
 
-        iq << @xml.elements[1]
-
         err = REXML::Element.new('error')
 
         case type

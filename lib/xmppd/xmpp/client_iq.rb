@@ -74,8 +74,6 @@ class IQStanza
         iq.add_attribute('type', 'error')
         iq.add_attribute('id', @id)
 
-        iq << @xml.elements[1]
-
         err = REXML::Element.new('error')
 
         case type
@@ -167,7 +165,7 @@ def handle_iq_get_query(stanza)
 
     # Verify namespace.
     if elem.attributes['xmlns'] == 'jabber:iq:easter'
-        stanza.error('114-97-107-97-117-114', IQStanza::ERR_CONTINUE)
+        stanza.error('114-97-107-97-117-114', IQStanza::ERR_CANCEL)
         return
     elsif elem.attributes['xmlns'] != 'jabber:iq:roster'
         stanza.error('feature-not-implemented', IQStanza::ERR_MODIFY)
