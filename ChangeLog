@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r52 | rakaur | 2008-09-19 17:02:16 -0400 (Fri, 19 Sep 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/Rakefile
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   A /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+
+Added lots of useful stuff to Resource.
+Added the beginnings of <presence/> processing.
+Still buggy, haven't done any kind of broadcasting stuff yet.
+
+------------------------------------------------------------------------
 r51 | rakaur | 2008-09-18 16:14:15 -0400 (Thu, 18 Sep 2008) | 1 line
 Changed paths:
    A /trunk/doc

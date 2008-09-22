@@ -166,7 +166,10 @@ def handle_iq_get_query(stanza)
     elem = stanza.xml.elements['query']
 
     # Verify namespace.
-    unless elem.attributes['xmlns'] == 'jabber:iq:roster'
+    if elem.attributes['xmlns'] == 'jabber:iq:easter'
+        stanza.error('114-97-107-97-117-114', IQStanza::ERR_CONTINUE)
+        return
+    elsif elem.attributes['xmlns'] != 'jabber:iq:roster'
         stanza.error('feature-not-implemented', IQStanza::ERR_MODIFY)
         return
     end
