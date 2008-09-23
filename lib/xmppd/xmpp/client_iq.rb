@@ -185,6 +185,11 @@ def handle_iq_get_query(stanza)
     result << iq
 
     write result
+
+    @resource.state |= Resource::STATE_INTERESTED
+    @logger.unknown "(#{@resource.name}) -> set state to interested"
+
+    @resource.get_roster_presence if @resource.available?
 end
 
 def handle_iq_set_bind(stanza)
@@ -204,9 +209,9 @@ def handle_iq_set_bind(stanza)
     # add random text onto that anyhow, so we do.
     #
     unless elem.has_elements?
-        resource = @jid.split('@')[0] + Stream.genid
+        resource = @jid.split('@')[0] + rand(rand(100000)).to_s
     else
-        resource = elem.elements['resource'].text + Stream.genid
+        resource = elem.elements['resource'].text + rand(rand(10000)).to_s
 
         unless resource
             stanza.error('bad-request', IQStanza::ERR_MODIFY)

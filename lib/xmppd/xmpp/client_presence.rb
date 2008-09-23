@@ -36,7 +36,7 @@ module Client
 class PresenceStanza
     @@stanzas = {} # XXX - not sure if this is necessary
 
-    attr_accessor :to, :from, :state, :id, :xml, :stream
+    attr_accessor :type, :to, :from, :state, :id, :xml, :stream
 
     STATE_NONE   = 0x00000000
     STATE_DONE   = 0x00000004
@@ -48,7 +48,7 @@ class PresenceStanza
     ERR_AUTH     = 0x00000008
     ERR_WAIT     = 0x00000010
 
-    def initialize(id)
+    def initialize(id = nil)
         # Prune out all the finished ones.
         @@stanzas.delete_if { |k, v| v.state & STATE_DONE != 0 }
         @@stanzas.delete_if { |k, v| v.state & STATE_ERROR != 0 }
@@ -69,8 +69,8 @@ class PresenceStanza
         iq = REXML::Element.new('presence')
         iq.add_attribute('from', @to) if @to
         iq.add_attribute('to', @from) if @from
+        iq.add_attribute('id', @id) if @id
         iq.add_attribute('type', 'error')
-        iq.add_attribute('id', @id)
 
         err = REXML::Element.new('error')
 
@@ -108,15 +108,11 @@ def handle_presence(elem)
     stanza = PresenceStanza.new(elem.attributes['id'])
     stanza.to = elem.attributes['to'] or nil
     stanza.from = elem.attributes['from'] or nil
-    stanza.state = IQStanza::STATE_NONE
+    stanza.type = elem.attributes['type'] or nil
+    stanza.state = PresenceStanza::STATE_NONE
     stanza.xml = elem
     stanza.stream = self
 
-    unless elem.attributes['id']
-        stanza.error('bad-request', PresenceStanza::ERR_MODIFY)
-        return
-    end
-    
     elem.attributes['type'] ||= 'none'
     
     methname = 'handle_type_' + elem.attributes['type']
@@ -131,8 +127,6 @@ end
  
 # No type signals avilability.
 def handle_type_none(stanza)
-    # XXX - broadcast...
-    
     case stanza.xml.elements['show'].text
     when 'away'
         @resource.show = Resource::SHOW_AWAY
@@ -163,14 +157,23 @@ def handle_type_none(stanza)
         @logger.unknown "-> priority set to #{p}"
     end
 
+    # XXX - directed presence
+
+    # Broadcast it to relevant entities.
+    @resource.presence_out(stanza)
+
+    # Get OUR contacts' presence. Only do this once.
+    @resource.get_roster_presence if @resource.interested? and not @resource.available?
+
+    @resource.state |= Resource::STATE_AVAILABLE unless @resource.available?
+
     stanza.state = PresenceStanza::STATE_DONE
 end
 
 # They're logging off.
-def handle_type_unavailable
-    # XXX - broadcast...
-    # they send the closing stream.
-    # we probably want to do this in Stream#close if they're Stream::STATE_ESTAB
+def handle_type_unavailable(stanza)
+    @resource.presence_out(stanza)
+    @state &= ~Stream::STATE_ESTAB
 end
 
 end # module Client

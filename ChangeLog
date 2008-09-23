@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------
+r54 | rakaur | 2008-09-22 16:47:48 -0400 (Mon, 22 Sep 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/doc/extensions
+   A /trunk/doc/extensions/xep-0186.html
+   A /trunk/doc/extensions/xmpp.css
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+
+Add some more docs, and remove useless sending of XML.
+
+------------------------------------------------------------------------
 r53 | rakaur | 2008-09-22 14:27:29 -0400 (Mon, 22 Sep 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

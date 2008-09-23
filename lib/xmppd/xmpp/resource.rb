@@ -27,16 +27,24 @@ class ResourceError
 end
 
 class Resource
-    attr_reader :name, :stream, :user, :priority, :status, :show, :status
+    attr_accessor :state
+    attr_reader :name, :stream, :user, :priority, :show, :status
     
-    SHOW_AVAILABLE = 0x00000000
-    SHOW_AWAY      = 0x00000001
-    SHOW_CHAT      = 0x00000002
-    SHOW_DND       = 0x00000004
-    SHOW_XA        = 0x00000008
+    SHOW_AVAILABLE   = 0x00000000
+    SHOW_AWAY        = 0x00000001
+    SHOW_CHAT        = 0x00000002
+    SHOW_DND         = 0x00000004
+    SHOW_XA          = 0x00000008
+
+    STATE_NONE       = 0x00000000
+    STATE_AVAILABLE  = 0x00000001
+    STATE_INTERESTED = 0x00000002
 
     def initialize(name, stream, user, priority = 0)
         @name = name
+        @state = STATE_NONE
+        @status = nil
+        @show = nil
 
         unless stream.class == ClientStream
             raise ResourceError, "stream isn't a client stream"
@@ -49,6 +57,7 @@ class Resource
         end
 
         @user = user
+        @user.add_resource(self)
 
         self.priority = priority
     end
@@ -56,6 +65,10 @@ class Resource
     ######
     public
     ######
+
+    def jid
+        @user.jid + '/' + @name
+    end
     
     def show=(show)
         unless show.class == Fixnum
@@ -79,6 +92,95 @@ class Resource
         end
         
         @priority = priority
+    end
+
+    def available?
+        return true if STATE_AVAILABLE & @state != 0
+        return false
+    end
+
+    def interested?
+        return true if STATE_INTERESTED & @state != 0
+        return false
+    end
+
+    def get_roster_presence
+        return if @user.roster.nil? or @user.roster.empty?
+
+        # Create a list of roster members we care about.
+        roster = @user.roster_subscribed_to
+        return unless roster
+
+        roster.each do |j, contact|
+            next if contact.user.resources.nil? or contact.user.resources.empty?
+
+            contact.user.resources.each do |name, resource|
+                resource.presence_to(self) if resource.available?
+            end
+        end
+    end
+
+    # Send our presence to one Resource.
+    def presence_to(resource)
+        unless resource.class == Resource
+            raise ArgumentError, "resource must be a Resource class"
+        end
+
+        xml = REXML::Document.new
+        pre = REXML::Element.new('presence')
+        pre.add_attribute('to', resource.jid)
+        pre.add_attribute('from', jid)
+
+        pri = REXML::Element.new('priority')
+        pri.text = @priority.to_s
+
+        pre << pri
+
+        show = REXML::Element.new('show')
+        case @show
+        when SHOW_AVAILABLE
+            show = nil
+        when SHOW_AWAY
+            show.text = 'away'
+        when SHOW_CHAT
+            show.text = 'chat'
+        when SHOW_DND
+            show.text = 'dnd'
+        when SHOW_XA
+            show.text = 'xa'
+        end
+
+        pre << show if show
+
+        if @status
+            status = REXML::Element.new('status')
+            status.text = @status
+
+            pre << status
+        end
+
+        xml << pre
+
+        resource.stream.write xml
+    end
+
+    # Broadcast our presence.
+    def presence_out(stanza)
+        unless stanza.class == Client::PresenceStanza
+            raise ArgumentError, "stanza must be a Client::PresenceStanza"
+        end
+
+        xml = REXML::Document.new
+
+        pre = REXML::Element.new('presence')
+        pre.add_attribute('type', stanza.type) if stanza.type
+        pre.add_attribute('from', jid)
+        stanza.xml.elements.each { |elem| pre << elem }
+
+        xml << pre
+
+        @user.to_self(xml)
+        @user.to_roster_subscribed(xml)
     end
 end
 

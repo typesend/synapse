@@ -35,7 +35,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :jid, :type, :state, :nonce, :resource
+    attr_reader :host, :myhost, :type, :state, :nonce, :resource
 
     TYPE_NONE     = 0x00000000
     TYPE_CLIENT   = 0x00000001
@@ -53,7 +53,6 @@ class Stream
     def initialize(host, type, myhost = nil)
         @socket = nil
         @host = IDN::Stringprep.nameprep(host)
-        @jid = nil
         @recvq = []
         @logger = nil
         @auth = nil
@@ -131,6 +130,10 @@ class Stream
         @myhost = IDN::Stringprep.nameprep(value)
     end
 
+    def established?
+        return (STATE_ESTAB & @state != 0) ? true : false
+    end
+
     def dead?
         return (STATE_DEAD & @state != 0) ? true : false
     end
@@ -141,6 +144,21 @@ class Stream
 
         @socket.close
         @state |= STATE_DEAD
+
+        return unless @resource
+
+        # If they're online, make sure to broadcast that they're not anymore.
+        if established?
+            stanza = Client::PresenceStanza.new
+            stanza.type = 'unavailable'
+
+            stanza.xml = REXML::Document.new
+
+            @resource.presence_out(stanza)
+        end
+
+        @resource.user.delete_resource(@resource)
+        @resouce = nil
     end
 
     def read
@@ -164,7 +182,10 @@ class Stream
             return
         end
 
-        @logger.unknown "-> #{data}"
+        string = ''
+        string += "(#{@resource.name}) " if @resource
+        string += '-> ' + data
+        @logger.unknown string
 
         @recvq << data
 
@@ -403,7 +424,10 @@ class ClientStream < Stream
     end
 
     def write(stanza)
-        @logger.unknown "<- #{stanza.to_s}"
+        string = ''
+        string += "(#{@resource.name}) " if @resource
+        string += '<- ' + stanza.to_s
+        @logger.unknown string
         super(stanza)
     end
 

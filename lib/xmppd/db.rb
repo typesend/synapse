@@ -41,6 +41,8 @@ class User
 
     attr_reader :node, :domain, :password, :resources, :roster
 
+    @resources = {}
+
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
@@ -164,7 +166,7 @@ class User
 
         # If it's one of ours, make sure we add it to their roster, too.
         if contact.class == LocalContact
-            return if contact.user.roster[jid]
+            return if contact.user.roster[jid] # XXX - updating theirs? infinite loop...
 
             nlc = LocalContact.new(self)
 
@@ -200,6 +202,99 @@ class User
 
         @resources ||= {}
         @resources[resource.name] = resource
+    end
+
+    def delete_resource(resource)
+        unless resource.class == XMPP::Resource
+            raise DBError, "resource isn't a Resource class"
+        end
+
+        @resources.delete_if { |j, rec| rec == resource }
+    end
+
+    # True if we're subscribed to their presence.
+    def subscribed?(user)
+        myc = @roster[user.jid]
+        return false unless myc
+
+        return true if myc.subscription == Contact::SUB_TO
+        return true if myc.subscription == Contact::SUB_BOTH
+
+        return false
+    end
+
+    #
+    # Returns an array of Contacts in our roster that
+    # are subscribed to our presence.
+    #
+    def roster_subscribed_from
+        @roster.find_all { |j, contact| contact.user.subscribed?(self) }
+    end
+
+    #
+    # Returns an array of Contacts in our roster that
+    # we are subscribed to.
+    def roster_subscribed_to
+        @roster.find_all { |j, contact| subscribed?(contact) }
+    end
+
+    # Send a given xml stanza to ourselves.
+    def to_self(xml)
+        return if @resources.nil? or @resources.empty?
+
+        @resources.each do |name, resource|
+            next unless resource.interested?
+
+            xml.root.add_attribute('to', resource.jid)
+            resource.stream.write xml
+        end
+    end
+
+    #
+    # Send a given xml stanza to all of the entries in our roster
+    # where subscription is either "FROM" or "BOTH."
+    #
+    def to_roster_subscribed(xml)
+        return if @roster.empty?
+
+        # Create a list of roster members who are subscribed to us.
+        roster = roster_subscribed_from
+        return unless roster
+
+        roster.each do |j, contact|
+            next if contact.class == RemoteContact # XXX - haven't done s2s yet...
+
+            # Do they have any online resources?
+            next if contact.user.resources.nil? or contact.user.resources.empty?
+
+            # Now go through each of their online resources and send it.
+            contact.user.resources.each do |name, resource|
+                next unless resource.interested?
+                next unless resource.available?
+
+                xml.root.add_attribute('to', resource.jid)
+
+                resource.stream.write xml 
+            end
+        end
+    end
+
+    #
+    # Go through our roster and send ourselves their
+    # current presence, if any.
+    #
+    def get_roster_presence
+        return if @roster.nil or @roster.empty?
+
+        @roster.each do |j, contact|
+            next if contact.class == RemoteContact # XXX - haven't done s2s yet...
+
+            next if contact.user.resources.nil? or contact.user.resources.empty?
+
+            next unless subscribed?(contact) # It could be a FROM
+
+            contact.user.resources.each { |name, resource| resource.send_presence(self) }
+        end
     end
 
     def roster_to_xml
