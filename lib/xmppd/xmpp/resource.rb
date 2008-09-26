@@ -37,8 +37,8 @@ class Resource
     SHOW_XA          = 0x00000008
 
     STATE_NONE       = 0x00000000
-    STATE_AVAILABLE  = 0x00000001
-    STATE_INTERESTED = 0x00000002
+    STATE_AVAILABLE  = 0x00000001 # Get presence updates
+    STATE_INTERESTED = 0x00000002 # Get roster pushes
 
     def initialize(name, stream, user, priority = 0)
         @name = name
@@ -104,24 +104,8 @@ class Resource
         return false
     end
 
-    def get_roster_presence
-        return if @user.roster.nil? or @user.roster.empty?
-
-        # Create a list of roster members we care about.
-        roster = @user.roster_subscribed_to
-        return unless roster
-
-        roster.each do |j, contact|
-            next if contact.user.resources.nil? or contact.user.resources.empty?
-
-            contact.user.resources.each do |name, resource|
-                resource.presence_to(self) if resource.available?
-            end
-        end
-    end
-
     # Send our presence to one Resource.
-    def presence_to(resource)
+    def send_presence(resource)
         unless resource.class == Resource
             raise ArgumentError, "resource must be a Resource class"
         end
@@ -164,8 +148,35 @@ class Resource
         resource.stream.write xml
     end
 
+    #
+    # Go through our User's roster and get the relevant
+    # entities current presence. This should only be
+    # called once, after we send initial presence.
+    #
+    # I know this seems counter-intuitive. Something should
+    # be sending this information TO a Resource, not
+    # making the Resource GET it. However, this is
+    # the cleanest way to do it in code, and in reality,
+    # the former is actually happening.
+    #
+    def send_roster_presence
+        return if @user.roster.nil? or @user.roster.empty?
+
+        # Create a list of roster members we care about.
+        roster = @user.roster_subscribed_to
+        return unless roster
+
+        roster.each do |j, contact|
+            next unless contact.user.available?
+
+            contact.user.resources.each do |name, resource|
+                resource.send_presence(self) if resource.available?
+            end
+        end
+    end
+
     # Broadcast our presence.
-    def presence_out(stanza)
+    def broadcast_presence(stanza)
         unless stanza.class == Client::PresenceStanza
             raise ArgumentError, "stanza must be a Client::PresenceStanza"
         end
@@ -179,8 +190,8 @@ class Resource
 
         xml << pre
 
-        @user.to_self(xml)
         @user.to_roster_subscribed(xml)
+        @user.to_self(xml)
     end
 end
 

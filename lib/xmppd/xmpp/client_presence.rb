@@ -100,7 +100,7 @@ end
 
 def handle_presence(elem)
     # Is the stream open?
-    if Stream::STATE_ESTAB & @state == 0
+    unless established?
         error('unexpected-request')
         return
     end
@@ -142,37 +142,41 @@ def handle_type_none(stanza)
     end if stanza.xml.elements['show']
     
     @resource.show ||= Resource::SHOW_AVAILABLE
-    
-    @logger.unknown '-> set availability'
+
+    @logger.unknown "(#{@resource.name}) -> set availability"
     
     if stanza.xml.elements['status']
         s = stanza.xml.elements['status'].text
         @resource.status = s
-        @logger.unknown "-> status set to '#{s}'"
+        @logger.unknown "(#{@resource.name}) -> status set to '#{s}'"
     end
     
     if stanza.xml.elements['priority']
         p = stanza.xml.elements['priority'].text.to_i
         @resource.priority = p
-        @logger.unknown "-> priority set to #{p}"
+        @logger.unknown "(#{@resource.name}) -> priority set to #{p}"
     end
 
     # XXX - directed presence
 
     # Broadcast it to relevant entities.
-    @resource.presence_out(stanza)
+    @resource.broadcast_presence(stanza)
 
-    # Get OUR contacts' presence. Only do this once.
-    @resource.get_roster_presence if @resource.interested? and not @resource.available?
+    # Was this their initial presence?
+    unless @resource.available?
+        @resource.state |= Resource::STATE_AVAILABLE
 
-    @resource.state |= Resource::STATE_AVAILABLE unless @resource.available?
+        # If they're sending out initial presense, then they
+        # need their contacts' presence.
+        @resource.send_roster_presence
+    end
 
     stanza.state = PresenceStanza::STATE_DONE
 end
 
 # They're logging off.
 def handle_type_unavailable(stanza)
-    @resource.presence_out(stanza)
+    @resource.broadcast_presence(stanza)
     @state &= ~Stream::STATE_ESTAB
 end
 

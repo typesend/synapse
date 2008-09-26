@@ -34,6 +34,7 @@ def starttls
     # Ready the SSL stuff.
     cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
     pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
+    #pkey = OpenSSL::PKey::RSA.new(File::read('etc/ssl.key'))
     ctx = OpenSSL::SSL::SSLContext.new
     ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
     ctx.cert = cert

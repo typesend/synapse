@@ -115,7 +115,7 @@ class XMPPd
             puts '----------------------------'
             puts "xmppd: configure error: #{e}"
             puts '----------------------------'
-            raise
+            exit
         end
 
         if $debug

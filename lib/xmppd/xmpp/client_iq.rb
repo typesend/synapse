@@ -102,7 +102,7 @@ end
 
 def handle_iq(elem)
     # Is the stream open?
-    if Stream::STATE_ESTAB & @state == 0
+    unless established?
         error('unexpected-request')
         return
     end
@@ -188,8 +188,6 @@ def handle_iq_get_query(stanza)
 
     @resource.state |= Resource::STATE_INTERESTED
     @logger.unknown "(#{@resource.name}) -> set state to interested"
-
-    @resource.get_roster_presence if @resource.available?
 end
 
 def handle_iq_set_bind(stanza)
@@ -288,7 +286,7 @@ def handle_iq_set_session(stanza)
     # Make sure they have a resource bound.
     user = DB::User.users[@jid]
 
-    if user.resources.nil? || user.resources.empty? || @resource.nil?
+    unless user.available? or @resource
         stanza.error('unexpected-request', IQStanza::ERR_WAIT)
         return
     end

@@ -35,7 +35,7 @@ module XMPP
 #
 class Stream
     attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :type, :state, :nonce, :resource
+    attr_reader :host, :myhost, :resource
 
     TYPE_NONE     = 0x00000000
     TYPE_CLIENT   = 0x00000001
@@ -53,7 +53,7 @@ class Stream
     def initialize(host, type, myhost = nil)
         @socket = nil
         @host = IDN::Stringprep.nameprep(host)
-        @recvq = []
+        @recvq = ''
         @logger = nil
         @auth = nil
         @state = STATE_NONE
@@ -75,7 +75,7 @@ class Stream
         if $debug
             Dir.mkdir('var/streams') unless File.exists?('var/streams')
 
-            if @type == TYPE_CLIENT
+            if client?
                 unless File.exists?('var/streams/c2s')
                     Dir.mkdir('var/streams/c2s')
                 end
@@ -134,8 +134,32 @@ class Stream
         return (STATE_ESTAB & @state != 0) ? true : false
     end
 
+    def tls?
+        return (STATE_TLS & @state != 0) ? true : false
+    end
+
+    def sasl?
+        return (STATE_SASL & @state != 0) ? true : false
+    end
+
+    def bind?
+        return (STATE_BIND & @state != 0) ? true : false
+    end
+
+    def session?
+        return (STATE_SESSION & @state != 0) ? true : false
+    end
+
     def dead?
         return (STATE_DEAD & @state != 0) ? true : false
+    end
+
+    def client?
+        return (@type == TYPE_CLIENT) ? true : false
+    end
+
+    def server?
+        return (@type == TYPE_SERVER) ? true : false
     end
 
     def close
@@ -154,7 +178,7 @@ class Stream
 
             stanza.xml = REXML::Document.new
 
-            @resource.presence_out(stanza)
+            @resource.broadcast_presence(stanza)
         end
 
         @resource.user.delete_resource(@resource)
@@ -163,7 +187,7 @@ class Stream
 
     def read
         begin
-            if STATE_TLS & @state != 0
+            if tls?
                 data = @socket.readpartial(8192)
             else
                 data = @socket.recv(8192)
@@ -184,10 +208,10 @@ class Stream
 
         string = ''
         string += "(#{@resource.name}) " if @resource
-        string += '-> ' + data
+        string += '-> ' + data.gsub("\n", '')
         @logger.unknown string
 
-        @recvq << data
+        @recvq = "<xmppd>#{data}</xmppd>"
 
         parse
     end
@@ -200,7 +224,7 @@ class Stream
         err << na
         xml << err
 
-        establish unless STATE_ESTAB & @state != 0
+        establish unless established?
 
         write(xml)
         close     
@@ -213,7 +237,7 @@ class Stream
 
     def write(stanza)
         begin
-            if STATE_TLS & @state != 0
+            if tls?
                 @socket.write(stanza.to_s)
             else
                 @socket.send(stanza.to_s, 0)
@@ -234,49 +258,52 @@ class Stream
     end
 
     def parse
-        @recvq.each do |stanza|
-            begin
-                xml = REXML::Document.new(stanza)
-            rescue REXML::ParseException => e
-                if e.message =~ /no close tag/i # REXML is quite strict.
-                    stanza[stanza.rindex('>')] = ''
-                    stanza += '/>'
-                    retry
-                elsif e.message =~ /must not be bound/i # REXML bug. Reported.
-                    str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
-                    stanza.sub!(str, '')
-                    retry
-                elsif e.message =~ /stream:stream/ # Closing stream tag.
-                    close
-                    return
-                else
-                    error('xml-not-well-formed')
-                    return
-                end
-            end
+        stanza = @recvq
 
-            xml.elements.each do |elem|
-                methname = "handle_#{elem.name}"
-                methname.sub!(':', '_')
-
-                unless respond_to? methname
-                    if @type == TYPE_CLIENT
-                        $log.c2s.error "Unknown stanza from #{@host}: " +
-                                       "'#{elem.name}' (no '#{methname}')"
-                    else
-                        $log.s2s.error "Unknown stanza from #{@host}: " +
-                                       "'#{elem.name}' (no '#{methname}')"
-                    end
-
-                    error('xml-not-well-formed')
-                    return
-                end
-
-                send(methname, elem)
+        begin
+            xml = REXML::Document.new(stanza)
+        rescue REXML::ParseException => e
+            rea, reb, rec = /no close tag/i, /missing end tag/i, /stream\:stream/
+            if (e.message =~ rea or e.message =~ reb) and e.message =~ rec # I hate REXML.
+                stanza.gsub!('</xmppd>', '')
+                stanza[stanza.rindex('>')] = ''
+                stanza += '/></xmppd>'
+                retry
+            elsif e.message =~ /must not be bound/i # REXML bug. Reported.
+                str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
+                stanza.sub!(str, '')
+                retry
+            elsif e.message =~ /stream:stream/ # Closing stream tag.
+                close
+                return
+            else
+                error('xml-not-well-formed')
+                @logger.unknown "REXML: #{e.message}"
+                return
             end
         end
 
-        @recvq = []
+        xml.root.elements.each do |elem|
+            methname = "handle_#{elem.name}"
+            methname.sub!(':', '_')
+
+            unless respond_to? methname
+                if client?
+                    $log.c2s.error "Unknown stanza from #{@host}: " +
+                                   "'#{elem.name}' (no '#{methname}')"
+                else
+                    $log.s2s.error "Unknown stanza from #{@host}: " +
+                                   "'#{elem.name}' (no '#{methname}')"
+                end
+
+                error('xml-not-well-formed')
+                return
+            end
+
+            send(methname, elem)
+        end
+
+        @recvq = ''
     end
 
     #
@@ -284,7 +311,7 @@ class Stream
     # On failure, falls back to regular DNS.
     #
     def resolve
-        if @type == TYPE_CLIENT
+        if client?
             rrname = '_xmpp-client._tcp.' + @host
         else
             rrname = '_xmpp-server._tcp.' + @host
@@ -382,7 +409,7 @@ class Stream
                 end
             end
         rescue Resolv::ResolvError
-            if @type == TYPE_CLIENT
+            if client?
                 weighted_recs << [name, 5222]
             else
                 weighted_recs << [name, 5269]
@@ -463,11 +490,11 @@ class ClientStream < Stream
 
         write(stanza)
 
-        if STATE_TLS & @state != 0 && STATE_SASL & @state != 0
-            $log.c2s.info "#{host} -> TLS/SASL stream established"
-        elsif STATE_TLS & @state != 0
+        if tls? and sasl?
+            $log.c2s.info "#{@host} -> TLS/SASL stream established"
+        elsif tls?
             $log.c2s.info "#{@host} -> TLS stream established"
-        elsif STATE_SASL & @state != 0
+        elsif sasl?
             $log.c2s.info "#{@host} -> SASL stream established"
         else
             $log.c2s.info "#{@host} -> stream established"

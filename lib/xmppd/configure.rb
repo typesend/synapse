@@ -25,6 +25,7 @@ require 'xmppd/var'
 #
 require 'rubygems'
 require 'idn'
+require 'openssl'
 
 #
 # The configuration namespace.
@@ -127,6 +128,14 @@ class ConfigParser < Configure::Parser
         unless File.exists?($config.listen.certfile)
             puts 'xmppd: specified certfile does not exist'
             exit
+        end
+
+        begin
+           # cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
+           # pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
+        rescue Exception => e
+            puts 'xmppd: OpenSSL error: ' + e.to_s
+            raise
         end
     end
 

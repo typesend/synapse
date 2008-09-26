@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------
+r55 | rakaur | 2008-09-23 14:26:28 -0400 (Tue, 23 Sep 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Huge commit. Presence now broadcasts, at least locally. I think all of it finally works.
+Need to write some new unit tests... XXX
+
+------------------------------------------------------------------------
 r54 | rakaur | 2008-09-22 16:47:48 -0400 (Mon, 22 Sep 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

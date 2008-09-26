@@ -41,8 +41,6 @@ class User
 
     attr_reader :node, :domain, :password, :resources, :roster
 
-    @resources = {}
-
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
@@ -212,6 +210,17 @@ class User
         @resources.delete_if { |j, rec| rec == resource }
     end
 
+    # True if we have any connected resources.
+    def available?
+        $-w = false
+        if @resources.nil? or @resources.empty?
+            return false
+        else
+            return true
+        end
+        $-w = true
+    end
+
     # True if we're subscribed to their presence.
     def subscribed?(user)
         myc = @roster[user.jid]
@@ -240,7 +249,7 @@ class User
 
     # Send a given xml stanza to ourselves.
     def to_self(xml)
-        return if @resources.nil? or @resources.empty?
+        return unless available?
 
         @resources.each do |name, resource|
             next unless resource.interested?
@@ -265,7 +274,7 @@ class User
             next if contact.class == RemoteContact # XXX - haven't done s2s yet...
 
             # Do they have any online resources?
-            next if contact.user.resources.nil? or contact.user.resources.empty?
+            next unless contact.user.available?
 
             # Now go through each of their online resources and send it.
             contact.user.resources.each do |name, resource|
@@ -276,24 +285,6 @@ class User
 
                 resource.stream.write xml 
             end
-        end
-    end
-
-    #
-    # Go through our roster and send ourselves their
-    # current presence, if any.
-    #
-    def get_roster_presence
-        return if @roster.nil or @roster.empty?
-
-        @roster.each do |j, contact|
-            next if contact.class == RemoteContact # XXX - haven't done s2s yet...
-
-            next if contact.user.resources.nil? or contact.user.resources.empty?
-
-            next unless subscribed?(contact) # It could be a FROM
-
-            contact.user.resources.each { |name, resource| resource.send_presence(self) }
         end
     end
 

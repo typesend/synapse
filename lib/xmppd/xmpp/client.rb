@@ -40,7 +40,7 @@ include XMPP::TLS
 
 def handle_stream(elem)
     # Is the stream open?
-    if Stream::STATE_ESTAB & @state != 0
+    if established?
         error('invalid-namespace')
         return
     end
@@ -87,7 +87,7 @@ end
 
 def handle_starttls(elem)
     # First verify that we have an open stream.
-    unless Stream::STATE_ESTAB & @state != 0
+    unless established?
         error('invalid-namespace')
         return
     end
@@ -118,7 +118,7 @@ end
 
 def handle_auth(elem)
     # First verify that we have an open stream.
-    unless Stream::STATE_ESTAB & @state != 0
+    unless established?
         error('invalid-namespace')
         return
     end
@@ -195,7 +195,7 @@ end
 
 def handle_response(elem)
     # First verify that we have an open stream.
-    unless Stream::STATE_ESTAB & @state != 0
+    unless established?
         error('invalid-namespace')
         return
     end
@@ -213,7 +213,7 @@ def handle_response(elem)
 
     # Decode the response.
     unless elem.has_text?
-        if Stream::STATE_SASL & @state != 0
+        if sasl?
             xml = REXML::Document.new
             suc = REXML::Element.new('success')
             suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
@@ -306,7 +306,7 @@ end
 
 def handle_abort(elem)
     # First verify that we have an open stream.
-    unless Stream::STATE_ESTAB & @state != 0
+    unless established?
         error('invalid-namespace')
         return
     end

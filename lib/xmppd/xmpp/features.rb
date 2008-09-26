@@ -35,7 +35,7 @@ def list(stream)
     feat = REXML::Element.new('stream:features')
 
     # They're not in TLS.
-    if Stream::STATE_TLS & stream.state == 0
+    if not stream.tls?
         # They're not required to have TLS, so advertise SASL.
         feat << sasl if stream.auth.plain && !stream.auth.legacy_auth
 
@@ -44,19 +44,19 @@ def list(stream)
         feat << starttls if !stream.auth.plain
 
     # They're in TLS, but not SASL.
-    elsif Stream::STATE_SASL & stream.state == 0
+    elsif not stream.sasl?
         feat << sasl if !stream.auth.legacy_auth 
 
     # They're in both.
     else
-        if stream.type == Stream::TYPE_CLIENT
-            feat << bind(true) if Stream::STATE_BIND & stream.state == 0
+        if stream.client?
+            feat << bind(true) unless stream.bind?
         else # Servers aren't required to bind a resource.
-            feat << bind(false) if Stream::STATE_BIND & stream.state == 0
+            feat << bind(false) unless stream.bind?
         end
         
         # Session has been removed in the new draft RFC.
-        feat << session if Stream::STATE_SESSION & stream.state == 0
+        feat << session unless stream.session?
     end
 
     xml << feat

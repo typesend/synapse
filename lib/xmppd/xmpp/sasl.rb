@@ -92,4 +92,5 @@ def startsasl(response)
 end
 
 end # module SASL
+
 end # module XMPP
