@@ -1,4 +1,27 @@
 ------------------------------------------------------------------------
+r56 | rakaur | 2008-09-26 16:07:39 -0400 (Fri, 26 Sep 2008) | 6 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+   M /trunk/lib/xmppd.rb
+
+Still gotta get private keys/passphases working right.
+Did a bunch of clean ups. Now stuff doesn't have to edit other stuff's states. This is good.
+Finally got parsing to work with Psi. REXML sucks, and my UNGODLY hacky work-around is to wrap everything in a <xmppd/> element.
+Hopefully move away from REXML in the future. Maybe hpricot or xml-simple.
+More cleanups.
+
+------------------------------------------------------------------------
 r55 | rakaur | 2008-09-23 14:26:28 -0400 (Tue, 23 Sep 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
