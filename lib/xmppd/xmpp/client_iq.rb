@@ -19,6 +19,7 @@ require 'rexml/document'
 require 'xmppd/var'
 
 require 'xmppd/xmpp/resource'
+require 'xmppd/xmpp/stanza'
 require 'xmppd/xmpp/stream'
 
 #
@@ -32,33 +33,12 @@ module XMPP
 #
 module Client
 
-class IQStanza
-    @@stanzas = {} # XXX - not sure if this is necessary
-
-    attr_accessor :type, :state, :id, :xml, :stream
-
+class IQStanza < XMPP::Stanza
     TYPE_GET     = 0x00000001
     TYPE_SET     = 0x00000002
 
-    STATE_NONE   = 0x00000000
-    STATE_SET    = 0x00000001
-    STATE_GET    = 0x00000002
-    STATE_RESULT = 0x00000004
-    STATE_ERROR  = 0x00000008
-
-    ERR_CANCEL   = 0x00000001
-    ERR_CONTINUE = 0x00000002
-    ERR_MODIFY   = 0x00000004
-    ERR_AUTH     = 0x00000008
-    ERR_WAIT     = 0x00000010
-
     def initialize(id)
-        # Prune out all the finished ones.
-        @@stanzas.delete_if { |k, v| v.state & STATE_RESULT != 0 }
-        @@stanzas.delete_if { |k, v| v.state & STATE_ERROR != 0 }
-
-        @@stanzas[id] = self
-        @id = id
+        super(id)
     end
 
     ######
@@ -66,37 +46,7 @@ class IQStanza
     ######
 
     def error(defined_condition, type)
-        @state = STATE_ERROR
-
-        result = REXML::Document.new
-
-        iq = REXML::Element.new('iq')
-        iq.add_attribute('type', 'error')
-        iq.add_attribute('id', @id)
-
-        err = REXML::Element.new('error')
-
-        case type
-        when ERR_CANCEL
-            err.add_attribute('type', 'cancel')
-        when ERR_CONTINUE
-            err.add_attribute('type', 'continue')
-        when ERR_MODIFY
-            err.add_attribute('type', 'modify')
-        when ERR_AUTH
-            err.add_attribute('type', 'auth')
-        when ERR_WAIT
-            err.add_attribute('type', 'wait')
-        end
-
-        cond = REXML::Element.new(defined_condition)
-        cond.add_namespace('urn:ietf:params:xml:ns:xmpp-stanzas')
-
-        err << cond
-        iq << err
-        result << iq
-
-        @stream.write iq
+        super('iq', defined_condition, type)
     end
 end
 

@@ -19,6 +19,7 @@ require 'rexml/document'
 require 'xmppd/var'
 
 require 'xmppd/xmpp/resource'
+require 'xmppd/xmpp/stanza'
 require 'xmppd/xmpp/stream'
 
 #
@@ -32,29 +33,9 @@ module XMPP
 #
 module Client
 
-# XXX - need to abstract out a base Stanza class eventually
-class PresenceStanza
-    @@stanzas = {} # XXX - not sure if this is necessary
-
-    attr_accessor :type, :to, :from, :state, :id, :xml, :stream
-
-    STATE_NONE   = 0x00000000
-    STATE_DONE   = 0x00000004
-    STATE_ERROR  = 0x00000008
-
-    ERR_CANCEL   = 0x00000001
-    ERR_CONTINUE = 0x00000002
-    ERR_MODIFY   = 0x00000004
-    ERR_AUTH     = 0x00000008
-    ERR_WAIT     = 0x00000010
-
+class PresenceStanza < XMPP::Stanza
     def initialize(id = nil)
-        # Prune out all the finished ones.
-        @@stanzas.delete_if { |k, v| v.state & STATE_DONE != 0 }
-        @@stanzas.delete_if { |k, v| v.state & STATE_ERROR != 0 }
-
-        @@stanzas[id] = self
-        @id = id
+        super(id)
     end
 
     ######
@@ -62,39 +43,7 @@ class PresenceStanza
     ######
 
     def error(defined_condition, type)
-        @state = STATE_ERROR
-
-        result = REXML::Document.new
-
-        iq = REXML::Element.new('presence')
-        iq.add_attribute('from', @to) if @to
-        iq.add_attribute('to', @from) if @from
-        iq.add_attribute('id', @id) if @id
-        iq.add_attribute('type', 'error')
-
-        err = REXML::Element.new('error')
-
-        case type
-        when ERR_CANCEL
-            err.add_attribute('type', 'cancel')
-        when ERR_CONTINUE
-            err.add_attribute('type', 'continue')
-        when ERR_MODIFY
-            err.add_attribute('type', 'modify')
-        when ERR_AUTH
-            err.add_attribute('type', 'auth')
-        when ERR_WAIT
-            err.add_attribute('type', 'wait')
-        end
-
-        cond = REXML::Element.new(defined_condition)
-        cond.add_namespace('urn:ietf:params:xml:ns:xmpp-stanzas')
-
-        err << cond
-        iq << err
-        result << iq
-
-        @stream.write iq
+        super('presence', defined_condition, type)
     end
 end
 
@@ -170,8 +119,6 @@ def handle_type_none(stanza)
         # need their contacts' presence.
         @resource.send_roster_presence
     end
-
-    stanza.state = PresenceStanza::STATE_DONE
 end
 
 # They're logging off.

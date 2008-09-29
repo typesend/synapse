@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r57 | rakaur | 2008-09-29 10:03:35 -0400 (Mon, 29 Sep 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+See comment in stream.rb on #45.
+
+------------------------------------------------------------------------
 r56 | rakaur | 2008-09-26 16:07:39 -0400 (Fri, 26 Sep 2008) | 6 lines
 Changed paths:
    M /trunk/ChangeLog

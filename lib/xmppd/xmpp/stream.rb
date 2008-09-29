@@ -34,7 +34,7 @@ module XMPP
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    attr_accessor :socket, :auth
+    attr_accessor :socket, :auth, :logger
     attr_reader :host, :myhost, :resource
 
     TYPE_NONE     = 0x00000000
