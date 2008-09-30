@@ -185,25 +185,6 @@ class Stream
         @resouce = nil
     end
 
-
-    #
-    # Okay, there's no easy way to say this, but, using XML
-    # for a streaming protocol without any way to establish
-    # when a full stanza has been read was a really bad idea.
-    #
-    # We can't just wait for \n like in IRC, so we have no
-    # way of knowing if we've read in a full stanza.
-    # Right now I just pass it off to the parser, and if it's
-    # messed up the client gets kicked and they have to reconnect
-    # and try again.
-    #
-    # How often does this happen in the real world? Who is on
-    # such a crappy connection it's sending half a stanza in a
-    # TCP packet? TCP itself should prevent this from happening,
-    # unless clients are sending partial stanzas to begin with.
-    # If they are, that's their fault. This isn't 1980, and we're
-    # not onl 1600 baud connections. I'm not losing sleep over it.
-    #
     def read
         begin
             if tls?

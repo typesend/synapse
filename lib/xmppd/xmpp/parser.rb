@@ -96,6 +96,7 @@ def parse
             @recvq.gsub!(str, '')
             parse
         else # Probably just an incomplete read(). Store it for next time.
+             # ^^^^^^^ <- Gotta figure that out, XXX
             saved = @recvq
         end
     ensure

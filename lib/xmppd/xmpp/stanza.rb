@@ -1,6 +1,6 @@
 #
 # xmppd: a small XMPP server
-# xmpp/client_iq.rb: handles iq stanzas from clients
+# xmpp/stanza.rb: handles stanzas from clients
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
 #
@@ -12,14 +12,6 @@
 #
 require 'idn'
 require 'rexml/document'
-
-#
-# Import required xmppd modules.
-#
-require 'xmppd/var'
-
-require 'xmppd/xmpp/resource'
-require 'xmppd/xmpp/stream'
 
 #
 # The XMPP namespace.
