@@ -190,12 +190,14 @@ class XMPPd
             # Update the current time.
             $time = Time.now.to_f
 
+            #puts "-------------------------------------------------"
             #ObjectSpace.each_object do |o|
             #    puts o if o.kind_of? XMPP::Stream
             #    puts o if o.kind_of? XMPP::Resource
             #    puts o if o.kind_of? XMPP::Stanza
+            #    puts "DOC: " + o.root.name if o.kind_of? REXML::Document
+            #    puts "ELE: " + o.name if o.kind_of? REXML::Element
             #end
-
             #puts "-------------------------------------------------"
 
             # Kill off any dead connections.
@@ -209,7 +211,7 @@ class XMPPd
             readfds = $connections.collect { |c| c.socket }
             readfds += $listeners
 
-            ret = select(readfds, [], [], 60)
+            ret = select(readfds, [], [], 5)
 
             next unless ret
             next if ret[0].empty?

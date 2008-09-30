@@ -15,7 +15,6 @@ require 'idn'
 require 'logger'
 require 'openssl'
 require 'resolv'
-require 'rexml/document'
 require 'socket'
 
 #
@@ -24,6 +23,7 @@ require 'socket'
 require 'xmppd/log'
 require 'xmppd/var'
 require 'xmppd/xmpp/client'
+require 'xmppd/xmpp/parser'
 
 #
 # The XMPP namespace.
@@ -230,7 +230,7 @@ class Stream
         string += '-> ' + data.gsub("\n", '')
         @logger.unknown string
 
-        @recvq = "<xmppd>#{data}</xmppd>"
+        @recvq += data
 
         parse
     end
@@ -276,54 +276,7 @@ class Stream
         end
     end
 
-    def parse
-        stanza = @recvq
-
-        begin
-            xml = REXML::Document.new(stanza)
-        rescue REXML::ParseException => e
-            rea, reb, rec = /no close tag/i, /missing end tag/i, /stream\:stream/
-            if (e.message =~ rea or e.message =~ reb) and e.message =~ rec # I hate REXML.
-                stanza.gsub!('</xmppd>', '')
-                stanza[stanza.rindex('>')] = ''
-                stanza += '/></xmppd>'
-                retry
-            elsif e.message =~ /must not be bound/i # REXML bug. Reported.
-                str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
-                stanza.sub!(str, '')
-                retry
-            elsif e.message =~ /stream:stream/ # Closing stream tag.
-                close
-                return
-            else
-                error('xml-not-well-formed')
-                @logger.unknown "REXML: #{e.message}"
-                return
-            end
-        end
-
-        xml.root.elements.each do |elem|
-            methname = "handle_#{elem.name}"
-            methname.sub!(':', '_')
-
-            unless respond_to? methname
-                if client?
-                    $log.c2s.error "Unknown stanza from #{@host}: " +
-                                   "'#{elem.name}' (no '#{methname}')"
-                else
-                    $log.s2s.error "Unknown stanza from #{@host}: " +
-                                   "'#{elem.name}' (no '#{methname}')"
-                end
-
-                error('xml-not-well-formed')
-                return
-            end
-
-            send(methname, elem)
-        end
-
-        @recvq = ''
-    end
+    include XMPP::Parser
 
     #
     # First tries DNS SRV RR as per RFC3920.

@@ -1,4 +1,17 @@
 ------------------------------------------------------------------------
+r58 | rakaur | 2008-09-29 14:29:26 -0400 (Mon, 29 Sep 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   A /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+
+Cleaned up stanza classes. See #43.
+Still need to work on storing the actual XML. Things are messing up for some reason and my brain hurts.
+
+------------------------------------------------------------------------
 r57 | rakaur | 2008-09-29 10:03:35 -0400 (Mon, 29 Sep 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

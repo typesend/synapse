@@ -96,7 +96,7 @@ def handle_type_none(stanza)
     
     if stanza.xml.elements['status']
         s = stanza.xml.elements['status'].text
-        @resource.status = s
+        @resource.status = s if s
         @logger.unknown "(#{@resource.name}) -> status set to '#{s}'"
     end
     

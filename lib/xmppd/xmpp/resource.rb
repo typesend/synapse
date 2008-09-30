@@ -60,6 +60,8 @@ class Resource
         @user.add_resource(self)
 
         self.priority = priority
+
+        @xml = nil
     end
     
     ######
@@ -110,40 +112,13 @@ class Resource
             raise ArgumentError, "resource must be a Resource class"
         end
 
-        xml = REXML::Document.new
-        pre = REXML::Element.new('presence')
-        pre.add_attribute('to', resource.jid)
-        pre.add_attribute('from', jid)
+        xml = @xml
 
-        pri = REXML::Element.new('priority')
-        pri.text = @priority.to_s
-
-        pre << pri
-
-        show = REXML::Element.new('show')
-        case @show
-        when SHOW_AVAILABLE
-            show = nil
-        when SHOW_AWAY
-            show.text = 'away'
-        when SHOW_CHAT
-            show.text = 'chat'
-        when SHOW_DND
-            show.text = 'dnd'
-        when SHOW_XA
-            show.text = 'xa'
+        xml.each_element do |elem|
+            if elem.name == 'presence'
+                elem.add_attribute('to', resource.jid)
+            end
         end
-
-        pre << show if show
-
-        if @status
-            status = REXML::Element.new('status')
-            status.text = @status
-
-            pre << status
-        end
-
-        xml << pre
 
         resource.stream.write xml
     end
@@ -189,6 +164,8 @@ class Resource
         stanza.xml.elements.each { |elem| pre << elem }
 
         xml << pre
+
+        @xml = xml
 
         @user.to_roster_subscribed(xml)
         @user.to_self(xml)

@@ -54,9 +54,9 @@ class Stanza
 
         result = REXML::Document.new
 
-        iq = REXML::Element.new(stanza)
-        iq.add_attribute('type', 'error')
-        iq.add_attribute('id', @id)
+        stzerr = REXML::Element.new(stanza)
+        stzerr.add_attribute('type', 'error')
+        stzerr.add_attribute('id', @id)
 
         err = REXML::Element.new('error')
 
@@ -77,10 +77,10 @@ class Stanza
         cond.add_namespace('urn:ietf:params:xml:ns:xmpp-stanzas')
 
         err << cond
-        iq << err
-        result << iq
+        stzerr << err
+        result << stzerr
 
-        @stream.write iq
+        @stream.write stzerr
     end
 end
 
