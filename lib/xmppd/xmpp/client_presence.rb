@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
 #
-# $Id: client_iq.rb 50 2008-09-18 20:09:56Z rakaur $
+# $Id$
 #
 
 #
