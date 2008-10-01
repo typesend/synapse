@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # xmppd.rb: main program class
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
@@ -59,7 +59,7 @@ class XMPPd
             exit
         end
 
-        puts "xmppd: version #$version (#$release_date) [#{RUBY_PLATFORM}]"
+        puts "xmppd: version synapse-#$version (#$release_date) [#{RUBY_PLATFORM}]"
 
         # Check to see if we're running as root.
         if Process.euid == 0

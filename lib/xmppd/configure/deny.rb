@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # deny.rb: client authorization configuration
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>

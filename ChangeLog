@@ -1,4 +1,38 @@
 ------------------------------------------------------------------------
+r61 | rakaur | 2008-09-30 17:25:19 -0400 (Tue, 30 Sep 2008) | 1 line
+Changed paths:
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Clean up some stuff.
+------------------------------------------------------------------------
+r60 | rakaur | 2008-09-30 17:05:47 -0400 (Tue, 30 Sep 2008) | 1 line
+Changed paths:
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+
+Fixing svn:keywords.
+------------------------------------------------------------------------
+r59 | rakaur | 2008-09-30 16:58:41 -0400 (Tue, 30 Sep 2008) | 6 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   A /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+
+Gotta make sure to commit while I remember. Big commit.
+Cleaned up stanza classes.
+Made resource stuff more sane.
+The XML is now parsed by a SAX parser, and can handle partial stanzas. This took me days.
+More later, after I clean this up.
+
+------------------------------------------------------------------------
 r58 | rakaur | 2008-09-29 14:29:26 -0400 (Mon, 29 Sep 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

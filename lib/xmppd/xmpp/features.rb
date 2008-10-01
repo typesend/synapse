@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # xmpp/features.rb: handles stream features
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>

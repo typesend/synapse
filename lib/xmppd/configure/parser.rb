@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # configure/parser.rb: bind-style configuration file parser
 #
 # Copyright (c) 2004-2005 Eric Will <rakaur@malkier.net>

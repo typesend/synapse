@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # ts_xmppd.rb: unit testing
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>

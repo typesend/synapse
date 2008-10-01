@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby -w
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # xmppd: launches a XMPPd class
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>

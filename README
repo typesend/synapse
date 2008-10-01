@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # README: at-a-glance documentation
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
@@ -7,13 +7,13 @@
 # $Id$
 #
 
-= xmppd
+= synapse
 === A Lightweight XMPP Server Implementation
 
 This program is free but copyrighted software; see <tt>doc/license</tt> for
 details.
 
-Information about +xmppd+ may be found at <tt>http://xmppd.malkier.net/</tt>.
+Information about +synapse+ may be found at <tt>http://synapse.malkier.net/</tt>.
 
 == Credits
 
@@ -22,7 +22,7 @@ none of which have ever been released. This program borrows some ideas, and
 perhaps a small amount of code (mostly for IDN, TLS, and SASL) from the
 netxmpp-ruby project: <tt>http://netxmpp-ruby.jabberstudio.org/</tt>.
 
-Currently xmppd is written largely by me:
+Currently synapse is written largely by me:
   rakaur, Eric Will <rakaur@malkier.net>
 
 Thanks to "official" alpha/beta testers:
@@ -53,22 +53,22 @@ Special thanks to:
 
 == Presentation
 
-+xmppd+ is a small, lightweight, strictly RFC-compliant Jabber/XMPP server.
++synapse+ is a small, lightweight, strictly RFC-compliant Jabber/XMPP server.
 It doesn't require a system-wide install, so that XMPP can hopefully be
-brought to the world of shells. As part of this goal, +xmppd+ doesn't rely
+brought to the world of shells. As part of this goal, +synapse+ doesn't rely
 on many processes running concurrently (+jabberd+), and doesn't rely on
 an exotic language to be installed (+ejabberd+) (unless you consider Ruby
 exotic, I guess, but it's installed in all of *my* shells).
 
-+xmppd+ should happily interoperate with any server that is either RFC
-compliant, or supports, at the very least, the Dialback protocol. +xmppd+
++synapse+ should happily interoperate with any server that is either RFC
+compliant, or supports, at the very least, the Dialback protocol. +synapse+
 is quite strict in regards to enforcing the RFC, with one exception for
 legacy +jabberd+ servers that don't properly specify the <tt>jabber:server</tt>
 namespace.
 
 == Installation
 
-+xmppd+ comes pretty much installed, as there's no compile-time.
++synapse+ comes pretty much installed, as there's no compile-time.
 
 === Dependencies:
 
@@ -94,15 +94,14 @@ the main program with <tt>./bin/xmppd</tt>.
 == Contact
 
 If you have a bug, support request, patch, or feature request, please use
-our tracker: <tt>http://xmppd.malkier.net/</tt>.
+our tracker: <tt>http://synapse.malkier.net/</tt>.
 
 Also, my JID is <tt>rakaur@malkier.net</tt>. Keep in mind if you message me
 about a bug, support request, patch, or feature request, I'm just going to point
 you to the tracker. If I handled everyone's problems on a case-by-case
 basis I'd certainly be crazier than I already am.
 
-Instead of a mailing list, there is a MUC
-room: <tt>xmppd@conference.malkier.net</tt>
+There is a mailing list, xmppd-dev@lists.malkier.net.
 
 If you've read this far, congratulations. You are among the few elite people
 that actually read documentation. Thank you.

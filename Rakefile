@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # Rakefile: Ruby Makefile
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
@@ -91,7 +91,7 @@ task :update_version => [:check_ver] do
 
     open('lib/xmppd/version.rb', 'w') do |f|
         f.puts '#'
-        f.puts '# xmppd: a small XMPP server'
+        f.puts '# synapse: a small XMPP server'
         f.puts '# version.rb: dynamically-generated version information'
         f.puts '#'
         f.puts '# Copyright (c) 2006 Eric Will <rakaur@malkier.net>'
@@ -129,7 +129,7 @@ PKG_FILES = FileList['Rakefile', 'ChangeLog',
 
 # Makes .tar.gz and .zip packages.
 Rake::PackageTask.new('package') do |p|
-    p.name = 'xmppd'
+    p.name = 'synapse'
     p.version = ENV['VER'] || $version
     p.need_tar = true
     p.need_zip = true
@@ -137,11 +137,11 @@ Rake::PackageTask.new('package') do |p|
 end
 
 spec = Gem::Specification.new do |s|
-    s.name = 'xmppd'
+    s.name = 'synapse'
     s.version = ENV['VER'] || $version
     s.author = 'Eric Will'
     s.email = 'rakaur@malkier.net'
-    s.homepage = 'http://xmppd.malkier.net/'
+    s.homepage = 'http://synapse.malkier.net/'
     s.platform = Gem::Platform::RUBY
     s.summary = 'a small, lightweight XMPP server'
     s.files = PKG_FILES.to_a

@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # version.rb: dynamically-generated version information
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
@@ -8,5 +8,5 @@
 #
 
 $version = '0.1'
-$release_date = '2008-9-18'
-$svn_version = 'r49'
+$release_date = '2008-10-1'
+$svn_version = 'r61M'

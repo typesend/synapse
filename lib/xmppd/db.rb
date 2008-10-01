@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # db.rb: database classes
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>

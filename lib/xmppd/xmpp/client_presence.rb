@@ -1,5 +1,5 @@
 #
-# xmppd: a small XMPP server
+# synapse: a small XMPP server
 # xmpp/client_presence.rb: handles presence stanzas from clients
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
