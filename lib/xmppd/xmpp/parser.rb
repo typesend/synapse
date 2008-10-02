@@ -24,8 +24,8 @@ class REXML::Source
         @buffer ||= ''
         @buffer += string
 
-        # A megabyte in the buffer.
-        raise XMPP::Parser::ParserError if @buffer.length > (1024*1024)
+        # 64kb in the buffer. This should never happen.
+        raise XMPP::Parser::ParserError if @buffer.length > 65536
     end
 end
 
@@ -106,10 +106,11 @@ def parse
         @parser.source.buffer = @recvq
         @parser.parse
 
-        raise ParserError if @current.to_s.length > (1024*1024)
+        raise ParserError if @current.to_s.length > 65536
     rescue ParserError
         # If we get here, they've maxed out on their buffer.
-        error('policy-violation', "recvq exceeded: #{@current.to_s.length}")
+        apperr = { 'name' => 'stanza-too-big', 'text' => 65536 }
+        error('policy-violation', apperr)
     rescue REXML::ParseException => e
         if e.message =~ /must not be bound/i # REXML bug. Reported.
             str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
@@ -121,6 +122,7 @@ def parse
             # XXX: IF I DO THIS, THERE IS NO WAY TO DETECT INVALID
             # XML IN THE STREAM. IF THIS CLIENT IS MESSING WITH US,
             # IT WILL SIT THERE UNTIL IT TIMES OUT, BEING USELESS.
+            error('xml-not-well-formed')
         end
     end
 

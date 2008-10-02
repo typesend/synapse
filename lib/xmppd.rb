@@ -189,7 +189,7 @@ class XMPPd
         #
         # If you want to add users, do this for now:
         #
-        #DB::User.new('username',  'host', 'password')
+        #DB::User.new('username', 'host', 'password')
     end
 
     def ioloop

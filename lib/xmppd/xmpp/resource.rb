@@ -28,7 +28,7 @@ end
 
 class Resource
     attr_accessor :state
-    attr_reader :name, :stream, :user, :priority, :show, :status
+    attr_reader :name, :stream, :user, :priority, :show, :status, :dp_to
     
     SHOW_AVAILABLE   = 0x00000000
     SHOW_AWAY        = 0x00000001
@@ -45,6 +45,7 @@ class Resource
         @state = STATE_NONE
         @status = nil
         @show = nil
+        @dp_to = [] # An array of JIDs that we've sent directed presence to.
 
         unless stream.class == ClientStream
             raise ResourceError, "stream isn't a client stream"
@@ -106,21 +107,70 @@ class Resource
         return false
     end
 
+    # Send directed presence to one JID.
+    def send_directed_presence(jid, stanza)
+        unless stanza.class == XMPP::Client::PresenceStanza
+            raise ArgumentError, "stanza must be PresenceStanza"
+        end
+
+        node, domain = jid.split('@')
+        domain, resource = domain.split('/')
+
+        # Check to see if its to one of ours.
+        user = DB::User.users[node + '@' + domain]
+
+        if user and not user.resources.empty?
+            sb = user.subscribed?(@user)
+
+            if resource and user.resources[resource]
+                send_presence(user.resources[resource], stanza)
+
+                @dp_to << user.resources[resource].jid unless sb
+                return
+            end
+
+            user.resources.each do |n, resource|
+                send_presence(resource, stanza)
+                @dp_to << resource.jid unless sb
+            end
+
+            return
+
+            @dp_to.uniq!
+        end
+
+        # If we get here then they're remote.
+    end
+
     # Send our presence to one Resource.
-    def send_presence(resource)
+    def send_presence(resource, stanza = nil)
         unless resource.class == Resource
             raise ArgumentError, "resource must be a Resource class"
         end
 
-        xml = @xml
+        unless stanza.class == XMPP::Client::PresenceStanza
+            raise ArgumentError, "stanza must be PresenceStanza"
+        end if stanza
 
-        xml.each_element do |elem|
-            if elem.name == 'presence'
-                elem.add_attribute('to', resource.jid)
+        if stanza
+            pre = REXML::Element.new('presence')
+            pre.add_attribute('type', stanza.type) if stanza.type
+            pre.add_attribute('from', jid)
+            pre.add_attribute('to', stanza.to) if stanza.to
+            stanza.xml.elements.each { |elem| pre << elem }
+
+            resource.stream.write pre
+        else
+            xml = @xml
+
+            xml.each_element do |elem|
+                if elem.name == 'presence'
+                    elem.add_attribute('to', resource.jid)
+                end
             end
-        end
 
-        resource.stream.write xml
+            resource.stream.write xml
+        end
     end
 
     #
@@ -162,6 +212,8 @@ class Resource
         stanza.xml.elements.each { |elem| pre << elem }
 
         @xml = pre
+
+        @state &= ~STATE_AVAILABLE if stanza.type == 'unavailable'
 
         @user.to_roster_subscribed(pre)
         @user.to_self(pre)

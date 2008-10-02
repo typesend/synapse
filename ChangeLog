@@ -1,4 +1,23 @@
 ------------------------------------------------------------------------
+r63 | rakaur | 2008-10-02 12:25:42 -0400 (Thu, 02 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+   M /trunk/lib/xmppd.rb
+
+Fixed up the parser to kind of work.
+Cleaned up the REXML creation stuff.
+Added a limit on the buffer waiting to be parsed.
+
+------------------------------------------------------------------------
 r62 | rakaur | 2008-10-01 10:08:21 -0400 (Wed, 01 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

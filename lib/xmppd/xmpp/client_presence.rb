@@ -76,6 +76,11 @@ end
  
 # No type signals avilability.
 def handle_type_none(stanza)
+    if stanza.to
+        @resource.send_directed_presence(stanza.to, stanza)
+        return
+    end
+
     case stanza.xml.elements['show'].text
     when 'away'
         @resource.show = Resource::SHOW_AWAY
@@ -106,8 +111,6 @@ def handle_type_none(stanza)
         @logger.unknown "(#{@resource.name}) -> priority set to #{p}"
     end
 
-    # XXX - directed presence
-
     # Broadcast it to relevant entities.
     @resource.broadcast_presence(stanza)
 
@@ -123,8 +126,17 @@ end
 
 # They're logging off.
 def handle_type_unavailable(stanza)
+    if stanza.to
+        @resource.send_directed_presence(stanza.to, stanza)
+        return
+    end
+
+    @resource.dp_to.uniq.each do |jid|
+        @resource.send_directed_presence(jid, stanza)
+    end
+
     @resource.broadcast_presence(stanza)
-    @state &= ~Stream::STATE_ESTAB
+    #@state &= ~Stream::STATE_ESTAB
 end
 
 end # module Client

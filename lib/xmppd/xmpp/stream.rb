@@ -170,6 +170,7 @@ class Stream
         write '</stream:stream>' if try
 
         @socket.close unless @socket.closed?
+        @state &= ~STATE_ESTAB
         @state |= STATE_DEAD
 
         return unless @resource
@@ -178,10 +179,10 @@ class Stream
         if try and established?
             stanza = Client::PresenceStanza.new
             stanza.type = 'unavailable'
+            stanza.xml = REXML::Element.new('presence')
+            stanza.xml.add_attribute('type', 'unavailable')
 
-            stanza.xml = REXML::Element.new
-
-            @resource.broadcast_presence(stanza)
+            handle_type_unavailable(stanza)
         end
 
         @resource.user.delete_resource(@resource)
@@ -219,17 +220,17 @@ class Stream
         parse
     end
 
-    def error(defined_condition, text = nil)
+    def error(defined_condition, apperr = nil)
         err = REXML::Element.new('stream:error')
         na = REXML::Element.new(defined_condition)
         na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
         err << na
 
-        if text
-            tx = REXML::Element.new('text')
-            tx.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
-            tx.text = text
-            err << tx
+        if apperr
+            ae = REXML::Element.new(apperr['name'])
+            ae.add_namespace('urn:xmpp:errors')
+            ae.text = apperr['text'] if apperr['text']
+            err << ae
         end
 
         establish unless established?
@@ -414,9 +415,9 @@ class ClientStream < Stream
         super(try)
     end
 
-    def error(defined_condition, text = nil)
+    def error(defined_condition, apperr = nil)
         $log.c2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition, text)
+        super(defined_condition, apperr)
     end
 
     #######
@@ -473,9 +474,9 @@ class ServerStream < Stream
         super(try)
     end
 
-    def error(defined_condition, text = nil)
+    def error(defined_condition, apperr = nil)
         $log.s2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition, text)
+        super(defined_condition, apperr)
     end
 
     #######
