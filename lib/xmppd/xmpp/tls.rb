@@ -48,7 +48,7 @@ def starttls
     rescue Exception => e
         @logger.unknown "-> TLS error: #{e}"
         @socket.close
-        @state |= STATE_DEAD
+        @state |= Stream::STATE_DEAD
         return
     end
     $-w = true # Get them back.

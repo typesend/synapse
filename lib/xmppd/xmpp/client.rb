@@ -94,24 +94,20 @@ def handle_starttls(elem)
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-tls'
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-tls')
-        xml << fai
 
-        write xml
+        write fai
         
         close
         return
     end
 
     # Send the go-ahead.
-    xml = REXML::Document.new
     pro = REXML::Element.new('proceed')
     pro.add_namespace('urn:ietf:params:xml:ns:xmpp-tls')
-    xml << pro
 
-    write xml
+    write pro
 
     starttls
 end
@@ -131,13 +127,11 @@ def handle_auth(elem)
 
     # Make sure they're using a mechanism we support.
     unless SASL::MECHANISMS.include? elem.attributes['mechanism']
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('invalid-mechanism')
-        xml << fai
 
-        write xml
+        write fai
 
         close
         return
@@ -149,24 +143,20 @@ def handle_auth(elem)
         authzid = authcid + '@' + @myhost if authzid.empty?
 
         unless DB::User.auth(authzid, passwd, true)
-            xml = REXML::Document.new
             fai = REXML::Element.new('failure')
             fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
             fai << REXML::Element.new('not-authorized')
-            xml << fai
 
-            write xml
+            write fai
 
             close
             return
         end
         
-        xml = REXML::Document.new
         suc = REXML::Element.new('success')
         suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-        xml << suc
         
-        write xml
+        write suc
         
         @state &= ~Stream::STATE_ESTAB
         @state |= Stream::STATE_SASL
@@ -184,13 +174,11 @@ def handle_auth(elem)
     chal = Base64.encode64(chal)
     chal.gsub!("\n", '')
 
-    xml = REXML::Document.new
     challenge = REXML::Element.new('challenge')
     challenge.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
     challenge.text = chal
-    xml << challenge
 
-    write xml
+    write challenge
 end
 
 def handle_response(elem)
@@ -214,12 +202,10 @@ def handle_response(elem)
     # Decode the response.
     unless elem.has_text?
         if sasl?
-            xml = REXML::Document.new
             suc = REXML::Element.new('success')
             suc.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
-            xml << suc
 
-            write xml
+            write suc
 
             @state &= ~Stream::STATE_ESTAB
 
@@ -227,13 +213,11 @@ def handle_response(elem)
 
             return
         else
-            xml = REXML::Document.new
             fai = REXML::Element.new('failure')
             fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
             fai << REXML::Element.new('incorrect-encoding')
-            xml << fai
 
-            write xml
+            write fai
 
             close
 
@@ -260,13 +244,11 @@ def handle_response(elem)
 
     # Is our key the same?
     unless response['nonce'] == @nonce
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('incorrect-encoding')
-        xml << fai
 
-        write xml
+        write fai
 
         close
         return
@@ -274,13 +256,11 @@ def handle_response(elem)
 
     # Is the realm right?
     unless response['realm'] == @myhost
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')       
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('incorrect-encoding')
-        xml << fai
 
-        write xml
+        write fai
 
         close
         return
@@ -288,13 +268,11 @@ def handle_response(elem)
 
     # Is the digest-uri right?
     unless response['digest-uri'] == 'xmpp/' + @myhost
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('incorrect-encoding')
-        xml << fai
 
-        write xml
+        write fai
 
         close
         return
@@ -322,13 +300,11 @@ def handle_abort(elem)
         return
     end
     
-    xml = REXML::Document.new
     fai = REXML::Element.new('failure')
     fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
     fai << REXML::Element.new('aborted')
-    xml << fai
 
-    write xml
+    write fai
 end
 
 end # module Client

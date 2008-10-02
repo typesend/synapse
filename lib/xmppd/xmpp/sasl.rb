@@ -58,13 +58,11 @@ def startsasl(response)
 
     # Are they authorized?
     unless myresp == response['response']
-        xml = REXML::Document.new
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('not-authorized')
-        xml << fai
 
-        write xml
+        write fai
 
         close
         return
@@ -80,15 +78,13 @@ def startsasl(response)
     rspauth = Base64.encode64(rspauth)
     rspauth.gsub!("\n", '')
 
-    xml = REXML::Document.new
     chal = REXML::Element.new('challenge')
     chal.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
     chal.text = rspauth
-    xml << chal
 
     @state |= Stream::STATE_SASL
 
-    write xml
+    write chal
 end
 
 end # module SASL

@@ -124,17 +124,14 @@ def handle_iq_get_query(stanza)
 
     stanza.state = IQStanza::STATE_RESULT
 
-    result = REXML::Document.new
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
     iq.add_attribute('id', stanza.id)
 
     query = DB::User.users[@jid].roster_to_xml
     iq << query
-    result << iq
 
-    write result
+    write iq
 
     @resource.state |= Resource::STATE_INTERESTED
     @logger.unknown "(#{@resource.name}) -> set state to interested"
@@ -185,8 +182,6 @@ def handle_iq_set_bind(stanza)
 
     stanza.state |= IQStanza::STATE_RESULT
 
-    result = REXML::Document.new
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
     iq.add_attribute('id', stanza.id)
@@ -199,9 +194,8 @@ def handle_iq_set_bind(stanza)
 
     bind << jid
     iq << bind
-    result << iq
 
-    write result
+    write iq
 
     user = DB::User.users[@jid]
     @resource = Resource.new(resource, self, user, 0)
@@ -243,15 +237,11 @@ def handle_iq_set_session(stanza)
 
     stanza.state |= IQStanza::STATE_RESULT
 
-    result = REXML::Document.new
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
     iq.add_attribute('id', stanza.id)
 
-    result << iq
-
-    write result
+    write iq
     
     # This only serves to let Features::list() know what to do.
     @state |= Stream::STATE_SESSION

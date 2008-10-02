@@ -31,7 +31,6 @@ module Features
 extend self
 
 def list(stream)
-    xml = REXML::Document.new
     feat = REXML::Element.new('stream:features')
 
     # They're not in TLS.
@@ -59,8 +58,7 @@ def list(stream)
         feat << session unless stream.session?
     end
 
-    xml << feat
-    stream.write(xml)
+    stream.write feat
 end
 
 def starttls

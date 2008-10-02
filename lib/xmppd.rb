@@ -142,6 +142,13 @@ class XMPPd
         # Save the db every five minutes.
         Timer::Timer.new('save user db', 300, true) { DB::User.dump }
 
+        # Check for connection timeouts.
+        #Timer::Timer.new('check connection timeouts', 60, true) do
+        #    $connections.each do |c|
+        #        c.error('connection-timeout') if ($time - c.rtime) >= 60
+        #    end
+        #end
+
         # Set up listening ports.
         Listen::init
 
@@ -191,13 +198,15 @@ class XMPPd
             $time = Time.now.to_f
 
             #puts "-------------------------------------------------"
+            #i = 0
             #ObjectSpace.each_object do |o|
             #    puts o if o.kind_of? XMPP::Stream
             #    puts o if o.kind_of? XMPP::Resource
             #    puts o if o.kind_of? XMPP::Stanza
             #    puts "DOC: " + o.root.name if o.kind_of? REXML::Document
-            #    puts "ELE: " + o.name if o.kind_of? REXML::Element
+            #    i += 1 if o.kind_of? REXML::Element
             #end
+            #puts "REXML::Element (x%d)" % i if i > 0
             #puts "-------------------------------------------------"
 
             # Kill off any dead connections.
@@ -216,6 +225,7 @@ class XMPPd
             next unless ret
             next if ret[0].empty?
 
+            # Something is waiting to be read.
             ret[0].each do |s|
                 if s.class == Listen::Listener
                     Listen::handle_new(s)

@@ -156,19 +156,15 @@ class Resource
             raise ArgumentError, "stanza must be a Client::PresenceStanza"
         end
 
-        xml = REXML::Document.new
-
         pre = REXML::Element.new('presence')
         pre.add_attribute('type', stanza.type) if stanza.type
         pre.add_attribute('from', jid)
         stanza.xml.elements.each { |elem| pre << elem }
 
-        xml << pre
+        @xml = pre
 
-        @xml = xml
-
-        @user.to_roster_subscribed(xml)
-        @user.to_self(xml)
+        @user.to_roster_subscribed(pre)
+        @user.to_self(pre)
     end
 end
 

@@ -44,8 +44,6 @@ class Stanza
     def error(stanza, defined_condition, type)
         @state = STATE_ERROR
 
-        result = REXML::Document.new
-
         stzerr = REXML::Element.new(stanza)
         stzerr.add_attribute('type', 'error')
         stzerr.add_attribute('id', @id)
@@ -70,7 +68,6 @@ class Stanza
 
         err << cond
         stzerr << err
-        result << stzerr
 
         @stream.write stzerr
     end

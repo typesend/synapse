@@ -34,8 +34,8 @@ module XMPP
 # Our Stream class. This handles socket I/O, etc.
 #
 class Stream
-    attr_accessor :socket, :auth, :logger
-    attr_reader :host, :myhost, :resource
+    attr_accessor :socket, :auth
+    attr_reader :host, :myhost, :resource, :rtime
 
     TYPE_NONE     = 0x00000000
     TYPE_CLIENT   = 0x00000001
@@ -59,6 +59,9 @@ class Stream
         @state = STATE_NONE
         @nonce = nil
         @resource = nil
+        @rtime = Time.now.to_f
+
+        parser_initialize
 
         if type == 'server'
             @type = TYPE_SERVER
@@ -162,21 +165,21 @@ class Stream
         return (@type == TYPE_SERVER) ? true : false
     end
 
-    def close
+    def close(try = true)
         # Close the stream.
-        write '</stream:stream>'
+        write '</stream:stream>' if try
 
-        @socket.close
+        @socket.close unless @socket.closed?
         @state |= STATE_DEAD
 
         return unless @resource
 
         # If they're online, make sure to broadcast that they're not anymore.
-        if established?
+        if try and established?
             stanza = Client::PresenceStanza.new
             stanza.type = 'unavailable'
 
-            stanza.xml = REXML::Document.new
+            stanza.xml = REXML::Element.new
 
             @resource.broadcast_presence(stanza)
         end
@@ -188,9 +191,9 @@ class Stream
     def read
         begin
             if tls?
-                data = @socket.readpartial(10485760)
+                data = @socket.readpartial(8192)
             else
-                data = @socket.recv(10485760)
+                data = @socket.recv(8192)
             end
         rescue Errno::EAGAIN
             return
@@ -211,29 +214,29 @@ class Stream
         string += '-> ' + data.gsub("\n", '')
         @logger.unknown string
 
-        @recvq += data
+        @recvq = data
 
         parse
     end
 
-    def error(defined_condition)
-        xml = REXML::Document.new
+    def error(defined_condition, text = nil)
         err = REXML::Element.new('stream:error')
         na = REXML::Element.new(defined_condition)
         na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
         err << na
-        xml << err
+
+        if text
+            tx = REXML::Element.new('text')
+            tx.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
+            tx.text = text
+            err << tx
+        end
 
         establish unless established?
 
-        write(xml)
-        close     
+        write err
+        close
     end
-
-
-    #######
-    private
-    #######
 
     def write(stanza)
         begin
@@ -246,16 +249,19 @@ class Stream
             retry
         rescue Exception => e
             @logger.unknown "<- write error: #{e}"
-
-            # Can't use `close` here because it will just
-            # call `write` for </stream:stream> which will just
-            # call `close` until we get a stack overflow.
-            @socket.close
-            @state |= STATE_DEAD
-
+            close(false)
             return
+        else
+            string = ''
+            string += "(#{@resource.name}) " if @resource
+            string += '<- ' + stanza.to_s
+            @logger.unknown string
         end
     end
+
+    #######
+    private
+    #######
 
     include XMPP::Parser
 
@@ -403,22 +409,14 @@ class ClientStream < Stream
         # called until they try to establish a stream first.
     end
 
-    def write(stanza)
-        string = ''
-        string += "(#{@resource.name}) " if @resource
-        string += '<- ' + stanza.to_s
-        @logger.unknown string
-        super(stanza)
+    def close(try = true)
+        $log.c2s.info "#{@host} -> TCP connection closed"
+        super(try)
     end
 
-    def close
-        $log.c2s.info "#{@host} -> TCP connection broken"
-        super
-    end
-
-    def error(defined_condition)
+    def error(defined_condition, text = nil)
         $log.c2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition)
+        super(defined_condition, text)
     end
 
     #######
@@ -441,7 +439,7 @@ class ClientStream < Stream
                  %(id='#{@id}' ) +
                  %(version='1.0'>)
 
-        write(stanza)
+        write stanza
 
         if tls? and sasl?
             $log.c2s.info "#{@host} -> TLS/SASL stream established"
@@ -470,19 +468,14 @@ class ServerStream < Stream
     public
     ######
 
-    def write(stanza)
-        @logger.unknown "<- #{stanza.to_s}"
-        super(stanza)
+    def close(try = true)
+        $log.s2s.info "#{@host} -> TCP connection closed"
+        super(try)
     end
 
-    def close
-        $log.s2s.info "#{@host} -> TCP connection broken"
-        super
-    end
-
-    def error(defined_condition)
+    def error(defined_condition, text = nil)
         $log.s2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition)
+        super(defined_condition, text)
     end
 
     #######
@@ -508,7 +501,7 @@ class ServerStream < Stream
                  %(xmlns:db='jabber:server:dialback' ) +
                  %(version='1.0'>)
 
-        write(stanza)
+        write stanza
 
         $log.s2s.info "#{@host} -> stream established"
 
