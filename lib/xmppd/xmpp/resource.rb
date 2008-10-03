@@ -133,13 +133,9 @@ class Resource
                 send_presence(resource, stanza)
                 @dp_to << resource.jid unless sb
             end
-
-            return
-
-            @dp_to.uniq!
         end
 
-        # If we get here then they're remote.
+        # XXX - If we get here then they're remote.
     end
 
     # Send our presence to one Resource.

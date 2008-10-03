@@ -131,8 +131,12 @@ class ConfigParser < Configure::Parser
         end
 
         begin
-           # cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
-           # pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
+           cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
+           pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
+           $ctx = OpenSSL::SSL::SSLContext.new
+           $ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
+           $ctx.cert = cert
+           $ctx.key = pkey
         rescue Exception => e
             puts 'xmppd: OpenSSL error: ' + e.to_s
             raise

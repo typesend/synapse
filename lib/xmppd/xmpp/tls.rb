@@ -31,17 +31,8 @@ module TLS
 extend self
 
 def starttls
-    # Ready the SSL stuff.
-    cert = OpenSSL::X509::Certificate.new(File::read($config.listen.certfile))
-    pkey = OpenSSL::PKey::RSA.new(File::read($config.listen.certfile))
-    #pkey = OpenSSL::PKey::RSA.new(File::read('etc/ssl.key'))
-    ctx = OpenSSL::SSL::SSLContext.new
-    ctx.verify_mode = OpenSSL::SSL::VERIFY_NONE
-    ctx.cert = cert
-    ctx.key = pkey
-
     $-w = false # Turn warnings off because we get a meaningless SSL warning.
-    tlssock = OpenSSL::SSL::SSLSocket.new(@socket, ctx)
+    tlssock = OpenSSL::SSL::SSLSocket.new(@socket, $ctx)
 
     begin
         tlssock.accept

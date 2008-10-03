@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r64 | rakaur | 2008-10-02 18:28:28 -0400 (Thu, 02 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+
+Fixed some bugs with available resources. A resource may now become available after being unavailable and everything works right.
+Finished directed presence, which finishes off presence, closing #41.
+Imposed a stanza limit of 65536. There is currently no standard for handling this, see #50.
+
+------------------------------------------------------------------------
 r63 | rakaur | 2008-10-02 12:25:42 -0400 (Thu, 02 Oct 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog

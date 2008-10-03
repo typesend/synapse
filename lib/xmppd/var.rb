@@ -24,6 +24,9 @@ $config_file = 'etc/xmppd.conf'
 # List of active connections.
 $connections = []
 
+# The OpenSSL::SSL::Context for our TLS stuff.
+$ctx = nil
+
 # Debug mode?
 $debug = false
 
