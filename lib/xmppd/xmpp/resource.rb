@@ -7,116 +7,136 @@
 # $Id$
 #
 
-#
 # Import required Ruby modules.
-#
 
-#
 # Import required xmppd modules.
-#
 require 'xmppd/db'
-
 require 'xmppd/xmpp/stream'
 
-#
 # The XMPP namespace.
-#
 module XMPP
 
-class ResourceError
-end
+# The Client namespace.
+module Client
 
+#
+# This is our XMPP::Client::Resource class.
+# This class handles all stuff a resource would
+# receive, such as rosters, presence notifications, etc.
+#
 class Resource
-    attr_accessor :state
-    attr_reader :name, :stream, :user, :priority, :show, :status, :dp_to
-    
-    SHOW_AVAILABLE   = 0x00000000
-    SHOW_AWAY        = 0x00000001
-    SHOW_CHAT        = 0x00000002
-    SHOW_DND         = 0x00000004
-    SHOW_XA          = 0x00000008
+    attr_accessor :presence_stanza
+    attr_reader :dp_to, :name, :stream, :user
 
-    STATE_NONE       = 0x00000000
-    STATE_AVAILABLE  = 0x00000001 # Get presence updates
-    STATE_INTERESTED = 0x00000002 # Get roster pushes
+    #
+    # Create a new XMPP::Client::Resource.
+    #
+    # name:: [String] the resource's name
+    # stream:: [XMPP::ClientStream] the associated stream
+    # user:: [DB::User] the stored user, where the roster and such is kept.
+    #
+    # return:: [XMPP::Client::Resource] new resource object.
+    #
+    def initialize(name, stream, user)
+        @dp_to      = []    # JIDs that we've sent directed presence to.
+        @name       = name  # The resource name.
+        @available  = false # True on initial presence.
+        @interested = false # True on roster get.
 
-    def initialize(name, stream, user, priority = 0)
-        @name = name
-        @state = STATE_NONE
-        @status = nil
-        @show = nil
-        @dp_to = [] # An array of JIDs that we've sent directed presence to.
-
+        # This is the ClientStream that bound us.
         unless stream.class == ClientStream
-            raise ResourceError, "stream isn't a client stream"
+            raise ArgumentError, "stream isn't a client stream"
         end
 
         @stream = stream
 
+        # This is the stored user, where the roster and such is kept.
         unless user.class == DB::User
-            raise ResourceError, "user isn't a db user"
+            raise ArgumentError, "user isn't a db user"
         end
 
         @user = user
+
+        # We're bound to the user, now bind them to us.
         @user.add_resource(self)
-
-        self.priority = priority
-
-        @xml = nil
     end
     
     ######
     public
     ######
 
+    # return:: [String] the Resource's full JID: node@domain/resource
     def jid
         @user.jid + '/' + @name
     end
     
-    def show=(show)
-        unless show.class == Fixnum
-            raise ResourceError, "show must be a numeric flag"
-        end
-        
-        @show = show
-    end
-    
-    def status=(status)
-        unless status.class == String
-            raise ResourceError, "status must be a string"
+
+    #
+    # Set the resource's interest in presence updates.
+    #
+    # value:: [boolean] true or false
+    #
+    # return:: [boolean] true or false
+    #
+    def available=(value)
+        unless value == true or value == false
+            raise ArgumentError, 'value must be true or false'
         end
 
-        @status = status[0, 1024]
-    end
-    
-    def priority=(priority)
-        if (priority < -128) or (priority > 127)
-            raise ResourceError, "priority isn't within range (-128 .. 127)"
-        end
-        
-        @priority = priority
+        @available = value
     end
 
+    #
+    # Has the resource requested presence updates?
+    #
+    # return:: [boolean] true or false
+    #
     def available?
-        return true if STATE_AVAILABLE & @state != 0
-        return false
+        @available
     end
 
-    def interested?
-        return true if STATE_INTERESTED & @state != 0
-        return false
-    end
-
-    # Send directed presence to one JID.
-    def send_directed_presence(jid, stanza)
-        unless stanza.class == XMPP::Client::PresenceStanza
-            raise ArgumentError, "stanza must be PresenceStanza"
+    #
+    # Set the resource's interest in roster pushes.
+    #
+    # value:: [boolean] true or false
+    #
+    # return:: [boolean] true or false
+    #
+    def interested=(value)
+        unless value == true or value == false
+            raise ArgumentError, 'value must be true or false'
         end
 
+        @interested = value
+    end
+
+    #
+    # Has the resource requested roster pushes?
+    #
+    # return:: [boolean] true or false
+    #
+    def interested?
+        @interested
+    end
+
+    #
+    # Send directed presence to one JID.
+    #
+    # jid:: [String] full or bare JID
+    # stanza:: [REXML::Element] the stanza to send
+    #
+    # return:: [XMPP::Client::Resource] self
+    #
+    def send_directed_presence(jid, stanza)
+        unless stanza.class == REXML::Element
+            raise ArgumentError, 'stanza must be a REXML::Element'
+        end
+
+        # Separate out the JID parts.
         node, domain = jid.split('@')
         domain, resource = domain.split('/')
 
-        # Check to see if its to one of ours.
+        # Check to see if its to a local user.
         user = DB::User.users[node + '@' + domain]
 
         if user and not user.resources.empty?
@@ -126,59 +146,55 @@ class Resource
                 send_presence(user.resources[resource], stanza)
 
                 @dp_to << user.resources[resource].jid unless sb
-                return
-            end
+                return self
+            else
+                user.resources.each do |n, resource|
+                    send_presence(resource, stanza)
+                    @dp_to << resource.jid unless sb
+                end
 
-            user.resources.each do |n, resource|
-                send_presence(resource, stanza)
-                @dp_to << resource.jid unless sb
+                return self
             end
         end
 
         # XXX - If we get here then they're remote.
+
+        return self
     end
 
-    # Send our presence to one Resource.
+    #
+    # Send our presence to one resource.
+    #
+    # resource:: [XMPP::Client::Resource] resource to send it to
+    # >stanza:: [REXML::Element] send using specific stanza
+    #
+    # return:: self
+    #
     def send_presence(resource, stanza = nil)
         unless resource.class == Resource
-            raise ArgumentError, "resource must be a Resource class"
+            raise ArgumentError, 'resource must be a XMPP::Client::Resource'
         end
 
-        unless stanza.class == XMPP::Client::PresenceStanza
-            raise ArgumentError, "stanza must be PresenceStanza"
+        unless stanza.class == REXML::Element
+            raise ArgumentError, 'stanza must be a REXML::Element'
         end if stanza
 
-        if stanza
-            pre = REXML::Element.new('presence')
-            pre.add_attribute('type', stanza.type) if stanza.type
-            pre.add_attribute('from', jid)
-            pre.add_attribute('to', stanza.to) if stanza.to
-            stanza.xml.elements.each { |elem| pre << elem }
-
-            resource.stream.write pre
+        if stanza # poopy
+            stanza.add_attribute('from', jid)
+            resource.stream.write stanza
         else
-            xml = @xml
-
-            xml.each_element do |elem|
-                if elem.name == 'presence'
-                    elem.add_attribute('to', resource.jid)
-                end
-            end
-
-            resource.stream.write xml
+            @presence_stanza.add_attribute('from', jid)
+            @presence_stanza.add_attribute('to', resource.jid)
+            resource.stream.write @presence_stanza
+            @presence_stanza.attributes.delete 'to'
         end
     end
 
     #
-    # Go through our User's roster and get the relevant
-    # entities current presence. This should only be
-    # called once, after we send initial presence.
+    # Get our roster's current presence information.
+    # This should only be called upon initial presence.
     #
-    # I know this seems counter-intuitive. Something should
-    # be sending this information TO a Resource, not
-    # making the Resource GET it. However, this is
-    # the cleanest way to do it in code, and in reality,
-    # the former is actually happening.
+    # return:: self
     #
     def send_roster_presence
         return if @user.roster.nil? or @user.roster.empty?
@@ -196,24 +212,28 @@ class Resource
         end
     end
 
-    # Broadcast our presence.
+    #
+    # Broadcast our presence to our subscribed contacts.
+    # This is called any time a broadcast presence issued.
+    #
+    # return:: self
+    #
     def broadcast_presence(stanza)
-        unless stanza.class == Client::PresenceStanza
-            raise ArgumentError, "stanza must be a Client::PresenceStanza"
+        unless stanza.class == REXML::Element
+            raise ArgumentError, 'stanza must be a REXML::Element'
         end
 
-        pre = REXML::Element.new('presence')
-        pre.add_attribute('type', stanza.type) if stanza.type
-        pre.add_attribute('from', jid)
-        stanza.xml.elements.each { |elem| pre << elem }
+        stanza.add_attribute('from', jid)
 
-        @xml = pre
+        @available = false if stanza.attributes['type'] == 'unavailable'
 
-        @state &= ~STATE_AVAILABLE if stanza.type == 'unavailable'
+        @user.to_roster_subscribed(stanza)
+        @user.to_self(stanza)
 
-        @user.to_roster_subscribed(pre)
-        @user.to_self(pre)
+        self
     end
 end
+
+end # module Client
 
 end # module XMPP

@@ -33,23 +33,6 @@ module XMPP
 #
 module Client
 
-class IQStanza < XMPP::Stanza
-    TYPE_GET     = 0x00000001
-    TYPE_SET     = 0x00000002
-
-    def initialize(id)
-        super(id)
-    end
-
-    ######
-    public
-    ######
-
-    def error(defined_condition, type)
-        super('iq', defined_condition, type)
-    end
-end
-
 def handle_iq(elem)
     # Is the stream open?
     unless established?
@@ -63,14 +46,8 @@ def handle_iq(elem)
 end
 
 def handle_iq_set(elem)
-    stanza = IQStanza.new(elem.attributes['id'])
-    stanza.type = IQStanza::TYPE_SET
-    stanza.state = IQStanza::STATE_SET
-    stanza.xml = elem
-    stanza.stream = self
-
     unless elem.attributes['id']
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        write Stanza.error(elem, 'bad-request', 'modify')
         return
     end
 
@@ -78,23 +55,17 @@ def handle_iq_set(elem)
         methname = 'handle_iq_set_' + e.name
 
         unless respond_to? methname
-            stanza.error('feature-not-implemented', IQStanza::ERR_CANCEL)
+            write Stanza.error(elem, 'feature-not-implemented', 'cancel')
             return
         else
-            send(methname, stanza)
+            send(methname, elem)
         end
     end
 end
 
 def handle_iq_get(elem)
-    stanza = IQStanza.new(elem.attributes['id'])
-    stanza.type = IQStanza::TYPE_GET
-    stanza.state = IQStanza::STATE_GET
-    stanza.xml = elem
-    stanza.stream = self
-
     unless elem.attributes['id']
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        write Stanza.error(elem, 'bad-request', 'modify')
         return
     end
 
@@ -102,47 +73,47 @@ def handle_iq_get(elem)
         methname = 'handle_iq_get_' + e.name
 
         unless respond_to? methname
-            stanza.error('feature-not-implemented', IQStanza::ERR_CANCEL)
+            write Stanza.error(elem, 'feature-not-implemented', 'cancel')
             return
         else
-            send(methname, stanza)
+            send(methname, elem)
         end
     end
 end
 
-def handle_iq_get_query(stanza)
-    elem = stanza.xml.elements['query']
+def handle_iq_get_query(elem)
+    stanza = elem
+    elem = stanza.root.elements['query']
 
     # Verify namespace.
     if elem.attributes['xmlns'] == 'jabber:iq:easter'
-        stanza.error('114-97-107-97-117-114', IQStanza::ERR_CANCEL)
+        write Stanza.error(stanza, '114-97-107-97-117-114', 'cancel')
         return
     elsif elem.attributes['xmlns'] != 'jabber:iq:roster'
-        stanza.error('feature-not-implemented', IQStanza::ERR_MODIFY)
+        write Stanza.error(stanza, 'feature-not-implemented', 'modify')
         return
     end
 
-    stanza.state = IQStanza::STATE_RESULT
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.id)
+    iq.add_attribute('id', stanza.attributes['id'])
 
     query = DB::User.users[@jid].roster_to_xml
     iq << query
 
     write iq
 
-    @resource.state |= Resource::STATE_INTERESTED
+    @resource.interested = true
     @logger.unknown "(#{@resource.name}) -> set state to interested"
 end
 
-def handle_iq_set_bind(stanza)
-    elem = stanza.xml.elements['bind']
+def handle_iq_set_bind(elem)
+    stanza = elem
+    elem = stanza.root.elements['bind']
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-bind'
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        write Stanza.error(stanza, 'bad-request', 'modify')
         return
     end
 
@@ -159,7 +130,7 @@ def handle_iq_set_bind(stanza)
         resource = elem.elements['resource'].text + rand(rand(10000)).to_s
 
         unless resource
-            stanza.error('bad-request', IQStanza::ERR_MODIFY)
+            write Stanza.error(stanza, 'bad-request', 'modify')
             return
         end
     end
@@ -167,7 +138,7 @@ def handle_iq_set_bind(stanza)
     begin
         resource = IDN::Stringprep.resourceprep(resource)
     rescue Exception
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        write Stanza.error(stanza, 'bad-request', 'modify')
         return
     end
 
@@ -175,16 +146,14 @@ def handle_iq_set_bind(stanza)
     user = DB::User.users[@jid]
     user.resources.each do |k, v|
         if v.name == resource
-            stanza.error('conflict', IQStanza::ERR_CANCEL)
+            write Stanza.error(stanza, 'conflict', 'cancel')
             return
         end
     end if user.resources
 
-    stanza.state |= IQStanza::STATE_RESULT
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.id)
+    iq.add_attribute('id', stanza.attributes['id'])
 
     bind = REXML::Element.new('bind')
     bind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
@@ -198,7 +167,7 @@ def handle_iq_set_bind(stanza)
     write iq
 
     user = DB::User.users[@jid]
-    @resource = Resource.new(resource, self, user, 0)
+    @resource = Resource.new(resource, self, user)
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND
     
@@ -218,12 +187,13 @@ end
 # Do the standard checks, tell them it succeeded, and
 # never think about it again.
 #
-def handle_iq_set_session(stanza)
-    elem = stanza.xml.elements['session']
+def handle_iq_set_session(elem)
+    stanza = elem
+    elem = stanza.root.elements['session']
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-session'
-        stanza.error('bad-request', IQStanza::ERR_MODIFY)
+        write Stanza.error(stanza, 'bad-request', 'modify')
         return
     end
 
@@ -231,15 +201,13 @@ def handle_iq_set_session(stanza)
     user = DB::User.users[@jid]
 
     unless user.available? or @resource
-        stanza.error('unexpected-request', IQStanza::ERR_WAIT)
+        write Stanza.error(stanza, 'unexpected-request', 'wait')
         return
     end
 
-    stanza.state |= IQStanza::STATE_RESULT
-
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.id)
+    iq.add_attribute('id', stanza.attributes['id'])
 
     write iq
     
@@ -253,4 +221,5 @@ def handle_iq_set_session(stanza)
 end
 
 end # module Client
+
 end # module XMPP

@@ -33,20 +33,6 @@ module XMPP
 #
 module Client
 
-class PresenceStanza < XMPP::Stanza
-    def initialize(id = nil)
-        super(id)
-    end
-
-    ######
-    public
-    ######
-
-    def error(defined_condition, type)
-        super('presence', defined_condition, type)
-    end
-end
-
 def handle_presence(elem)
     # Is the stream open?
     unless established?
@@ -54,69 +40,33 @@ def handle_presence(elem)
         return
     end
 
-    stanza = PresenceStanza.new(elem.attributes['id'])
-    stanza.to = elem.attributes['to'] or nil
-    stanza.from = elem.attributes['from'] or nil
-    stanza.type = elem.attributes['type'] or nil
-    stanza.state = PresenceStanza::STATE_NONE
-    stanza.xml = elem
-    stanza.stream = self
-
     elem.attributes['type'] ||= 'none'
     
     methname = 'handle_type_' + elem.attributes['type']
 
     unless respond_to? methname
-        stanza.error('bad-request', PresenceStanza::ERR_CANCEL)
+        write Stanza.error(elem, 'bad-request', 'cancel')
         return
     else
-        send(methname, stanza)
+        send(methname, elem)
     end
 end
  
 # No type signals avilability.
-def handle_type_none(stanza)
-    if stanza.to
-        @resource.send_directed_presence(stanza.to, stanza)
+def handle_type_none(elem)
+    if elem.attributes['to']
+        @resource.send_directed_presence(elem.attributes['to'], elem)
         return
     end
 
-    case stanza.xml.elements['show'].text
-    when 'away'
-        @resource.show = Resource::SHOW_AWAY
-    when 'chat'
-        @resource.show = Resource::SHOW_CHAT
-    when 'dnd'
-        @resource.show = Resource::SHOW_DND
-    when 'xa'
-        @resource.show = Resource::SHOW_XA
-    else
-        stanza.error('bad-request', PresenceStanza::ERR_MODIFY)
-        return
-    end if stanza.xml.elements['show']
-    
-    @resource.show ||= Resource::SHOW_AVAILABLE
-
-    @logger.unknown "(#{@resource.name}) -> set availability"
-    
-    if stanza.xml.elements['status']
-        s = stanza.xml.elements['status'].text
-        @resource.status = s if s
-        @logger.unknown "(#{@resource.name}) -> status set to '#{s}'"
-    end
-    
-    if stanza.xml.elements['priority']
-        p = stanza.xml.elements['priority'].text.to_i
-        @resource.priority = p
-        @logger.unknown "(#{@resource.name}) -> priority set to #{p}"
-    end
+    @resource.presence_stanza = elem
 
     # Broadcast it to relevant entities.
-    @resource.broadcast_presence(stanza)
+    @resource.broadcast_presence(elem)
 
     # Was this their initial presence?
     unless @resource.available?
-        @resource.state |= Resource::STATE_AVAILABLE
+        @resource.available = true
 
         # If they're sending out initial presense, then they
         # need their contacts' presence.
@@ -125,19 +75,19 @@ def handle_type_none(stanza)
 end
 
 # They're logging off.
-def handle_type_unavailable(stanza)
-    if stanza.to
-        @resource.send_directed_presence(stanza.to, stanza)
+def handle_type_unavailable(elem)
+    if elem.attributes['to']
+        @resource.send_directed_presence(elem.attributes['to'], elem)
         return
     end
 
     @resource.dp_to.uniq.each do |jid|
-        @resource.send_directed_presence(jid, stanza)
+        @resource.send_directed_presence(jid, elem)
     end
 
-    @resource.broadcast_presence(stanza)
-    #@state &= ~Stream::STATE_ESTAB
+    @resource.broadcast_presence(elem)
 end
 
 end # module Client
+
 end # module XMPP

@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r65 | rakaur | 2008-10-03 13:33:37 -0400 (Fri, 03 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/var.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+
+Fixed the certfile stuff so it only asks for the password once.
+
+------------------------------------------------------------------------
 r64 | rakaur | 2008-10-02 18:28:28 -0400 (Thu, 02 Oct 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog

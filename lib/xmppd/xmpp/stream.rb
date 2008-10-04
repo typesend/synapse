@@ -170,23 +170,21 @@ class Stream
         write '</stream:stream>' if try
 
         @socket.close unless @socket.closed?
-        @state &= ~STATE_ESTAB
         @state |= STATE_DEAD
 
         return unless @resource
 
         # If they're online, make sure to broadcast that they're not anymore.
         if try and established?
-            stanza = Client::PresenceStanza.new
-            stanza.type = 'unavailable'
-            stanza.xml = REXML::Element.new('presence')
-            stanza.xml.add_attribute('type', 'unavailable')
+            elem = REXML::Element.new('presence')
+            elem.add_attribute('type', 'unavailable')
 
-            handle_type_unavailable(stanza)
+            handle_type_unavailable(elem)
         end
 
         @resource.user.delete_resource(@resource)
         @resouce = nil
+        @state &= ~STATE_ESTAB
     end
 
     def read

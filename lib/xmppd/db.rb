@@ -194,7 +194,7 @@ class User
     end
 
     def add_resource(resource)
-        unless resource.class == XMPP::Resource
+        unless resource.class == XMPP::Client::Resource
             raise DBError, "resource isn't a Resource class"
         end
 
@@ -203,7 +203,7 @@ class User
     end
 
     def delete_resource(resource)
-        unless resource.class == XMPP::Resource
+        unless resource.class == XMPP::Client::Resource
             raise DBError, "resource isn't a Resource class"
         end
 
