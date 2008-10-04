@@ -7,9 +7,7 @@
 # $Id$
 #
 
-#
 # Import required Ruby modules.
-#
 require 'digest/md5'
 require 'idn'
 require 'logger'
@@ -17,30 +15,25 @@ require 'openssl'
 require 'resolv'
 require 'socket'
 
-#
 # Import required xmppd modules.
-#
 require 'xmppd/log'
 require 'xmppd/var'
 require 'xmppd/xmpp/client'
 require 'xmppd/xmpp/parser'
 
-#
 # The XMPP namespace.
-#
 module XMPP
 
 #
-# Our Stream class. This handles socket I/O, etc.
+# This is our base XMPP::Stream class.
+# This handles socket I/O, etc. More specific
+# child classes inherit from this below.
 #
 class Stream
-    attr_accessor :socket, :auth
-    attr_reader :host, :myhost, :resource, :rtime
+    attr_accessor :socket
+    attr_reader   :host, :rtime
 
-    TYPE_NONE     = 0x00000000
-    TYPE_CLIENT   = 0x00000001
-    TYPE_SERVER   = 0x00000002
-
+    # Try to move away from this.
     STATE_NONE    = 0x00000000
     STATE_DEAD    = 0x00000001
     STATE_PLAIN   = 0x00000002
@@ -50,31 +43,30 @@ class Stream
     STATE_BIND    = 0x00000020
     STATE_SESSION = 0x00000040 # This is only here for state in Features::list().
 
-    def initialize(host, type, myhost = nil)
-        @socket = nil
-        @host = IDN::Stringprep.nameprep(host)
-        @recvq = ''
-        @logger = nil
-        @auth = nil
-        @state = STATE_NONE
-        @nonce = nil
+    #
+    # Create a new XMPP::Stream.
+    # Nothing does this directly, but instead uses child classes.
+    #
+    # host:: [String] the remote host
+    # type:: [String] either 'client' or 'server'
+    # 
+    # return:: [XMPP::Stream] new stream object
+    #
+    def initialize(host, type)
+        @host     = IDN::Stringprep.nameprep(host)
+        @recvq    = ''
+        @state    = STATE_NONE
+        @nonce    = nil
         @resource = nil
-        @rtime = Time.now.to_f
+        @rtime    = Time.now.to_f
 
-        parser_initialize
-
-        if type == 'server'
-            @type = TYPE_SERVER
-        elsif type == 'client'
-            @type = TYPE_CLIENT
-        else
+        unless type == 'server' or type == 'client'
             raise ArgumentError, "type must be 'client' or 'server'"
         end
 
-        unless myhost
-            @myhost = $config.hosts.first
-        end
+        @type = type
 
+        # Set up debug logging.
         if $debug
             Dir.mkdir('var/streams') unless File.exists?('var/streams')
 
@@ -98,12 +90,21 @@ class Stream
         else
             @logger = MyLog::DeadLogger.new
         end
+
+        # This sets up our events for the XML parser.
+        parser_initialize
     end
 
     ######
     public
     ######
 
+    #
+    # Generate a unique stream id.
+    # I think I yanked this from a Google SoC project.
+    #
+    # return:: [String] random string
+    #
     def Stream.genid
         @@id_changed = Time.now.to_i
         @@id_counter = 0
@@ -129,64 +130,113 @@ class Stream
         Digest::MD5.hexdigest(id)
     end
 
+    #
+    # Set the vhost we're serving, with IDN preps.
+    #
+    # value:: [String] a host from $config
+    #
+    # return:: [XMPP::Stream] self
+    #
     def myhost=(value)
         @myhost = IDN::Stringprep.nameprep(value)
+        self
     end
 
+    #
+    # Is the stream established?
+    #
+    # return:: [boolean] true or false
+    #
     def established?
         return (STATE_ESTAB & @state != 0) ? true : false
     end
 
+    #
+    # Is the stream encrypted?
+    #
+    # return:: [boolean] true or false
+    #
     def tls?
         return (STATE_TLS & @state != 0) ? true : false
     end
 
+    #
+    # Are we authenticated via SASL?
+    #
+    # return:: [boolean] true or false
+    #
     def sasl?
         return (STATE_SASL & @state != 0) ? true : false
     end
 
+    #
+    # Have we bound a resource?
+    #
+    # return:: [boolean] true or false
+    #
     def bind?
         return (STATE_BIND & @state != 0) ? true : false
     end
 
+    #
+    # Have they established as session?
+    # This is depreciated and useless.
+    #
+    # return:: [boolean] true or false
+    #
     def session?
         return (STATE_SESSION & @state != 0) ? true : false
     end
 
+    #
+    # Did our socket die?
+    #
+    # return:: [boolean] true or false
+    #
     def dead?
         return (STATE_DEAD & @state != 0) ? true : false
     end
 
+    #
+    # Is this a client stream?
+    #
+    # return:: [boolean] true or false
+    #
     def client?
-        return (@type == TYPE_CLIENT) ? true : false
+        return (@type == 'client') ? true : false
     end
 
+    #
+    # Is this a server stream?
+    #
+    # return:: [boolean] true or false
+    #
     def server?
-        return (@type == TYPE_SERVER) ? true : false
+        return (@type == 'server') ? true : false
     end
 
+    #
+    # Close the stream and socket, etc.
+    #
+    # try:: [boolean] try to write the closing tag
+    #
+    # return self
+    #
     def close(try = true)
-        # Close the stream.
-        write '</stream:stream>' if try
+        write '</stream:stream>'
 
         @socket.close unless @socket.closed?
+        @state &= ~STATE_ESTAB
         @state |= STATE_DEAD
 
-        return unless @resource
-
-        # If they're online, make sure to broadcast that they're not anymore.
-        if try and established?
-            elem = REXML::Element.new('presence')
-            elem.add_attribute('type', 'unavailable')
-
-            handle_type_unavailable(elem)
-        end
-
-        @resource.user.delete_resource(@resource)
-        @resouce = nil
-        @state &= ~STATE_ESTAB
+        self
     end
 
+    #
+    # Read data from the socket, and send it off to parse.
+    #
+    # return:: [XMPP::Stream] self
+    #
     def read
         begin
             if tls?
@@ -195,6 +245,7 @@ class Stream
                 data = @socket.recv(8192)
             end
         rescue Errno::EAGAIN
+            # Kick it back to select().
             return
         rescue Exception => e
             @logger.unknown "-> read error: #{e}"
@@ -216,18 +267,28 @@ class Stream
         @recvq = data
 
         parse
+
+        self
     end
 
-    def error(defined_condition, apperr = nil)
+    #
+    # Generate a stream error, and close the stream.
+    #
+    # defined_condition:: [String] the error, defined in XMPP-CORE
+    # application_error:: [Hash] name => error, text => description
+    #
+    # return:: [XMPP::Stream] self
+    #
+    def error(defined_condition, application_error = nil)
         err = REXML::Element.new('stream:error')
         na = REXML::Element.new(defined_condition)
         na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
         err << na
 
-        if apperr
-            ae = REXML::Element.new(apperr['name'])
+        if application_error
+            ae = REXML::Element.new(application_error['name'])
             ae.add_namespace('urn:xmpp:errors')
-            ae.text = apperr['text'] if apperr['text']
+            ae.text = application_error['text'] if application_error['text']
             err << ae
         end
 
@@ -235,8 +296,17 @@ class Stream
 
         write err
         close
+
+        self
     end
 
+    #
+    # Write data to the socket.
+    #
+    # stanza:: [object that provides to_s] data to write
+    #
+    # return:: [XMPP::Stream] self
+    #
     def write(stanza)
         begin
             if tls?
@@ -256,17 +326,24 @@ class Stream
             string += '<- ' + stanza.to_s
             @logger.unknown string
         end
+
+        self
     end
 
     #######
     private
     #######
 
+    # This module defines our parsing methods.
     include XMPP::Parser
 
     #
+    # Resolve a host and port for a remote server.
     # First tries DNS SRV RR as per RFC3920.
     # On failure, falls back to regular DNS.
+    # I think I yanked this from a Google SoC project.
+    #
+    # return:: [Array] addr, port
     #
     def resolve
         if client?
@@ -386,19 +463,35 @@ class Stream
     end
 end
 
+#
+# This is our XMPP::ClientStream class.
+# All client connections have one of these.
+#
 class ClientStream < Stream
-    attr_reader :id
+    attr_reader :id, :resource
 
-    def initialize(host, myhost = nil)
-        super(host, 'client', myhost)
+    #
+    # Create a new XMPP::ClientStream.
+    #
+    # host:: [String] the remote host
+    #
+    # return:: [XMPP::ClientStream] new client stream object
+    #
+    def initialize(host)
+        super(host, 'client')
     end
 
     ######
     public
     ######
 
+    #
+    # Accept a new client connection.
+    #
+    # return:: [XMPP::ClientStream] self
+    #
     def connect
-        raise RuntimeError, "no client socket to connect with" unless @socket
+        raise RuntimeError, 'no client socket to connect with' unless @socket
 
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
 
@@ -406,16 +499,42 @@ class ClientStream < Stream
 
         # We don't send the first stanza, so establish isn't
         # called until they try to establish a stream first.
+
+        self
     end
 
+    #
+    # A wrapper around XMPP::Stream#close.
+    #
+    # return:: [XMPP::ClientStream] self
+    #
     def close(try = true)
+        # If they're online, make sure to broadcast that they're not anymore.
+        if try and established?
+            elem = REXML::Element.new('presence')
+            elem.add_attribute('type', 'unavailable')
+
+            handle_type_unavailable(elem)
+        end
+
+        # Undo some refereces so GC works.
+        if @resource
+            @resource.user.delete_resource(@resource)
+            @resouce = nil
+        end
+
         $log.c2s.info "#{@host} -> TCP connection closed"
         super(try)
     end
 
-    def error(defined_condition, apperr = nil)
-        $log.c2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition, apperr)
+    #
+    # A wrapper around XMPP::Stream#error.
+    #
+    # return:: [XMPP::ClientStream] self
+    #
+    def error(*args)
+        $log.c2s.error "#{@host} -> #{args[0]}"
+        super(*args)
     end
 
     #######
@@ -426,6 +545,8 @@ class ClientStream < Stream
     # Manually build and send the opening stream XML.
     # We can't use REXML here because it closes all
     # of the tags on its own.
+    #
+    # return:: [XMPP::ClientStream] self
     #
     def establish
         @id = Stream.genid
@@ -453,28 +574,49 @@ class ClientStream < Stream
         @state |= STATE_ESTAB
     end
 
+    # This module contains all of our client routines.
     include XMPP::Client
 end
 
+#
+# This is our XMPP::ServerStream class.
+# More specific classes inherit from this below. 
+#
 class ServerStream < Stream
-    attr_reader :host, :myhost, :socket
-
-    def initialize(host, myhost = nil)
-        super(host, 'server', myhost)
+    #
+    # Create a new XMPP::ServerStream.
+    #
+    # host:: [String] the remote host
+    #
+    # return:: [XMPP::ServerStream] new server stream object
+    #
+    def initialize(host)
+        super(host, 'server')
     end
 
     ######
     public
     ######
 
-    def close(try = true)
+
+    #
+    # A wrapper around XMPP::Stream#close.
+    #
+    # return:: [XMPP::ServerStream] self
+    #
+    def close(*args)
         $log.s2s.info "#{@host} -> TCP connection closed"
-        super(try)
+        super(*args)
     end
 
-    def error(defined_condition, apperr = nil)
-        $log.s2s.error "#{@host} -> #{defined_condition}"
-        super(defined_condition, apperr)
+    #
+    # A wrapper around XMPP::Stream#error.
+    #
+    # return:: [XMPP::ServerStream] self
+    #
+    def error(*args)
+        $log.s2s.error "#{@host} -> #{args[0]}"
+        super(*args)
     end
 
     #######
@@ -485,11 +627,14 @@ class ServerStream < Stream
     # Manually build and send the opening stream XML.
     # We can't use REXML here because it closes all  
     # of the tags on its own.                      
-    #                        
+    #--                        
     # ejabberd claims '1.0' but won't even let you
     # connect without an xmlns:db attribute. If
     # it's 1.0 then how does it expect servers
     # to initiate TLS connections?
+    #++
+    #
+    # return:: [XMPP::ServerStream] self
     #
     def establish
         stanza = %(<?xml version='1.0'?>) +
@@ -505,15 +650,24 @@ class ServerStream < Stream
         $log.s2s.info "#{@host} -> stream established"
 
         @state |= STATE_ESTAB
+
+        self
     end
 end
 
 #
-# This class handles incoming s2s streams.
+# This is our XMPP::ServerStreamIn class.
+# All incoming server connections have one of these.
 #
 class ServerStreamIn < ServerStream
-    attr_reader :host, :socket
-
+    #
+    # Create a new XMPP::ServerStreamIn.
+    #
+    # host:: [String] the remote host
+    # socket:: [TCPSocket] the connection socket
+    #
+    # return:: [XMPP::ServerStreamIn] new incoming server object
+    #
     def initialize(host, socket)
         super(host)
 
@@ -525,7 +679,12 @@ class ServerStreamIn < ServerStream
     public
     ######
 
+    #
+    # Accept a new incoming server connection.
     # This is an incoming socket, so stuff should be connected.
+    #
+    # return:: [XMPP::ServerStreamIn] self
+    #
     def connect
         @socket.setsockopt(Socket::SOL_SOCKET, Socket::SO_REUSEADDR, 1)
 
@@ -533,17 +692,26 @@ class ServerStreamIn < ServerStream
 
         # We don't send the first stanza, so establish isn't
         # called until they try to establish a stream first.
+
+        self
     end
 end
 
 #
-# This class handles outgoing s2s streams.
+# This is our XMPP::ServerStreamOut class.
+# All outgoing server connections have one of these.
 #
 class ServerStreamOut < ServerStream
-    attr_reader :host, :myhost, :socket
-
+    #
+    # Create a new XMPP::ServerStreamOut.
+    #
+    # host:: [String] the remote host
+    # myhost:: [String] the host we're serving from
+    #
+    # return:: [XMPP::ServerStringOut] new outgoing server stream object
+    #
     def initialize(host, myhost)
-        super(host, myhost)
+        super(host)
 
         @host = IDN::Stringprep.nameprep(host)
         @myhost = IDN::Stringprep.nameprep(myhost)
@@ -553,7 +721,11 @@ class ServerStreamOut < ServerStream
     public
     ######
 
-    # This is an outgoing socket, so we need to connect out.
+    #
+    # Connect out to a remote server.
+    #
+    # return:: [XMPP::ServerStreamOut] self
+    #
     def connect
         $log.s2s.info "#{@host}:5269 -> initiating TCP connection"
 
@@ -572,6 +744,8 @@ class ServerStreamOut < ServerStream
 
             establish
         end
+
+        self
     end
 end
 

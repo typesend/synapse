@@ -7,8 +7,6 @@
 # $Id$
 #
 
-# Import required Ruby modules.
-
 # Import required xmppd modules.
 require 'xmppd/db'
 require 'xmppd/xmpp/stream'
@@ -26,7 +24,7 @@ module Client
 #
 class Resource
     attr_accessor :presence_stanza
-    attr_reader :dp_to, :name, :stream, :user
+    attr_reader   :dp_to, :name, :stream, :user
 
     #
     # Create a new XMPP::Client::Resource.
@@ -65,7 +63,11 @@ class Resource
     public
     ######
 
+    #
+    # Return our full JID.
+    #
     # return:: [String] the Resource's full JID: node@domain/resource
+    #
     def jid
         @user.jid + '/' + @name
     end
@@ -168,7 +170,7 @@ class Resource
     # resource:: [XMPP::Client::Resource] resource to send it to
     # >stanza:: [REXML::Element] send using specific stanza
     #
-    # return:: self
+    # return:: [XMPP::Client::Resource] self
     #
     def send_presence(resource, stanza = nil)
         unless resource.class == Resource
@@ -194,7 +196,7 @@ class Resource
     # Get our roster's current presence information.
     # This should only be called upon initial presence.
     #
-    # return:: self
+    # return:: [XMPP::Client::Resource] self
     #
     def send_roster_presence
         return if @user.roster.nil? or @user.roster.empty?
@@ -214,9 +216,9 @@ class Resource
 
     #
     # Broadcast our presence to our subscribed contacts.
-    # This is called any time a broadcast presence issued.
+    # This is called any time a broadcast presence is issued.
     #
-    # return:: self
+    # return:: [XMPP::Client::Resource] self
     #
     def broadcast_presence(stanza)
         unless stanza.class == REXML::Element
@@ -228,7 +230,7 @@ class Resource
         @available = false if stanza.attributes['type'] == 'unavailable'
 
         @user.to_roster_subscribed(stanza)
-        @user.to_self(stanza)
+        @user.to_self(stanza) unless stanza.attributes['type'] == 'unavailable'
 
         self
     end

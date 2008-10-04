@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r66 | rakaur | 2008-10-04 14:51:23 -0400 (Sat, 04 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Got rid of the useless Stanza classes. Just pass the REXML::Elements now. Closes #53.
+Also, documented the hell out of resource.rb. Going to keep on doing this. Part of #31.
+
+------------------------------------------------------------------------
 r65 | rakaur | 2008-10-03 13:33:37 -0400 (Fri, 03 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog
