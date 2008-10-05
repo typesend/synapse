@@ -54,11 +54,12 @@ class Stream
     #
     def initialize(host, type)
         @host     = IDN::Stringprep.nameprep(host)
-        @recvq    = ''
-        @state    = STATE_NONE
+        @myhost   = ''
         @nonce    = nil
+        @recvq    = ''
         @resource = nil
         @rtime    = Time.now.to_f
+        @state    = STATE_NONE
 
         unless type == 'server' or type == 'client'
             raise ArgumentError, "type must be 'client' or 'server'"
@@ -225,7 +226,11 @@ class Stream
     def close(try = true)
         write '</stream:stream>'
 
-        @socket.close
+        begin
+            @socket.close unless @socket.closed?
+        rescue Exception => e
+            # Do nothing.
+        end
 
         @state &= ~STATE_ESTAB
         @state |= STATE_DEAD
