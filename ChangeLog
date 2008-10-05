@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r67 | rakaur | 2008-10-04 19:45:01 -0400 (Sat, 04 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Move some stuff from Stream#close to ClientStream#close where it should have been.
+Fix some typos in resource.rb.
+Document the hell out of stream.rb.
+
+------------------------------------------------------------------------
 r66 | rakaur | 2008-10-04 14:51:23 -0400 (Sat, 04 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -122,12 +122,14 @@ def handle_iq_set_bind(elem)
     #
     # If it's empty they want us to generate one for them, if not
     # they've supplied a string to use. The new draft RFC says we should
-    # add random text onto that anyhow, so we do.
+    # add random text onto that anyhow, but apparently no one likes
+    # that. We'll go ahead and accept theirs if they supply it,
+    # which they shouldn't.
     #
     unless elem.has_elements?
-        resource = @jid.split('@')[0] + rand(rand(100000)).to_s
+        resource = @jid.split('@')[0]
     else
-        resource = elem.elements['resource'].text + rand(rand(10000)).to_s
+        resource = elem.elements['resource'].text + Stream.gen_id
 
         unless resource
             write Stanza.error(stanza, 'bad-request', 'modify')

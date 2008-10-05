@@ -145,9 +145,9 @@ class XMPPd
         # Check for connection timeouts.
         #Timer::Timer.new('check connection timeouts', 60, true) do
         #    $connections.each do |c|
-        #        c.error('connection-timeout') if ($time - c.rtime) >= 60
+        #        c.error('connection-timeout') if ($time - c.rtime) >= 30
         #    end
-        #end
+        #end XXX - ruby bug as far as i can tell, working on it...
 
         # Set up listening ports.
         Listen::init

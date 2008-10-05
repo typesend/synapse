@@ -30,7 +30,7 @@ module XMPP
 # child classes inherit from this below.
 #
 class Stream
-    attr_accessor :socket
+    attr_accessor :auth, :socket
     attr_reader   :host, :rtime
 
     # Try to move away from this.
@@ -225,7 +225,8 @@ class Stream
     def close(try = true)
         write '</stream:stream>'
 
-        @socket.close unless @socket.closed?
+        @socket.close
+
         @state &= ~STATE_ESTAB
         @state |= STATE_DEAD
 
@@ -293,6 +294,7 @@ class Stream
         end
 
         establish unless established?
+        @state &= ~STATE_ESTAB # Random telnet could crash us otherwise.
 
         write err
         close
