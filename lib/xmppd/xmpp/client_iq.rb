@@ -7,32 +7,33 @@
 # $Id$
 #
 
-#
 # Import required Ruby modules.
-#
 require 'idn'
 require 'rexml/document'
 
-#
 # Import required xmppd modules.
-#
 require 'xmppd/var'
-
 require 'xmppd/xmpp/resource'
 require 'xmppd/xmpp/stanza'
 require 'xmppd/xmpp/stream'
 
-#
 # The XMPP namespace.
-#
 module XMPP
 
-#
 # The Client namespace.
 # This is meant to be a mixin to a Stream.
-#
 module Client
 
+#
+# Handle an incoming <iq/> stanza.
+# IQ stanzas are somewhat-synchronous.
+# This handler breaks down further to handle
+# each type of IQ stanza (get, set, result).
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_iq(elem)
     # Is the stream open?
     unless established?
@@ -90,7 +91,7 @@ def handle_iq_get_query(elem)
         write Stanza.error(stanza, '114-97-107-97-117-114', 'cancel')
         return
     elsif elem.attributes['xmlns'] != 'jabber:iq:roster'
-        write Stanza.error(stanza, 'feature-not-implemented', 'modify')
+        write Stanza.error(stanza, 'service-unavailable', 'cancel')
         return
     end
 
@@ -113,7 +114,7 @@ def handle_iq_set_bind(elem)
 
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-bind'
-        write Stanza.error(stanza, 'bad-request', 'modify')
+        write Stanza.error(stanza, 'service-unavailable', 'cancel')
         return
     end
 
@@ -146,12 +147,10 @@ def handle_iq_set_bind(elem)
 
     # Is it in use?
     user = DB::User.users[@jid]
-    user.resources.each do |k, v|
-        if v.name == resource
-            write Stanza.error(stanza, 'conflict', 'cancel')
-            return
-        end
-    end if user.resources
+    if user.resources and user.resources[resource]
+        write Stanza.error(stanza, 'conflict', 'cancel')
+        return
+    end
 
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
@@ -168,7 +167,7 @@ def handle_iq_set_bind(elem)
 
     write iq
 
-    user = DB::User.users[@jid]
+    user = DB::User.users[@jid] # XXX didn't i just do this?
     @resource = Resource.new(resource, self, user)
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND

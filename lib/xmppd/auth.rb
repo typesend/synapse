@@ -41,9 +41,7 @@ def check_auth(host)
     m = nil
 
     $config.auth.each do |auth|
-        m = auth.host.find { |h| h == host }
-
-        return auth if m
+        return auth if auth.host.include?(host)
 
         m = auth.match.find { |a| host =~ a }
 
@@ -57,9 +55,7 @@ def check_deny(host)
     m = nil
 
     $config.deny.each do |deny|
-        m = deny.host.find { |h| h == host }
-
-        return true if m
+        return true if deny.host.include?(host)
 
         m = deny.match.find { |a| host =~ a }
 

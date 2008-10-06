@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r72 | rakaur | 2008-10-06 15:19:10 -0400 (Mon, 06 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Continue the documentation effort.
+
+------------------------------------------------------------------------
 r71 | rakaur | 2008-10-06 10:50:23 -0400 (Mon, 06 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -70,10 +70,8 @@ def handle_stream(elem)
         return
     end
 
-    m = $config.hosts.find { |h| h == to_host }
-
     # Do we serve this host?
-    unless m
+    unless $config.hosts.include?(to_host)
         error('host-unknown')
         return
     end
