@@ -127,9 +127,9 @@ def handle_iq_set_bind(elem)
     # which they shouldn't.
     #
     unless elem.has_elements?
-        resource = @jid.split('@')[0]
+        resource = @jid.split('@')[0] + Stream.genid
     else
-        resource = elem.elements['resource'].text + Stream.gen_id
+        resource = elem.elements['resource'].text
 
         unless resource
             write Stanza.error(stanza, 'bad-request', 'modify')

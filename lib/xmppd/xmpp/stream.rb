@@ -61,6 +61,10 @@ class Stream
         @rtime    = Time.now.to_f
         @state    = STATE_NONE
 
+        @flood    = { 'stanzas'  => 0, # This is for rate limiting.
+                      'mtime'    => 0,
+                      'killed' => false }
+
         unless type == 'server' or type == 'client'
             raise ArgumentError, "type must be 'client' or 'server'"
         end
@@ -283,6 +287,7 @@ class Stream
         @logger.unknown string
 
         @recvq = data
+        @rtime = $time
 
         parse
 

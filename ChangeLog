@@ -1,4 +1,22 @@
 ------------------------------------------------------------------------
+r70 | rakaur | 2008-10-06 07:41:00 -0400 (Mon, 06 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/Rakefile
+   M /trunk/etc/example.conf
+   A /trunk/lib/xmppd/base64.rb
+   M /trunk/lib/xmppd/configure/auth.rb
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/timer.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+
+Fixed timeouts, closing #48.
+Make some fixes for ruby19. Won't run yet because IDN doesn't work.
+
+------------------------------------------------------------------------
 r69 | rakaur | 2008-10-05 10:54:41 -0400 (Sun, 05 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

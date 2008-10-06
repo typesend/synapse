@@ -44,7 +44,25 @@ class ParserError < Exception
 end
 
 def dispatch(stanza)
-    @rtime = Time.now.to_f
+    # Do flood checks.
+    # XXX - opers excluded.
+    return if @flood['killed']
+
+    # Reset the timer if they're below the rate limits.
+    if ($time - @flood['mtime']) > 10 or not established?
+        @flood['mtime']   = $time
+        @flood['stanzas'] = 0
+    end
+
+    @flood['stanzas'] += 1 # This stanza counts.
+
+    # 30 stanzas in 10 seconds, outside of setup...
+    if @flood['stanzas'] > 30 and established?
+        @flood['killed'] = true
+        error('policy-violation', { 'name' => 'rate-limit-exceeded', 'text' => '>30 stanzas in <10 seconds' })
+        return
+    end
+
     methname = "handle_#{stanza.name}"
     methname.sub!(':', '_')
 
