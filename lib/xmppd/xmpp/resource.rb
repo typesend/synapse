@@ -135,7 +135,7 @@ class Resource
         end
 
         # Separate out the JID parts.
-        node, domain = jid.split('@')
+        node,   domain   = jid.split('@')
         domain, resource = domain.split('/')
 
         # Check to see if its to a local user.
@@ -146,7 +146,6 @@ class Resource
 
             if resource and user.resources[resource]
                 send_presence(user.resources[resource], stanza)
-
                 @dp_to << user.resources[resource].jid unless sb
                 return self
             else
@@ -159,7 +158,7 @@ class Resource
             end
         end
 
-        # XXX - If we get here then they're remote.
+        # XXX - If we get here then they're s2s.
 
         return self
     end
@@ -168,7 +167,7 @@ class Resource
     # Send our presence to one resource.
     #
     # resource:: [XMPP::Client::Resource] resource to send it to
-    # >stanza:: [REXML::Element] send using specific stanza
+    # stanza:: [REXML::Element] send using specific stanza
     #
     # return:: [XMPP::Client::Resource] self
     #
@@ -181,14 +180,17 @@ class Resource
             raise ArgumentError, 'stanza must be a REXML::Element'
         end if stanza
 
-        if stanza # poopy
+        if stanza
             stanza.add_attribute('from', jid)
+
             resource.stream.write stanza
         else
             @presence_stanza.add_attribute('from', jid)
-            @presence_stanza.add_attribute('to', resource.jid)
+            @presence_stanza.add_attribute('to',   resource.jid)
+
             resource.stream.write @presence_stanza
-            @presence_stanza.attributes.delete 'to'
+
+            @presence_stanza.attributes.delete('to')
         end
     end
 
@@ -237,5 +239,4 @@ class Resource
 end
 
 end # module Client
-
 end # module XMPP

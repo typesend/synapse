@@ -41,7 +41,7 @@ class Stream
     STATE_TLS     = 0x00000008
     STATE_SASL    = 0x00000010
     STATE_BIND    = 0x00000020
-    STATE_SESSION = 0x00000040 # This is only here for state in Features::list().
+    STATE_SESSION = 0x00000040 # This is only here for state in Features.list.
 
     #
     # Create a new XMPP::Stream.
@@ -56,14 +56,13 @@ class Stream
         @host     = IDN::Stringprep.nameprep(host)
         @myhost   = $config.hosts.first # A default.
         @nonce    = nil
-        @recvq    = ''
         @resource = nil
         @rtime    = Time.now.to_f
         @state    = STATE_NONE
 
         @flood    = { 'stanzas'  => 0, # This is for rate limiting.
                       'mtime'    => 0,
-                      'killed' => false }
+                      'killed'   => false }
 
         unless type == 'server' or type == 'client'
             raise ArgumentError, "type must be 'client' or 'server'"
@@ -89,8 +88,8 @@ class Stream
                 @logger = Logger.new("var/streams/s2s/#{@host}")
             end
 
-            @logger.level = Logger::UNKNOWN
-            @logger.progname = @host
+            @logger.level           = Logger::UNKNOWN
+            @logger.progname        = @host
             @logger.datetime_format = '%b %d %H:%M:%S '
         else
             @logger = MyLog::DeadLogger.new
@@ -110,20 +109,20 @@ class Stream
     #
     # return:: [String] random string
     #
+    @@id_counter = 0
+
     def Stream.genid
         @@id_changed = Time.now.to_i
-        @@id_counter = 0
 
-        time = Time.now.to_i
-        tid = Thread.new {}
-        tid = tid.object_id
+        time          = Time.now.to_i
+        tid           = Thread.new { }.object_id
         @@id_counter += 1
 
         nid = (time << 48) | (tid << 16) | @@id_counter
-        id = ''
+        id  = ''
 
         while nid > 0
-            id += (nid & 0xFF).chr
+            id   += (nid & 0xFF).chr
             nid >>= 8
         end
 
@@ -276,20 +275,20 @@ class Stream
             return
         end
         if data.empty?
-            @logger.unknown "-> empty read"
+            @logger.unknown '-> empty read'
             close
             return
         end
 
-        string = ''
+        string  = ''
         string += "(#{@resource.name}) " if @resource
         string += '-> ' + data.gsub("\n", '')
+
         @logger.unknown string
 
-        @recvq = data
         @rtime = $time
 
-        parse
+        parse(data)
 
         self
     end
@@ -304,14 +303,16 @@ class Stream
     #
     def error(defined_condition, application_error = nil)
         err = REXML::Element.new('stream:error')
-        na = REXML::Element.new(defined_condition)
+        na  = REXML::Element.new(defined_condition)
+
         na.add_namespace('urn:ietf:params:xml:ns:xmpp-streams')
         err << na
 
         if application_error
-            ae = REXML::Element.new(application_error['name'])
-            ae.add_namespace('urn:xmpp:errors')
+            ae      = REXML::Element.new(application_error['name'])
             ae.text = application_error['text'] if application_error['text']
+
+            ae.add_namespace('urn:xmpp:errors')
             err << ae
         end
 
@@ -345,9 +346,10 @@ class Stream
             close(false)
             return
         else
-            string = ''
+            string  = ''
             string += "(#{@resource.name}) " if @resource
             string += '<- ' + stanza.to_s
+
             @logger.unknown string
         end
 
@@ -376,12 +378,12 @@ class Stream
             rrname = '_xmpp-server._tcp.' + @host
         end
 
-        resolver = Resolv::DNS.new
+        resolver      = Resolv::DNS.new
         original_recs = []
         weighted_recs = []
 
         # See whether Ruby has the DNS SRV RR class (RUBY_VERSION >= 1.8.3)
-        type = nil
+        type        = nil
         srv_support = Resolv::DNS::Resource::IN.const_defined?('SRV')
 
         if srv_support
@@ -406,15 +408,15 @@ class Stream
                     next unless classname == 'Type33_Class1'
 
                     priority, weight, port, target = x.data.unpack('n3a*')
-                    pos = 0
+                    pos  = 0
                     addr = ''
 
                     until target[pos] == 0
                         addr += '.' unless pos == 0
-                        len = target[pos]
-                        pos += 1
+                        len   = target[pos]
+                        pos  += 1
                         addr += target[pos, len]
-                        pos += len
+                        pos  += len
                     end
 
                     original_recs << { 'target'   => addr,
@@ -428,7 +430,7 @@ class Stream
             equals = {}
 
             original_recs.each do |rec|
-                prio = rec['priority']
+                prio         = rec['priority']
                 equals[prio] = [] unless equals.include?(prio)
                 equals[prio] << rec
             end
@@ -446,8 +448,8 @@ class Stream
 
                 eqrecs.each { |rec| sum += rec['weight'] }
 
-                factor = rand(sum + 1)
-                sum = 0
+                factor  = rand(sum + 1)
+                sum     = 0
                 allzero = true
 
                 eqrecs.each do |rec|
@@ -456,7 +458,7 @@ class Stream
                     sum += rec['weight']
 
                     if sum >= factor
-                        weighted_recs << [ rec['target'], rec['port'] ]
+                        weighted_recs << [rec['target'], rec['port']]
                         allzero = false
                         break
                     end
@@ -464,7 +466,7 @@ class Stream
 
                 if allzero
                     selectee = eqrecs[rand(eqrecs.size)]
-                    weighted_recs << [ selectee['target'], selectee['port'] ]
+                    weighted_recs << [selectee['target'], selectee['port']]
                 end
             end
         rescue Resolv::ResolvError
@@ -476,9 +478,7 @@ class Stream
         end
 
         if block_given?
-            weighted_recs.each do |x|
-                yield(x[0], x[1])
-            end
+            weighted_recs.each { |x| yield(x[0], x[1]) }
 
             return nil
         else
@@ -573,8 +573,7 @@ class ClientStream < Stream
     # return:: [XMPP::ClientStream] self
     #
     def establish
-        @id = Stream.genid
-
+        @id    = Stream.genid
         stanza = %(<?xml version='1.0'?>) +
                  %(<stream:stream ) +
                  %(xmlns='jabber:client' ) +
@@ -647,7 +646,7 @@ class ServerStream < Stream
     private
     #######
 
-    #      
+    #
     # Manually build and send the opening stream XML.
     # We can't use REXML here because it closes all  
     # of the tags on its own.                      
@@ -695,7 +694,7 @@ class ServerStreamIn < ServerStream
     def initialize(host, socket)
         super(host)
 
-        @host = IDN::Stringprep.nameprep(host)
+        @host   = IDN::Stringprep.nameprep(host)
         @socket = socket
     end
 
@@ -737,7 +736,7 @@ class ServerStreamOut < ServerStream
     def initialize(host, myhost)
         super(host)
 
-        @host = IDN::Stringprep.nameprep(host)
+        @host   = IDN::Stringprep.nameprep(host)
         @myhost = IDN::Stringprep.nameprep(myhost)
     end
 

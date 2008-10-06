@@ -7,15 +7,11 @@
 # $Id$
 #
 
-#
 # Import required Ruby modules.
-#
 require 'idn'
 require 'rexml/document'
 
-#
 # Import required xmppd modules.
-#
 require 'xmppd/base64'
 require 'xmppd/var'
 require 'xmppd/xmpp/client_iq'
@@ -25,9 +21,7 @@ require 'xmppd/xmpp/sasl'
 require 'xmppd/xmpp/stream'
 require 'xmppd/xmpp/tls'
 
-#
 # The XMPP namespace.
-#
 module XMPP
 
 #
@@ -35,9 +29,16 @@ module XMPP
 # This is meant to be a mixin to a Stream.
 #
 module Client
-include XMPP::SASL
-include XMPP::TLS
+include XMPP::SASL # For the SASL methods.
+include XMPP::TLS  # For the TLS methods.
 
+#
+# Handle an incoming <stream> root element.
+#
+# elem:: [REXML::Element] parsed <stream> element
+#
+# return:: [XMPP::Stream] self
+#
 def handle_stream(elem)
     # Is the stream open?
     if established?
@@ -71,6 +72,7 @@ def handle_stream(elem)
 
     m = $config.hosts.find { |h| h == to_host }
 
+    # Do we serve this host?
     unless m
         error('host-unknown')
         return
@@ -82,9 +84,18 @@ def handle_stream(elem)
     establish
 
     # Send our feature list.
-    XMPP::Features::list(self) if elem.attributes['version'] == '1.0'
+    XMPP::Features.list(self) if elem.attributes['version'] == '1.0'
+
+    self
 end
 
+#
+# Handle an incoming <starttls/> stanza.
+#
+# elem:: [REXML::Element] parsed <starttls/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_starttls(elem)
     # First verify that we have an open stream.
     unless established?
@@ -110,8 +121,17 @@ def handle_starttls(elem)
     write pro
 
     starttls
+
+    self
 end
 
+#
+# Handle an incoming <auth/> stanza.
+#
+# elem:: [REXML::Element] parsed <auth/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_auth(elem)
     # First verify that we have an open stream.
     unless established?
@@ -169,18 +189,29 @@ def handle_auth(elem)
     end
 
     @nonce = Stream.genid
-    chal = 'nonce="%s",qop="auth",charset=utf-8,algorithm=md5-sess' % @nonce
-    chal = "realm=#{@myhost}," + chal
-    chal = Base64.encode64(chal)
+    chal   = 'nonce="%s",qop="auth",charset=utf-8,algorithm=md5-sess' % @nonce
+    chal   = "realm=#{@myhost}," + chal
+    chal   = Base64.encode64(chal)
+
     chal.gsub!("\n", '')
 
-    challenge = REXML::Element.new('challenge')
-    challenge.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+    challenge      = REXML::Element.new('challenge')
     challenge.text = chal
 
+    challenge.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+
     write challenge
+
+    self
 end
 
+#
+# Handle an incoming <response/> stanza.
+#
+# elem:: [REXML::Element] parsed <response/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_response(elem)
     # First verify that we have an open stream.
     unless established?
@@ -220,15 +251,15 @@ def handle_response(elem)
             write fai
 
             close
-
             return
         end
     end
 
     #
-    # I know this sucks, but you have the guy that designed SASL's DIGEST-MD5 to blame for it.
-    # For some reason he decided it'd be a good idea to allow the 'cnonce' field
-    # be able to consist of ANYTHING, which makes tokenizing this string a bitch.
+    # I know this sucks, but you have the guy that designed SASL's DIGEST-MD5
+    # blame for it. For some reason he decided it'd be a good idea to allow the
+    # 'cnonce' field be able to consist of ANYTHING, which makes tokenizing
+    # this string a bitch.
     #
     # This took four people on the jdev mailing list a while to sort out.
     #
@@ -280,8 +311,17 @@ def handle_response(elem)
 
     # Start SASL.
     startsasl(response)
+
+    self
 end
 
+#
+# Handle an incoming <abort/> stanza.
+#
+# elem:: [REXML::Element] parsed <abort/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_abort(elem)
     # First verify that we have an open stream.
     unless established?
@@ -305,6 +345,8 @@ def handle_abort(elem)
     fai << REXML::Element.new('aborted')
 
     write fai
+
+    self
 end
 
 end # module Client

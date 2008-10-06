@@ -19,10 +19,15 @@ require 'rexml/parsers/sax2parser'
 require 'xmppd/var'
 require 'xmppd/xmpp/stream'
 
+#
+# This is kind of a hack.
+# There's no way to change any of REXML's parser's sources, which
+# I kind of need to do so I don't have to run this for every stanza.
+#
 class REXML::Source
     def buffer=(string)
         @buffer ||= ''
-        @buffer += string
+        @buffer  += string
 
         # 64kb in the buffer. This should never happen.
         raise XMPP::Parser::ParserError if @buffer.length > 65536
@@ -59,12 +64,13 @@ def dispatch(stanza)
     # 30 stanzas in 10 seconds, outside of setup...
     if @flood['stanzas'] > 30 and established?
         @flood['killed'] = true
-        error('policy-violation', { 'name' => 'rate-limit-exceeded', 'text' => '>30 stanzas in <10 seconds' })
+        error('policy-violation', { 'name' => 'rate-limit-exceeded',
+                                    'text' => '>30 stanzas in <10 seconds' })
+
         return
     end
 
     methname = "handle_#{stanza.name}"
-    methname.sub!(':', '_')
 
     unless respond_to? methname
         if client?
@@ -83,8 +89,7 @@ end
 
 def parser_initialize
     @current = nil
-
-    @parser = REXML::Parsers::SAX2Parser.new(@recvq)
+    @parser  = REXML::Parsers::SAX2Parser.new('')
 
     @parser.listen(:start_element) do |uri, localname, qname, attributes|
         e = REXML::Element.new(qname)
@@ -119,20 +124,19 @@ def parser_initialize
     end
 end
 
-def parse
+def parse(data)
     begin
-        @parser.source.buffer = @recvq
+        @parser.source.buffer = data
         @parser.parse
 
         raise ParserError if @current.to_s.length > 65536
     rescue ParserError
-        # If we get here, they've maxed out on their buffer.
-        apperr = { 'name' => 'stanza-too-big', 'text' => 65536 }
-        error('policy-violation', apperr)
+        error('policy-violation', { 'name' => 'stanza-too-big',
+                                    'text' => 65536 })
     rescue REXML::ParseException => e
         if e.message =~ /must not be bound/i # REXML bug. Reported.
             str = 'xmlns:xml="http://www.w3.org/XML/1998/namespace"'
-            @recvq.gsub!(str, '')
+            data.gsub!(str, '')
             retry
         else
             # REXML throws this when it gets a partial stanza that's not
@@ -143,10 +147,7 @@ def parse
             error('xml-not-well-formed')
         end
     end
-
-    @recvq = ''
 end
 
 end # module Parser
-
 end # module XMPP

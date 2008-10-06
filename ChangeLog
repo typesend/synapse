@@ -1,4 +1,14 @@
 ------------------------------------------------------------------------
+r71 | rakaur | 2008-10-06 10:50:23 -0400 (Mon, 06 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Added rate limiting, closing #51.
+
+------------------------------------------------------------------------
 r70 | rakaur | 2008-10-06 07:41:00 -0400 (Mon, 06 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
