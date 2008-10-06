@@ -10,13 +10,13 @@
 #
 # Import required Ruby modules.
 #
-require 'base64'
 require 'digest/md5'
 require 'rexml/document'
 
 #
 # Import required xmppd modules.
 #
+require 'xmppd/base64'
 require 'xmppd/db'
 
 require 'xmppd/xmpp/stream'

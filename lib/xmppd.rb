@@ -14,7 +14,6 @@ require 'rubygems'
 #
 require 'optparse'
 require 'singleton'
-require 'timeout'
 
 # Check for libidn.
 begin
@@ -142,14 +141,6 @@ class XMPPd
         # Save the db every five minutes.
         Timer::Timer.new('save user db', 300, true) { DB::User.dump }
 
-        # Check for connection timeouts.
-        Timer::Timer.new('check connection timeouts', 60, true) do
-            $connections.each do |c|
-                next if c.dead? or c.socket.closed?
-                c.error('connection-timeout') if ($time - c.rtime) >= 30
-            end
-        end
-
         # Set up listening ports.
         Listen::init
 
@@ -210,6 +201,11 @@ class XMPPd
             #puts "REXML::Element (x%d)" % i if i > 0
             #puts "-------------------------------------------------"
 
+            # Check for connection timeouts.
+            # We have to do this here instead of a Timer because
+            # some weird threading crash happens.
+            $connections.each { |c| c.check_timeout } unless $connections.empty?
+
             # Kill off any dead connections.
             $connections.delete_if { |c| c.dead? }
 
@@ -217,11 +213,11 @@ class XMPPd
                 sleep(1)
                 next
             end
-            
+
             readfds = $connections.collect { |c| c.socket }
             readfds += $listeners
 
-            ret = select(readfds, [], [], 5)
+            ret = select(readfds, [], [], 60)
 
             next unless ret
             next if ret[0].empty?

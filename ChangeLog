@@ -1,4 +1,13 @@
 ------------------------------------------------------------------------
+r69 | rakaur | 2008-10-05 10:54:41 -0400 (Sun, 05 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd.rb
+
+This commit doesn't work. Trying to stamp out a bug.
+
+------------------------------------------------------------------------
 r68 | rakaur | 2008-10-05 00:36:23 -0400 (Sun, 05 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

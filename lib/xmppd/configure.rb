@@ -180,6 +180,10 @@ class ConfigParser < Configure::Parser
                 missing_parameter(node.name, node.line) unless node.data
                 newauth.match << /#{node.data}/
 
+            when 'timeout'
+                missing_parameter(node.name, node.line) unless node.data
+                newauth.timeout = node.data.to_i
+
             when 'flags'
                 node.entries.each do |flag|
                     case flag.name

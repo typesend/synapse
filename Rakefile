@@ -35,7 +35,7 @@ task :default => [:test]
 
 Rake::TestTask.new do |t|
     t.libs << 'test'
-    t.test_files = 'test/ts_xmppd.rb'
+    t.test_files = ['test/ts_xmppd.rb']
 end
 
 #

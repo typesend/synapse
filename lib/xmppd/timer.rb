@@ -8,11 +8,6 @@
 #
 
 #
-# Import required Ruby modules.
-#
-require 'timeout'
-
-#
 # The Timer namespace.
 #
 module Timer
@@ -28,7 +23,7 @@ class Timer
         @repeat = repeat
         @block = block
 
-        @@timers['name'] = self
+        @@timers[name] = self
 
         $log.xmppd.info "new timer: #{@name} every #{@time} secs"
 
@@ -43,13 +38,22 @@ class Timer
         @@timers
     end
 
-    def start
-        begin
-            Timeout::timeout(@time) { sleep(@time + 1) }
-        rescue Timeout::Error
-            @block.call
-            retry if @repeat
+    def delete(name)
+        if @@timers[name]
+            @@timers.delete name
+            $log.xmppd.info "timer deleted: #{name}"
         end
+    end
+
+    def start
+        loop do
+            sleep(@time)
+            $log.xmppd.debug "executing timer: #{@name}"
+            @block.call
+            break unless @repeat
+        end
+
+        $log.xmppd.info "timer expired: #{@name}"
     end
 end
 

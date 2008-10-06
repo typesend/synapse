@@ -14,17 +14,26 @@ module Configure
 #
 class Auth
     attr_accessor :host, :match
-    attr_reader :plain, :legacy_auth
+    attr_reader :timeout, :plain, :legacy_auth
 
     def initialize
         @host = []
         @match = []
+        @timeout = 300
         @plain = false
         @legacy_auth = false
     end
 
+    def timeout=(value)
+        unless value.class == Fixnum
+            raise ArgumentError, "invalid 'timeout' (must be integer)"
+        end
+
+        @timeout = timeout
+    end
+
     def plain=(value)
-        unless value == true || value == false
+        unless value == true or value == false
             raise ArgumentError, "invalid 'plain' (must be true/false)"
         end
            
@@ -32,7 +41,7 @@ class Auth
     end    
 
     def legacy_auth=(value)
-        unless value == true || value == false
+        unless value == true or value == false
             raise ArgumentError, "invalid 'legacy_auth' (must be true/false)"
         end
 

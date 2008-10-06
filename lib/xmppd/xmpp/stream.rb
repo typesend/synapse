@@ -54,7 +54,7 @@ class Stream
     #
     def initialize(host, type)
         @host     = IDN::Stringprep.nameprep(host)
-        @myhost   = ''
+        @myhost   = $config.hosts.first # A default.
         @nonce    = nil
         @recvq    = ''
         @resource = nil
@@ -217,6 +217,19 @@ class Stream
     end
 
     #
+    # Check for a connection timeout.
+    #
+    # return:: [XMPP::Stream] self
+    #
+    def check_timeout
+        return if dead? or @socket.closed?
+
+        error('connection-timeout') if ($time - @rtime) >= @auth.timeout
+
+        self
+    end
+
+    #
     # Close the stream and socket, etc.
     #
     # try:: [boolean] try to write the closing tag
@@ -258,7 +271,6 @@ class Stream
             close
             return
         end
-
         if data.empty?
             @logger.unknown "-> empty read"
             close
