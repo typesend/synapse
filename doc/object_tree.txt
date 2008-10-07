@@ -40,9 +40,11 @@ XMPP
 |   `-ServerStreamOut
 |-Parser
 | `-ParserError
+|-Client
+| `-Resource
+|-IQ
+|-Presence
 |-TLS
 |-SASL
 |-Stanza
-|-Features
-`-Client
-  `-Resource
+`-Features

@@ -208,7 +208,7 @@ def handle_iq_set_bind(elem)
     write iq
 
     user = DB::User.users[@jid] # XXX didn't i just do this?
-    @resource = Resource.new(resource, self, user)
+    @resource = XMPP::Client::Resource.new(resource, self, user)
     user.add_resource(@resource)
     @state |= Stream::STATE_BIND
     

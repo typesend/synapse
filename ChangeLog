@@ -1,4 +1,31 @@
 ------------------------------------------------------------------------
+r75 | rakaur | 2008-10-07 10:02:23 -0400 (Tue, 07 Oct 2008) | 1 line
+Changed paths:
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+
+Intermediate commit to get svn to shut up.
+------------------------------------------------------------------------
+r74 | rakaur | 2008-10-07 09:27:30 -0400 (Tue, 07 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   A /trunk/doc/object_tree.txt
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/client_iq.rb
+   M /trunk/lib/xmppd/xmpp/client_presence.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+
+Continue the documentation saga.
+
+------------------------------------------------------------------------
 r73 | rakaur | 2008-10-06 18:56:36 -0400 (Mon, 06 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
