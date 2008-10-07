@@ -2,7 +2,7 @@
 # synapse: a small XMPP server
 # xmpp/parser.rb: parses XML
 #
-# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+# Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
 # $Id$
 #

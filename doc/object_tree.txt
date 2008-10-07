@@ -1,0 +1,48 @@
+#
+# synapse: a small XMPP server
+# doc/object_tree.txt: the object tree
+#
+# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+#
+# $Id$
+#
+
+
+Configure
+|-Auth
+|-Configuration
+|-Deny
+|-Listen
+|-Logging
+|-Operator
+`-ConfigParser
+
+DB
+|-User
+`-Contact
+  |-LocalContact
+  `-RemoteContact
+
+Timer
+`-Timer
+
+MyLog
+|-MyLogger
+`-DeadLogger
+
+Auth
+
+XMPP
+|-Stream
+| |-ClientStream
+| `-ServerStream
+|   |-ServerStreamIn
+|   `-ServerStreamOut
+|-Parser
+| `-ParserError
+|-TLS
+|-SASL
+|-Stanza
+|-Features
+`-Client
+  `-Resource

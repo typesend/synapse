@@ -2,7 +2,7 @@
 # synapse: a small XMPP server
 # xmpp/features.rb: handles stream features
 #
-# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+# Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
 # $Id$
 #

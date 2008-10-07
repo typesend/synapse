@@ -2,7 +2,7 @@
 # synapse: a small XMPP server
 # xmpp/client_iq.rb: handles iq stanzas from clients
 #
-# Copyright (c) 2006 Eric Will <rakaur@malkier.net>
+# Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
 # $Id$
 #
@@ -46,6 +46,14 @@ def handle_iq(elem)
     handle_iq_result(elem) if elem.attributes['type'] == 'result'
 end
 
+#
+# Handle an incoming <iq type='set'/> stanza.
+# This further delegates as well.
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Client] self
+# 
 def handle_iq_set(elem)
     unless elem.attributes['id']
         write Stanza.error(elem, 'bad-request', 'modify')
@@ -64,6 +72,14 @@ def handle_iq_set(elem)
     end
 end
 
+#
+# Handle a incoming <iq type='get'/> stanza.
+# This further delegates as well.
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Stream] self
+# 
 def handle_iq_get(elem)
     unless elem.attributes['id']
         write Stanza.error(elem, 'bad-request', 'modify')
@@ -82,6 +98,14 @@ def handle_iq_get(elem)
     end
 end
 
+#
+# Handle a <query/> element within an <iq/> stanza.
+# <query/> is used for just about everything.
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_iq_get_query(elem)
     stanza = elem
     elem = stanza.root.elements['query']
@@ -108,6 +132,14 @@ def handle_iq_get_query(elem)
     @logger.unknown "(#{@resource.name}) -> set state to interested"
 end
 
+#
+# Handle a <bind/> element within an <iq/> stanza.
+# This binds the client resource.
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Stream] self
+#
 def handle_iq_set_bind(elem)
     stanza = elem
     elem = stanza.root.elements['bind']
@@ -175,7 +207,7 @@ def handle_iq_set_bind(elem)
     @logger.unknown "-> resource bound to #{resource}"
     
     # Send the updated features list.
-    XMPP::Features::list(self)
+    XMPP::Features.list(self)
 end
 
 # XXX
@@ -218,9 +250,8 @@ def handle_iq_set_session(elem)
     @logger.unknown "-> session silently ignored"
 
     # Send the updated features list.
-    XMPP::Features::list(self)
+    XMPP::Features.list(self)
 end
 
 end # module Client
-
 end # module XMPP
