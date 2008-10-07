@@ -1,6 +1,6 @@
 #
 # synapse: a small XMPP server
-# xmpp/client_presence.rb: handles presence stanzas from clients
+# xmpp/presence.rb: handles presence stanzas from clients
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
@@ -28,10 +28,12 @@ require 'xmppd/xmpp/stream'
 module XMPP
 
 #
-# The Client namespace.
+# The Presence namespace.
 # This is meant to be a mixin to a Stream.
 #
-module Client
+module Presence
+
+extend self
 
 def handle_presence(elem)
     # Is the stream open?
@@ -88,6 +90,5 @@ def handle_type_unavailable(elem)
     @resource.broadcast_presence(elem)
 end
 
-end # module Client
-
+end # module Presence
 end # module XMPP

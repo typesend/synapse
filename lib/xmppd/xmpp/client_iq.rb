@@ -20,9 +20,9 @@ require 'xmppd/xmpp/stream'
 # The XMPP namespace.
 module XMPP
 
-# The Client namespace.
+# The IQ namespace.
 # This is meant to be a mixin to a Stream.
-module Client
+module IQ
 
 #
 # Handle an incoming <iq/> stanza.
@@ -38,12 +38,14 @@ def handle_iq(elem)
     # Is the stream open?
     unless established?
         error('unexpected-request')
-        return
+        return self
     end
 
     handle_iq_set(elem) if elem.attributes['type'] == 'set'
     handle_iq_get(elem) if elem.attributes['type'] == 'get'
     handle_iq_result(elem) if elem.attributes['type'] == 'result'
+
+    self
 end
 
 #
@@ -57,7 +59,7 @@ end
 def handle_iq_set(elem)
     unless elem.attributes['id']
         write Stanza.error(elem, 'bad-request', 'modify')
-        return
+        return self
     end
 
     elem.elements.each do |e|
@@ -65,11 +67,13 @@ def handle_iq_set(elem)
 
         unless respond_to? methname
             write Stanza.error(elem, 'feature-not-implemented', 'cancel')
-            return
+            return self
         else
             send(methname, elem)
         end
     end
+
+    self
 end
 
 #
@@ -83,7 +87,7 @@ end
 def handle_iq_get(elem)
     unless elem.attributes['id']
         write Stanza.error(elem, 'bad-request', 'modify')
-        return
+        return self
     end
 
     elem.elements.each do |e|
@@ -91,11 +95,13 @@ def handle_iq_get(elem)
 
         unless respond_to? methname
             write Stanza.error(elem, 'feature-not-implemented', 'cancel')
-            return
+            return self
         else
             send(methname, elem)
         end
     end
+
+    self
 end
 
 #
@@ -113,10 +119,10 @@ def handle_iq_get_query(elem)
     # Verify namespace.
     if elem.attributes['xmlns'] == 'jabber:iq:easter'
         write Stanza.error(stanza, '114-97-107-97-117-114', 'cancel')
-        return
+        return self
     elsif elem.attributes['xmlns'] != 'jabber:iq:roster'
         write Stanza.error(stanza, 'service-unavailable', 'cancel')
-        return
+        return self
     end
 
     iq = REXML::Element.new('iq')
@@ -130,6 +136,8 @@ def handle_iq_get_query(elem)
 
     @resource.interested = true
     @logger.unknown "(#{@resource.name}) -> set state to interested"
+
+    self
 end
 
 #
@@ -147,7 +155,7 @@ def handle_iq_set_bind(elem)
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-bind'
         write Stanza.error(stanza, 'service-unavailable', 'cancel')
-        return
+        return self
     end
 
     resource = nil
@@ -166,7 +174,7 @@ def handle_iq_set_bind(elem)
 
         unless resource
             write Stanza.error(stanza, 'bad-request', 'modify')
-            return
+            return self
         end
     end
 
@@ -174,14 +182,14 @@ def handle_iq_set_bind(elem)
         resource = IDN::Stringprep.resourceprep(resource)
     rescue Exception
         write Stanza.error(stanza, 'bad-request', 'modify')
-        return
+        return self
     end
 
     # Is it in use?
     user = DB::User.users[@jid]
     if user.resources and user.resources[resource]
         write Stanza.error(stanza, 'conflict', 'cancel')
-        return
+        return self
     end
 
     iq = REXML::Element.new('iq')
@@ -208,6 +216,8 @@ def handle_iq_set_bind(elem)
     
     # Send the updated features list.
     XMPP::Features.list(self)
+
+    self
 end
 
 # XXX
@@ -227,7 +237,7 @@ def handle_iq_set_session(elem)
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-session'
         write Stanza.error(stanza, 'bad-request', 'modify')
-        return
+        return self
     end
 
     # Make sure they have a resource bound.
@@ -235,7 +245,7 @@ def handle_iq_set_session(elem)
 
     unless user.available? or @resource
         write Stanza.error(stanza, 'unexpected-request', 'wait')
-        return
+        return self
     end
 
     iq = REXML::Element.new('iq')
@@ -251,7 +261,9 @@ def handle_iq_set_session(elem)
 
     # Send the updated features list.
     XMPP::Features.list(self)
+
+    self
 end
 
-end # module Client
+end # module IQ
 end # module XMPP

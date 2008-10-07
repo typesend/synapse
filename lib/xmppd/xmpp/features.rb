@@ -7,29 +7,29 @@
 # $Id$
 #
 
-#
 # Import required Ruby modules.
-#
 require 'rexml/document'
 
-#
 # Import required xmppd modules.
-#
 require 'xmppd/xmpp/stream'
 require 'xmppd/xmpp/sasl'
 
-#
 # The XMPP namespace.
-#
 module XMPP
 
-#
 # The Features namespace.
-#
 module Features
 
 extend self
 
+#
+# Send the <stream:features/> stanza.
+# This changes as the stream's context changes.
+#
+# stream:: [XMPP::Stream] the stream to send to
+#
+# return:: [XMPP::Stream] the same stream
+#
 def list(stream)
     feat = REXML::Element.new('stream:features')
 
@@ -59,8 +59,15 @@ def list(stream)
     end
 
     stream.write feat
+
+    stream
 end
 
+#
+# Build the <starttls/> element for <stream:features/>.
+#
+# return:: [REXML::Element] <starttls/> element
+#
 def starttls
     starttls = REXML::Element.new('starttls')  
     starttls.add_namespace('urn:ietf:params:xml:ns:xmpp-tls')
@@ -69,6 +76,11 @@ def starttls
     return starttls
 end
 
+#
+# Build the <mechanisms/> element for <stream:features/>.
+#
+# return:: [REXML::Element] <mechanisms/> element
+#
 def sasl
     mechs = REXML::Element.new('mechanisms')
     mechs.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
@@ -82,6 +94,11 @@ def sasl
     return mechs
 end
 
+#
+# Build the <bind/> element for <stream:features/>.
+#
+# return:: [REXML::Element] <bind/> element
+#
 def bind(type_client)
     recbind = REXML::Element.new('bind')
     recbind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
@@ -90,7 +107,12 @@ def bind(type_client)
     return recbind
 end
 
-# XXX - depreciated
+# XXX - DEPRECIATED
+#
+# Build the <session/> element for <stream:features/>.
+#
+# return:: [REXML::Element] <session/> element
+#
 def session
     sess = REXML::Element.new('session')
     sess.add_namespace('urn:ietf:params:xml:ns:xmpp-session')
