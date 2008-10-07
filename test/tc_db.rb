@@ -24,6 +24,9 @@ class TestDB < Test::Unit::TestCase
     def setup
         assert_nothing_raised do
             $config = Configure::Configuration.new
+            $config.hosts << 'example.org'
+            $config.hosts << 'example.com'
+            $config.hosts << 'example.net'
             $config.logging.enable = false
             $log = MyLog::MyLogger.instance
             $log.xmppd = Logger.new('test/xmppdt.log')

@@ -38,7 +38,7 @@ end
 # Most IRC programs tend to use a named.conf-like configuration file
 # format these days. Being a good IRC developer, I used the same parser
 # everyone else used: configparse.c from csircd. When I started coding
-# in Python, I decided to write me own. Not knowing anything about
+# in Python, I decided to write my own. Not knowing anything about
 # lexers (I still don't) I just wrote it out by parsing it one character
 # at a time. When I started coding in Ruby, I had to do it all over
 # again. I'm glad to say this one is slightly more usable than my
@@ -60,7 +60,7 @@ end
 # == Author
 #
 # The Ruby parser was written by me for an IRC services program.
-# Copyright (c) 2004-2006 Eric Will <rakaur@malkier.net>
+# Copyright (c) 2004-2008 Eric Will <rakaur@malkier.net>
 #
 # ----
 #

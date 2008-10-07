@@ -41,14 +41,19 @@ class User
 
     attr_reader :node, :domain, :password, :resources, :roster
 
+    # XXX - something's wrong with IPs here
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
 
-        @node = IDN::Stringprep.nodeprep(node)
+        @node = IDN::Stringprep.nodeprep(node[0, 1023])
 
         unless domain =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
-            @domain = IDN::Stringprep.nameprep(domain)
+            @domain = IDN::Stringprep.nameprep(domain[0, 1023])
+        end
+
+        unless $config.hosts.include?(@domain)
+            raise DBError, "we do not serve host: #{@domain}"
         end
 
         @password = "%s:%s:%s" % [@node, @domain, password]
@@ -58,7 +63,7 @@ class User
 
         @@users[jid] = self
 
-        $log.xmppd.info 'new user: %s' % jid
+        $log.xmppd.info "new user: #{jid}"
 
         @@need_dump = true
     end

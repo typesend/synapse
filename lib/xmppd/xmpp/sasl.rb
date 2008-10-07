@@ -43,8 +43,10 @@ def hh(s)
 end
 
 def startsasl(response)
-    @jid = response['username'] + '@' + response['realm']
-    a1_h = DB::User.users[@jid].password
+    node   = IDN::Stringprep.nodeprep(response['username'])
+    domain = IDN::Stringprep.nameprep(response['realm'])
+    @jid   = node + '@' + domain
+    a1_h   = DB::User.users[@jid].password
 
     # Compute response and see if it matches.
     # Sorry, but there's no pretty way to do this.
@@ -88,5 +90,4 @@ def startsasl(response)
 end
 
 end # module SASL
-
 end # module XMPP

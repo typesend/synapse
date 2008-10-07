@@ -72,7 +72,7 @@ def dispatch(stanza)
 
     methname = "handle_#{stanza.name}"
 
-    unless respond_to? methname
+    unless respond_to?(methname)
         if client?
             $log.c2s.error "Unknown stanza from #{@host}: " +
                            "'#{stanza.name}' (no '#{methname}')"

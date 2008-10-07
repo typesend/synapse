@@ -139,7 +139,7 @@ class Resource
         domain, resource = domain.split('/')
 
         # Check to see if its to a local user.
-        return unless $config.hosts.include? domain
+        return unless $config.hosts.include?(domain)
 
         user = DB::User.users[node + '@' + domain]
 

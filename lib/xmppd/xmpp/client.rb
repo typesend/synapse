@@ -146,7 +146,7 @@ def handle_auth(elem)
     end
 
     # Make sure they're using a mechanism we support.
-    unless SASL::MECHANISMS.include? elem.attributes['mechanism']
+    unless SASL::MECHANISMS.include?(elem.attributes['mechanism'])
         fai = REXML::Element.new('failure')
         fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
         fai << REXML::Element.new('invalid-mechanism')

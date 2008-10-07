@@ -69,7 +69,7 @@ class ConfigParser < Configure::Parser
 
     def handle_hosts(entry)
        entry.entries.each do |node|
-           $config.hosts << IDN::Stringprep.nameprep(node.name)
+           $config.hosts << IDN::Stringprep.nameprep(node.name[0, 1023])
        end
     end
 

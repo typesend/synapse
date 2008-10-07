@@ -46,7 +46,7 @@ def handle_presence(elem)
     
     methname = 'handle_type_' + elem.attributes['type']
 
-    unless respond_to? methname
+    unless respond_to?(methname)
         write Stanza.error(elem, 'bad-request', 'cancel')
         return
     else
@@ -82,6 +82,8 @@ def handle_type_unavailable(elem)
         @resource.send_directed_presence(elem.attributes['to'], elem)
         return
     end
+
+    @resource.presence_stanza = elem
 
     @resource.dp_to.uniq.each do |jid|
         @resource.send_directed_presence(jid, elem)

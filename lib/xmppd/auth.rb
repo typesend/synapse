@@ -38,8 +38,6 @@ def check(host)
 end
 
 def check_auth(host)
-    m = nil
-
     $config.auth.each do |auth|
         return auth if auth.host.include?(host)
 
@@ -52,8 +50,6 @@ def check_auth(host)
 end
 
 def check_deny(host)
-    m = nil
-
     $config.deny.each do |deny|
         return true if deny.host.include?(host)
 

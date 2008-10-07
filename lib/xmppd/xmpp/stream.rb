@@ -349,6 +349,7 @@ class Stream
             string  = ''
             string += "(#{@resource.name}) " if @resource
             string += '<- ' + stanza.to_s
+            string.gsub!("\n", '')
 
             @logger.unknown string
         end
@@ -534,7 +535,7 @@ class ClientStream < Stream
     #
     def close(try = true)
         # If they're online, make sure to broadcast that they're not anymore.
-        if try and established?
+        if try and @resource and @resource.available?
             elem = REXML::Element.new('presence')
             elem.add_attribute('type', 'unavailable')
 

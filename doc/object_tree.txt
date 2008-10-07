@@ -8,43 +8,52 @@
 #
 
 
-Configure
-|-Auth
-|-Configuration
-|-Deny
-|-Listen
-|-Logging
-|-Operator
-`-ConfigParser
+Auth                  (M)
 
-DB
-|-User
-`-Contact
-  |-LocalContact
-  `-RemoteContact
+Configure             (M)
+|-Auth                (C)
+|-ConfigError         (E)
+|-Configuration       (M)
+| `ConfigParser       (C)
+|-Deny                (C)
+|-Entry               (C)
+|-Listen              (C)
+|-Logging             (C)
+|-Operator            (C)
+`-Parser              (C)
 
-Timer
-`-Timer
+DB                    (M)
+|-DBError             (E)
+|-Contact             (C)
+|  |-LocalContact     (C)
+|  `-RemoteContact    (C)
+`-User                (C)
 
-MyLog
-|-MyLogger
-`-DeadLogger
+Listen                (M)
+`-Listener            (C)
 
-Auth
+MyLog                 (M)
+|-MyLogger            (C)
+`-DeadLogger          (C)
 
-XMPP
-|-Stream
-| |-ClientStream
-| `-ServerStream
-|   |-ServerStreamIn
-|   `-ServerStreamOut
-|-Parser
-| `-ParserError
-|-Client
-| `-Resource
-|-IQ
-|-Presence
-|-TLS
-|-SASL
-|-Stanza
-`-Features
+Timer                 (M)
+`-Timer               (C)
+
+XMPP                  (M)
+|-Client              (M)
+| `-Resource          (C)
+|-Features            (M)
+|-IQ                  (M)
+| |-GET               (M)
+| `-SET               (M)
+|-Parser              (M)
+| `-ParserError       (E)
+|-Presence            (M)
+|-SASL                (M)
+|-Stanza              (M)
+|-Stream              (C)
+| |-ClientStream      (C)
+| `-ServerStream      (C)
+|   |-ServerStreamIn  (C)
+|   `-ServerStreamOut (C)
+|-TLS                 (M)
