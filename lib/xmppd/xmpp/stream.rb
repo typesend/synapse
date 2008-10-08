@@ -239,7 +239,7 @@ class Stream
     # return self
     #
     def close(try = true)
-        write '</stream:stream>'
+        write '</stream:stream>' if try
 
         begin
             @socket.close unless @socket.closed?
@@ -535,6 +535,7 @@ class ClientStream < Stream
     def close(try = true)
         # If they're online, make sure to broadcast that they're not anymore.
         if try and @resource and @resource.available?
+            @logger.unknown "(#{@resource.name}) -> generating log off information"
             elem = REXML::Element.new('presence')
             elem.add_attribute('type', 'unavailable')
 

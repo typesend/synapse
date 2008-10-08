@@ -153,6 +153,12 @@ class User
         @node + '@' + @domain
     end
 
+    def oper?
+        m = $config.operator.find { |oper| oper.jid == jid }
+        return false unless m
+        return m
+    end
+
     def password=(newpass)
         newpass = "%s:%s:%s" % [@node, @domain, newpass]
         @password = Digest::MD5.digest(newpass)
@@ -232,6 +238,8 @@ class User
 
     # True if we're subscribed to their presence.
     def subscribed?(user)
+        return true if user == self
+
         myc = @roster[user.jid]
         return false unless myc
 

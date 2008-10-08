@@ -41,58 +41,15 @@ def handle_message(elem)
 
     elem.attributes['type'] ||= 'normal'
     elem.attributes['from'] ||= @resource.jid
-
     to_jid = elem.attributes['to']
 
-    unless to_jid
+    # To must be present and it must not be just a domain.
+    unless to_jid and to_jid.include?('@')
         write Stanza.error(elem, 'bad-request', 'cancel')
+        return self
     end
 
-    # Separate out the JID parts.
-    node,   domain   = to_jid.split('@')
-    domain, resource = domain.split('/')
-
-    # Check to see if it's to a remote user.
-    unless $config.hosts.include?(domain)
-        write Stanza.error(elem, 'feature-not-implemented', 'cancel')
-        return
-    end
-
-    # Must be to a local user.
-    user = DB::User.users[node + '@' + domain]
-
-    unless user
-        write Stanza.error(elem, 'service-unavailable', 'cancel')
-        return
-    end
-
-    # Are they online?
-    # XXX - this gets stored plain in the db... maybe zlib it?
-    unless user.available?
-        # This implements XEP-0203.
-        datetime = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-        delay = REXML::Element.new('delay')
-        delay.add_attribute('stamp', datetime)
-        delay.add_attribute('from', @myhost)
-        delay.add_namespace('urn:xmpp:delay')
-        delay.text = 'Offline Storage'
-
-        elem << delay
-        user.offline_stanzas['message'] << elem.to_s
-
-        return
-    end
-
-    # If it's to a specific resource, try to find it.
-    if resource and user.resources[resource]
-        to_stream = user.resources[resource].stream
-    else
-        to_stream = user.front_resource.stream
-        # XXX - rewrite the to?
-    end
-
-    # And deliver!
-    to_stream.write elem
+    @resource.send_message(elem)
 end
  
 end # module Message

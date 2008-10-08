@@ -68,8 +68,14 @@ def get_query(elem)
     # Verify namespace.
     ns = elem.attributes['xmlns']
 
-    if ns =~ /^\w+\:\w+\:(\w+)$/
-        methname = 'query_' + $1
+    re1 = /^\w+\:\w+\:(\w+)$/
+    re2 = /^http\:\/\/jabber\.org\/protocol\/(.*)$/
+
+    m = re1.match(ns)
+    m = re2.match(ns) unless m
+
+    if m
+        methname = 'query_' + m[1].sub('#', '_')
 
         unless respond_to?(methname)
             write Stanza.error(stanza, 'service-unavailable', 'cancel')
@@ -77,12 +83,106 @@ def get_query(elem)
         end
 
         send(methname, stanza)
-    elsif ns[0, 7] == 'http://'
+    else
         write Stanza.error(stanza, 'service-unavailable', 'cancel')
         return self
     end
 
     self
+end
+
+def query_disco_items(stanza)
+    unless stanza.attributes['to']
+        write Stanza.error(stanza, 'service-unavailable', 'modify')
+        return self
+    end
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.attributes['id'])
+
+    query = REXML::Element.new('query')
+    query.add_namespace('http://jabber.org/protocol/disco#items')
+
+    # If it's to a bare JID, we handle it.
+    jid_to = stanza.attributes['to']
+    if not jid_to.include?('/') and jid_to.include?('@')
+        user = DB::User.users[jid_to]
+
+        unless @resource.user.subscribed?(user)
+            write Stanza.error(stanza, 'service-unavailable', 'cancel')
+            return self
+        end
+
+        user.resources.each do |name, rec|
+            item = REXML::Element.new('item')
+            item.add_attribute('jid', rec.jid)
+            query << item
+        end if user.resources
+    end
+
+    iq << query
+
+    write iq
+end
+
+FEATURES = [ 'http://jabber.org/protocol/disco#items',
+             'http://jabber.org/protocol/disco#info',
+             'stringprep',
+             'dnssrv',
+             'msgoffline',
+             'urn:xmpp:delay',
+             'jabber:iq:easter',
+             'jabber:iq:version' ]
+
+def query_disco_info(stanza)
+    unless stanza.attributes['to']
+        write Stanza.error(stanza, 'service-unavailable', 'modify')
+        return self
+    end
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.attributes['id'])
+
+    query = REXML::Element.new('query')
+    query.add_namespace('http://jabber.org/protocol/disco#info')
+
+    # If it's to a bare JID, we handle it.
+    jid_to = stanza.attributes['to']
+    if not jid_to.include?('/') and jid_to.include?('@')
+        user = DB::User.users[jid_to]
+
+        unless @resource.user.subscribed?(user)
+            write Stanza.error(stanza, 'service-unavailable', 'cancel')
+            return self
+        end
+
+        type = user.oper? ? 'admin' : 'registered'
+
+        identity = REXML::Element.new('identity')
+        identity.add_attribute('category', 'account')
+        identity.add_attribute('type', type)
+
+        query << identity
+    else
+        identity = REXML::Element.new('identity')
+        identity.add_attribute('category', 'server')
+        identity.add_attribute('type', 'im')
+
+        query << identity
+
+        # Now list our supported features.
+        FEATURES.each do |feat|
+            feature = REXML::Element.new('feature')
+            feature.add_attribute('var', feat)
+            query << feature
+        end
+    end
+
+    iq << query
+
+    write iq
 end
 
 def query_easter(stanza)

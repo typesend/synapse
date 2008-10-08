@@ -1,4 +1,12 @@
 ------------------------------------------------------------------------
+r79 | rakaur | 2008-10-07 23:37:27 -0400 (Tue, 07 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+
+Implement XEP-0092, software version. Closes #23.
+
+------------------------------------------------------------------------
 r78 | rakaur | 2008-10-07 20:44:50 -0400 (Tue, 07 Oct 2008) | 5 lines
 Changed paths:
    M /trunk/ChangeLog
