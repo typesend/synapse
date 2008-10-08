@@ -106,6 +106,32 @@ def query_roster(stanza)
     self
 end
 
+# This implements XEP-0092.
+def query_version(stanza)
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.attributes['id'])
+
+    query = REXML::Element.new('query')
+    query.add_namespace('jabber:iq:version')
+
+    name = REXML::Element.new('name')
+    name.text = 'xmppd'
+    query << name
+
+    version = REXML::Element.new('version')
+    version.text = "synapse-#$version"
+    query << version
+
+    os = REXML::Element.new('os')
+    os.text = RUBY_PLATFORM
+    query << os # XXX - supposed to make this configurable 
+
+    iq << query
+
+    write iq
+end
+
 end # module GET
 end # module IQ
 end # module XMPP

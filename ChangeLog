@@ -1,4 +1,33 @@
 ------------------------------------------------------------------------
+r78 | rakaur | 2008-10-07 20:44:50 -0400 (Tue, 07 Oct 2008) | 5 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/bin/xmppd
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/listen.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/iq.rb
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   A /trunk/lib/xmppd/xmpp/message.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/lib/xmppd/xmpp/tls.rb
+   M /trunk/lib/xmppd/xmpp.rb
+   M /trunk/lib/xmppd.rb
+   M /trunk/test/ts_xmppd.rb
+
+Big commit.
+Add message stuff, including offline messages (XEP-0160) with delay (XEP-0203). Closes #16 and #57.
+Fix up IQ stuff a little more.
+General cleanups.
+
+------------------------------------------------------------------------
 r77 | rakaur | 2008-10-07 14:36:25 -0400 (Tue, 07 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
