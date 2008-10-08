@@ -39,12 +39,16 @@ class User
     @@users = {}
     @@need_dump = false
 
-    attr_reader :node, :domain, :password, :resources, :roster
+    attr_accessor :offline_stanzas
+    attr_reader   :node, :domain, :password, :resources, :roster
 
     # XXX - something's wrong with IPs here
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
+        @offline_stanzas = { 'iq'       => [],
+                             'presence' => [],
+                             'message'  => [] }
 
         @node = IDN::Stringprep.nodeprep(node[0, 1023])
 
@@ -73,7 +77,7 @@ class User
     ######
 
     def to_yaml_properties
-        %w( @node @domain @password @roster )
+        %w( @node @domain @password @roster @offline_stanzas )
     end
 
     def User.users
@@ -81,7 +85,7 @@ class User
     end
 
     def User.need_dump?
-        @@need_dump
+        true #@@need_dump -- XXX figure out offline_stanzas
     end
 
     def User.load
@@ -235,6 +239,24 @@ class User
         return true if myc.subscription == Contact::SUB_BOTH
 
         return false
+    end
+
+    #
+    # Return the resource with the highest priority.
+    #
+    def front_resource
+        recs = {}
+
+        # If there is a tie, the last one in the loop wins.
+        @resources.each do |name, rec|
+            next unless rec.available?
+            p = rec.presence_stanza.elements['priority'].text.to_i
+            next if p < 0 # Skip negative priorities.
+
+            recs[p] = rec
+        end
+
+        return recs[recs.keys.max]
     end
 
     #

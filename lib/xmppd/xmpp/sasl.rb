@@ -18,8 +18,7 @@ require 'rexml/document'
 #
 require 'xmppd/base64'
 require 'xmppd/db'
-
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 #
 # The XMPP namespace.

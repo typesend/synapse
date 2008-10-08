@@ -7,8 +7,6 @@
 # $Id$
 #
 
-require 'rubygems'
-
 #
 # Import required Ruby modules.
 #
@@ -31,6 +29,8 @@ end
 #
 # Import required xmppd modules.
 #
+require 'xmppd/auth'
+require 'xmppd/base64'
 require 'xmppd/configure'
 require 'xmppd/db'
 require 'xmppd/listen'
@@ -38,6 +38,7 @@ require 'xmppd/log'
 require 'xmppd/timer'
 require 'xmppd/var'
 require 'xmppd/version'
+require 'xmppd/xmpp'
 
 #
 # The main program class.

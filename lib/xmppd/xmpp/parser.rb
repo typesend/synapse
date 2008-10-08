@@ -17,7 +17,7 @@ require 'rexml/parsers/sax2parser'
 # Import required xmppd modules.
 #
 require 'xmppd/var'
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 #
 # This is kind of a hack.

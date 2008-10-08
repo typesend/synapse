@@ -23,7 +23,6 @@ require 'xmppd/var'
 #
 # Import required Ruby modules.
 #
-require 'rubygems'
 require 'idn'
 require 'openssl'
 

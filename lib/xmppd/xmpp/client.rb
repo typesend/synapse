@@ -14,12 +14,8 @@ require 'rexml/document'
 # Import required xmppd modules.
 require 'xmppd/base64'
 require 'xmppd/var'
-require 'xmppd/xmpp/features'
-require 'xmppd/xmpp/iq'
-require 'xmppd/xmpp/presence'
-require 'xmppd/xmpp/sasl'
-require 'xmppd/xmpp/stream'
-require 'xmppd/xmpp/tls'
+
+require 'xmppd/xmpp'
 
 # The XMPP namespace.
 module XMPP
@@ -33,6 +29,7 @@ include XMPP::SASL     # For the SASL methods.
 include XMPP::TLS      # For the TLS methods.
 include XMPP::IQ       # For <iq/> stanzas.
 include XMPP::Presence # For <presence/> stanzas.
+include XMPP::Message  # For <message/> stanzas.
 
 #
 # Handle an incoming <stream> root element.

@@ -1,4 +1,27 @@
 ------------------------------------------------------------------------
+r77 | rakaur | 2008-10-07 14:36:25 -0400 (Tue, 07 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/doc/object_tree.txt
+   M /trunk/lib/xmppd/auth.rb
+   M /trunk/lib/xmppd/configure/parser.rb
+   M /trunk/lib/xmppd/configure.rb
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/client.rb
+   M /trunk/lib/xmppd/xmpp/iq.rb
+   A /trunk/lib/xmppd/xmpp/iq_get.rb
+   A /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+   M /trunk/test/tc_db.rb
+
+Resorted the IQ stuff. Still not sure I'm happy with it. See #56.
+Fixed a few random things.
+
+------------------------------------------------------------------------
 r76 | rakaur | 2008-10-07 10:11:17 -0400 (Tue, 07 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

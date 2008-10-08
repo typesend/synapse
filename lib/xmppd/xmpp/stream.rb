@@ -17,9 +17,8 @@ require 'socket'
 
 # Import required xmppd modules.
 require 'xmppd/log'
-require 'xmppd/var'
+
 require 'xmppd/xmpp/client'
-require 'xmppd/xmpp/parser'
 
 # The XMPP namespace.
 module XMPP
@@ -539,7 +538,7 @@ class ClientStream < Stream
             elem = REXML::Element.new('presence')
             elem.add_attribute('type', 'unavailable')
 
-            handle_type_unavailable(elem)
+            ptype_unavailable(elem)
         end
 
         # Undo some refereces so GC works.

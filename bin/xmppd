@@ -11,9 +11,10 @@
 $: << File.join(Dir.getwd, 'lib')
 $0 = 'xmppd'
 
-#
+# Import required Ruby modules.
+require 'rubygems'
+
 # Import required xmppd modules.
-#
 require 'xmppd'
 
 # Launch a new XMPPd.

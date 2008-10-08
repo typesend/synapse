@@ -1,6 +1,6 @@
 #
 # synapse: a small XMPP server
-# xmpp/presence.rb: handles presence stanzas from clients
+# xmpp/presence.rb: handles <presence/> stanzas
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
@@ -17,10 +17,7 @@ require 'rexml/document'
 # Import required xmppd modules.
 #
 require 'xmppd/var'
-
-require 'xmppd/xmpp/resource'
-require 'xmppd/xmpp/stanza'
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 #
 # The XMPP namespace.
@@ -44,7 +41,7 @@ def handle_presence(elem)
 
     elem.attributes['type'] ||= 'none'
     
-    methname = 'handle_type_' + elem.attributes['type']
+    methname = 'ptype_' + elem.attributes['type']
 
     unless respond_to?(methname)
         write Stanza.error(elem, 'bad-request', 'cancel')
@@ -55,7 +52,7 @@ def handle_presence(elem)
 end
  
 # No type signals avilability.
-def handle_type_none(elem)
+def ptype_none(elem)
     if elem.attributes['to']
         @resource.send_directed_presence(elem.attributes['to'], elem)
         return
@@ -73,11 +70,20 @@ def handle_type_none(elem)
         # If they're sending out initial presense, then they
         # need their contacts' presence.
         @resource.send_roster_presence
+
+        # Do they have any offline stazas?
+        return if elem.elements['priority'].text.to_i < 0
+
+        # XXX - only deliver messages for now
+        @resource.user.offline_stanzas.each do |kind, stanzas|
+            stanzas.each { |stanza| write stanza } if kind == 'message'
+            @resource.user.offline_stanzas[kind] = []
+        end
     end
 end
 
 # They're logging off.
-def handle_type_unavailable(elem)
+def ptype_unavailable(elem)
     if elem.attributes['to']
         @resource.send_directed_presence(elem.attributes['to'], elem)
         return

@@ -15,7 +15,7 @@ require 'openssl'
 #
 # Import required xmppd modules.
 #
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 #
 # The XMPP namespace.

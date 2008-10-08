@@ -9,7 +9,7 @@
 
 # Import required xmppd modules.
 require 'xmppd/db'
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 # The XMPP namespace.
 module XMPP
@@ -138,7 +138,7 @@ class Resource
         node,   domain   = jid.split('@')
         domain, resource = domain.split('/')
 
-        # Check to see if its to a local user.
+        # Check to see if it's to a local user.
         return unless $config.hosts.include?(domain)
 
         user = DB::User.users[node + '@' + domain]

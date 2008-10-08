@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'rubygems'
 require 'test/unit'
 
 #

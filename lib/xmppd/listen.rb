@@ -17,6 +17,7 @@ require 'socket'
 #
 require 'xmppd/auth'
 require 'xmppd/var'
+
 require 'xmppd/xmpp/stream'
 
 # The Listen namespace.

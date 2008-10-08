@@ -13,11 +13,9 @@ require 'rexml/document'
 
 # Import required xmppd modules.
 require 'xmppd/var'
+
 require 'xmppd/xmpp/iq_get'
 require 'xmppd/xmpp/iq_set'
-require 'xmppd/xmpp/resource'
-require 'xmppd/xmpp/stanza'
-require 'xmppd/xmpp/stream'
 
 # The XMPP namespace.
 module XMPP
@@ -50,8 +48,8 @@ def handle_iq(elem)
     self
 end
 
-include XMPP::IQ::GET
-include XMPP::IQ::SET
+include XMPP::IQ::GET # Handles <iq type='get'/> stanzas.
+include XMPP::IQ::SET # Handles <iq type='set'/> stanzas.
 
 end # module IQ
 end # module XMPP

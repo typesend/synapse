@@ -11,8 +11,7 @@
 require 'rexml/document'
 
 # Import required xmppd modules.
-require 'xmppd/xmpp/stream'
-require 'xmppd/xmpp/sasl'
+require 'xmppd/xmpp'
 
 # The XMPP namespace.
 module XMPP

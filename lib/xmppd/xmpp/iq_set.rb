@@ -13,9 +13,7 @@ require 'rexml/document'
 
 # Import required xmppd modules.
 require 'xmppd/var'
-require 'xmppd/xmpp/resource'
-require 'xmppd/xmpp/stanza'
-require 'xmppd/xmpp/stream'
+require 'xmppd/xmpp'
 
 # The XMPP namespace.
 module XMPP
