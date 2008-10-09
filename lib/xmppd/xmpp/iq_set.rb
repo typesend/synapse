@@ -94,8 +94,19 @@ end
 # This implements XEP-0077.
 def squery_register(stanza)
     if stanza.elements['query'].elements['remove']
-        # XXX - need to do user deleting...
-        Stanza.error(stanza, 'not-allowed', 'cancel')
+        unless sasl?
+            write Stanza.error(stanza, 'not-allowed', 'cancel')
+            return self
+        end
+
+        iq = REXML::Element.new('iq')
+        iq.add_attribute('type', 'result')
+        iq.add_attribute('id', stanza.attributes['id'])
+
+        write iq
+
+        DB::User.delete(@jid)
+
         return self
     end
 
@@ -171,6 +182,13 @@ def set_bind(elem)
     # Verify namespace.
     unless elem.attributes['xmlns'] == 'urn:ietf:params:xml:ns:xmpp-bind'
         write Stanza.error(stanza, 'service-unavailable', 'cancel')
+        return self
+    end
+
+    # Do they have too many connected already?
+    recs = DB::User.users[@jid].resources
+    if recs and recs.length > 10
+        write Stanza.error(stanza, 'resource-constraint', 'cancel')
         return self
     end
 

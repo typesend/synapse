@@ -146,7 +146,18 @@ class User
     def User.delete(jid)
         raise DBError, "#{jid} does not exist" unless @@users[jid]
 
-        @@users[jid] = nil
+        user = @@users[jid]
+        @@users.delete jid
+
+        # Disconnect any active resources.
+        user.resources.each { |n, rec| rec.stream.close } if user.resources
+
+        # XXX - remove them from rosters?
+        user.roster.each do |c|
+        end
+
+        $log.xmppd.info "user delete: #{jid}"
+
         @@need_dump = true
     end
 

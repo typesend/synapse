@@ -1,4 +1,28 @@
 ------------------------------------------------------------------------
+r81 | rakaur | 2008-10-09 12:24:28 -0400 (Thu, 09 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+   A /trunk/doc/extensions/xep-0030.html
+   A /trunk/doc/extensions/xep-0077.html
+   A /trunk/doc/extensions/xep-0092.html
+   A /trunk/doc/extensions/xep-0160.html
+   A /trunk/doc/extensions/xep-0203.html
+   M /trunk/etc/example.conf
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/features.rb
+   M /trunk/lib/xmppd/xmpp/iq.rb
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/message.rb
+   M /trunk/lib/xmppd/xmpp/parser.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Implemented XEP-0077, closes #5.
+Fixed some bugs.
+
+------------------------------------------------------------------------
 r80 | rakaur | 2008-10-08 17:21:27 -0400 (Wed, 08 Oct 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -45,7 +45,20 @@ def startsasl(response)
     node   = IDN::Stringprep.nodeprep(response['username'])
     domain = IDN::Stringprep.nameprep(response['realm'])
     @jid   = node + '@' + domain
-    a1_h   = DB::User.users[@jid].password
+    user   = DB::User.users[@jid]
+
+    unless user
+        fai = REXML::Element.new('failure')
+        fai.add_namespace('urn:ietf:params:xml:ns:xmpp-sasl')
+        fai << REXML::Element.new('not-authorized')
+
+        write fai
+
+        close
+        return
+    end
+
+    a1_h = user.password
 
     # Compute response and see if it matches.
     # Sorry, but there's no pretty way to do this.
