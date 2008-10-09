@@ -173,6 +173,36 @@ class Stream
     end
 
     #
+    # Are we ready to exchange <iq/> stanzas?
+    # Right now I define this as being in TLS.
+    #
+    # return:: [boolean] true or false
+    def iq_ready?
+        tls?
+    end
+
+    #
+    # Are we ready to exchange <presence/> stanzas?
+    # Right now I define this as being in TLS and SASL.
+    #
+    # return:: [boolean] true or false
+    def presence_ready?
+        return true if tls? and sasl?
+        return false
+    end
+
+    #
+    # Are we ready to exchange <message/> stanzas?
+    # Right now I define this as being in TLS and SASL
+    #
+    # return:: [boolean] true or false
+    def message_ready?
+        return true if tls? and sasl?
+        return false
+    end
+
+
+    #
     # Have we bound a resource?
     #
     # return:: [boolean] true or false
@@ -502,6 +532,7 @@ class ClientStream < Stream
     # return:: [XMPP::ClientStream] new client stream object
     #
     def initialize(host)
+        @registered = false # For In-Band Registration
         super(host, 'client')
     end
 
@@ -535,11 +566,10 @@ class ClientStream < Stream
     def close(try = true)
         # If they're online, make sure to broadcast that they're not anymore.
         if try and @resource and @resource.available?
-            @logger.unknown "(#{@resource.name}) -> generating log off information"
             elem = REXML::Element.new('presence')
             elem.add_attribute('type', 'unavailable')
 
-            ptype_unavailable(elem)
+            presence_unavailable(elem)
         end
 
         # Undo some refereces so GC works.

@@ -33,8 +33,8 @@ module Message
 extend self
 
 def handle_message(elem)
-    # Is the stream open?
-    unless established?
+    # Are we ready for <message/> stanzas?
+    unless message_ready?
         error('unexpected-request')
         return
     end

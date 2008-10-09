@@ -33,15 +33,15 @@ module Presence
 extend self
 
 def handle_presence(elem)
-    # Is the stream open?
-    unless established?
+    # Are we ready for <presence/> stanzas?
+    unless presence_ready?
         error('unexpected-request')
         return
     end
 
     elem.attributes['type'] ||= 'none'
     
-    methname = 'ptype_' + elem.attributes['type']
+    methname = 'presence_' + elem.attributes['type']
 
     unless respond_to?(methname)
         write Stanza.error(elem, 'bad-request', 'cancel')
@@ -52,7 +52,7 @@ def handle_presence(elem)
 end
  
 # No type signals avilability.
-def ptype_none(elem)
+def presence_none(elem)
     if elem.attributes['to']
         @resource.send_directed_presence(elem.attributes['to'], elem)
         return
@@ -83,7 +83,7 @@ def ptype_none(elem)
 end
 
 # They're logging off.
-def ptype_unavailable(elem)
+def presence_unavailable(elem)
     if elem.attributes['to']
         @resource.send_directed_presence(elem.attributes['to'], elem)
         return

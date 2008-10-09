@@ -1,4 +1,19 @@
 ------------------------------------------------------------------------
+r80 | rakaur | 2008-10-08 17:21:27 -0400 (Wed, 08 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq.rb
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+   M /trunk/lib/xmppd/xmpp/message.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/stream.rb
+
+Another big commit. Implemented Service Discovery, which closes #15.
+Reworked the IQ stanza stuff, which closes #56.
+I think the processing works now, still need to look at presence. See #60.
+
+------------------------------------------------------------------------
 r79 | rakaur | 2008-10-07 23:37:27 -0400 (Tue, 07 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

@@ -50,11 +50,10 @@ end
 
 def dispatch(stanza)
     # Do flood checks.
-    # XXX - opers excluded.
     return if @flood['killed']
 
     # Reset the timer if they're below the rate limits.
-    if ($time - @flood['mtime']) > 10 or not established?
+    if ($time - @flood['mtime']) > 10 or not message_ready?
         @flood['mtime']   = $time
         @flood['stanzas'] = 0
     end
@@ -62,13 +61,13 @@ def dispatch(stanza)
     @flood['stanzas'] += 1 # This stanza counts.
 
     # 30 stanzas in 10 seconds, outside of setup...
-    if @flood['stanzas'] > 30 and established?
+    if @flood['stanzas'] > 30 and message_ready?
         @flood['killed'] = true
         error('policy-violation', { 'name' => 'rate-limit-exceeded',
                                     'text' => '>30 stanzas in <10 seconds' })
 
         return
-    end
+    end unless @resource.user.operator? if @resource
 
     methname = "handle_#{stanza.name}"
 
@@ -81,7 +80,7 @@ def dispatch(stanza)
                            "'#{stanza.name}' (no '#{methname}')"
         end
 
-        error('xml-not-well-formed')
+        error('invalid-namespace')
     else
         send(methname, stanza)
     end

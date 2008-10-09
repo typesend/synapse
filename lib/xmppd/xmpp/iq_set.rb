@@ -55,6 +55,108 @@ def handle_iq_set(elem)
 end
 
 #
+# Handle a <query/> element within an <iq/> stanza.
+#
+# elem:: [REXML::Element] parsed <iq/> stanza
+#
+# return:: [XMPP::Stream] self
+#
+def set_query(elem)
+    stanza = elem
+    elem = stanza.root.elements['query']
+
+    # Verify namespace.
+    ns = elem.attributes['xmlns']
+
+    re1 = /^\w+\:\w+\:(\w+)$/
+    re2 = /^http\:\/\/jabber\.org\/protocol\/(.*)$/
+
+    m = re1.match(ns)
+    m = re2.match(ns) unless m
+
+    if m
+        methname = 'squery_' + m[1].sub('#', '_')
+
+        unless respond_to?(methname)
+            write Stanza.error(stanza, 'service-unavailable', 'cancel')
+            return self
+        end
+
+        send(methname, stanza)
+    else
+        write Stanza.error(stanza, 'service-unavailable', 'cancel')
+        return self
+    end
+
+    self
+end
+
+# This implements XEP-0077.
+def squery_register(stanza)
+    if stanza.elements['query'].elements['remove']
+        # XXX - need to do user deleting...
+        Stanza.error(stanza, 'not-allowed', 'cancel')
+        return self
+    end
+
+    username = stanza.elements['query'].elements['username'].text
+    password = stanza.elements['query'].elements['password'].text
+
+    if @registered and not sasl?
+        write Stanza.error(stanza, 'not-acceptable', 'cancel')
+        return self
+    end
+
+    unless username and password
+        write Stanza.error(stanza, 'not-acceptable', 'modify')
+        return self
+    end
+
+    if username.length > 1023 or password.length > 1023
+        write Stanza.error(stanza, 'not-acceptable', 'modify')
+        return self
+    end
+
+    user = nil
+
+    # Password change?
+    if sasl?
+        user = DB::User.users[username + '@' + @myhost]
+        user.password = password
+    else
+        # Check to see if the username is in use.
+        if DB::User.users[username + '@' + @myhost]
+            write Stanza.error(stanza, 'conflict', 'cancel')
+            return self
+        end
+
+        # DB::User does the IDN stuff.
+        @registered = true
+        user = DB::User.new(username, @myhost, password)
+    end
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.attributes['id'])
+
+    query = REXML::Element.new('query')
+    query.add_namespace('jabber:iq:register')
+
+    un = REXML::Element.new('username')
+    pw = REXML::Element.new('password')
+
+    un.text = user.node
+    pw.text = password
+
+    query << un
+    query << pw
+
+    iq << query
+
+    write iq
+end
+
+#
 # Handle a <bind/> element within an <iq/> stanza.
 # This binds the client resource.
 #

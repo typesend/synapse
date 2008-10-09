@@ -75,7 +75,7 @@ def get_query(elem)
     m = re2.match(ns) unless m
 
     if m
-        methname = 'query_' + m[1].sub('#', '_')
+        methname = 'gquery_' + m[1].sub('#', '_')
 
         unless respond_to?(methname)
             write Stanza.error(stanza, 'service-unavailable', 'cancel')
@@ -91,7 +91,14 @@ def get_query(elem)
     self
 end
 
-def query_disco_items(stanza)
+# XXX - hack
+# This is so Adium doesn't die.
+# Make sure to report this.
+def gquery_auth(stanza)
+    # If adium never gets a response, it's okay.
+end
+
+def gquery_disco_items(stanza)
     unless stanza.attributes['to']
         write Stanza.error(stanza, 'service-unavailable', 'modify')
         return self
@@ -135,7 +142,7 @@ FEATURES = [ 'http://jabber.org/protocol/disco#items',
              'jabber:iq:easter',
              'jabber:iq:version' ]
 
-def query_disco_info(stanza)
+def gquery_disco_info(stanza)
     unless stanza.attributes['to']
         write Stanza.error(stanza, 'service-unavailable', 'modify')
         return self
@@ -158,7 +165,7 @@ def query_disco_info(stanza)
             return self
         end
 
-        type = user.oper? ? 'admin' : 'registered'
+        type = user.operator? ? 'admin' : 'registered'
 
         identity = REXML::Element.new('identity')
         identity.add_attribute('category', 'account')
@@ -185,12 +192,60 @@ def query_disco_info(stanza)
     write iq
 end
 
-def query_easter(stanza)
+def gquery_easter(stanza)
     write Stanza.error(stanza, '114-97-107-97-117-114', 'cancel')
     return self
 end
 
-def query_roster(stanza)
+# This implements XEP-0077.
+def gquery_register(stanza)
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'result')
+    iq.add_attribute('id', stanza.attributes['id'])
+
+    query = REXML::Element.new('query')
+    query.add_namespace('jabber:iq:register')
+
+    if sasl?
+        user = DB::User.users[@jid]
+
+        registered = REXML::Element.new('registered')
+        username   = REXML::Element.new('username')
+        password   = REXML::Element.new('password')
+
+        username.text = user.node
+        password.text = [DIGEST-MD5]
+
+        query << registered
+        query << username
+        query << password
+
+        iq << query
+
+        write iq
+
+        return self
+    end
+
+    instructions = REXML::Element.new('instructions')
+    instructions.text = 'Choose a username and password for use with ' +
+                        "this service.\n"
+
+    username = REXML::Element.new('username')
+    password = REXML::Element.new('password')
+
+    query << instructions
+    query << username
+    query << password
+
+    iq << query
+
+    write iq
+
+    return self
+end
+ 
+def gquery_roster(stanza)
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
     iq.add_attribute('id', stanza.attributes['id'])
@@ -207,7 +262,7 @@ def query_roster(stanza)
 end
 
 # This implements XEP-0092.
-def query_version(stanza)
+def gquery_version(stanza)
     iq = REXML::Element.new('iq')
     iq.add_attribute('type', 'result')
     iq.add_attribute('id', stanza.attributes['id'])

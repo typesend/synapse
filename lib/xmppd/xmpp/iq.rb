@@ -35,8 +35,8 @@ module IQ
 # return:: [XMPP::Stream] self
 #
 def handle_iq(elem)
-    # Is the stream open?
-    unless established?
+    # Are we ready for <iq/> stanzas?
+    unless iq_ready?
         error('unexpected-request')
         return self
     end

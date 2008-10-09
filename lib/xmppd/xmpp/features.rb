@@ -44,6 +44,7 @@ def list(stream)
     # They're in TLS, but not SASL.
     elsif not stream.sasl?
         feat << sasl if !stream.auth.legacy_auth 
+        feat << register if stream.client?
 
     # They're in both.
     else
@@ -118,6 +119,18 @@ def session
     sess.add_element(REXML::Element.new('optional'))
 
     return sess
+end
+
+#
+# Build the <register/> element for <stream:features/>.
+#
+# return:: [REXML::Element] <register/> element
+#
+def register
+    reg = REXML::Element.new('register')
+    reg.add_namespace('http://jabber.org/features/iq-register')
+
+    return reg
 end
 
 end # module Features

@@ -42,7 +42,6 @@ class User
     attr_accessor :offline_stanzas
     attr_reader   :node, :domain, :password, :resources, :roster
 
-    # XXX - something's wrong with IPs here
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
@@ -52,7 +51,9 @@ class User
 
         @node = IDN::Stringprep.nodeprep(node[0, 1023])
 
-        unless domain =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
+        if domain =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
+            @domain = domain
+        else
             @domain = IDN::Stringprep.nameprep(domain[0, 1023])
         end
 
@@ -153,7 +154,7 @@ class User
         @node + '@' + @domain
     end
 
-    def oper?
+    def operator?
         m = $config.operator.find { |oper| oper.jid == jid }
         return false unless m
         return m
