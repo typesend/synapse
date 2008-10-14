@@ -143,7 +143,7 @@ class Resource
 
         user = DB::User.users[node + '@' + domain]
 
-        if user and not user.resources.empty?
+        if user and user.available?
             sb = user.subscribed?(@user)
 
             if resource and user.resources[resource]
@@ -160,6 +160,7 @@ class Resource
             end
         end
 
+        @stream.write Stanza.error(stanza, 'feature-not-implemented', 'cancel')
         # XXX - If we get here then they're s2s.
 
         return self
@@ -182,9 +183,10 @@ class Resource
             raise ArgumentError, 'stanza must be a REXML::Element'
         end if stanza
 
-        if stanza
-            stanza.add_attribute('from', jid)
+        # Only available resources get presence updates.
+        return unless resource.available?
 
+        if stanza
             resource.stream.write stanza
         else
             @presence_stanza.add_attribute('from', jid)

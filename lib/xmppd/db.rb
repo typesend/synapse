@@ -189,24 +189,6 @@ class User
 
         $log.xmppd.debug "DB::User.add_contact(): #{jid} -> #{contact.jid}"
 
-        # If it's one of ours, make sure we add it to their roster, too.
-        if contact.class == LocalContact
-            return if contact.user.roster[jid] # XXX - updating theirs? infinite loop...
-
-            nlc = LocalContact.new(self)
-
-            case contact.subscription
-            when Contact::SUB_TO
-                nlc.subscription = Contact::SUB_FROM
-            when Contact::SUB_FROM
-                nlc.subscription = Contact::SUB_TO
-            when Contact::SUB_BOTH
-                nlc.subscription = Contact::SUB_BOTH
-            end
-
-            contact.user.add_contact(nlc)
-        end
-
         @@need_dump = true
     end
 
@@ -255,8 +237,8 @@ class User
         myc = @roster[user.jid]
         return false unless myc
 
-        return true if myc.subscription == Contact::SUB_TO
-        return true if myc.subscription == Contact::SUB_BOTH
+        return true if myc.subscription == 'to'
+        return true if myc.subscription == 'both'
 
         return false
     end
@@ -343,17 +325,9 @@ class User
             item = REXML::Element.new('item')
             item.add_attribute('jid', c.jid)
             item.add_attribute('name', c.name) if c.name
+            item.add_attribute('subscription', c.subscription)
 
-            case c.subscription
-            when Contact::SUB_NONE
-                item.add_attribute('subscription', 'none')
-            when Contact::SUB_TO
-                item.add_attribute('subscription', 'to')
-            when Contact::SUB_FROM
-                item.add_attribute('subscription', 'from')
-            when Contact::SUB_BOTH
-                item.add_attribute('subscription', 'both')
-            end
+            item.add_attribute('ask', 'subscribe') if c.pending_out?
 
             query << item
         end
@@ -366,22 +340,75 @@ end
 # A contact in a roster.
 #
 class Contact
-    attr_reader :name
-    attr_accessor :subscription, :pending
-
-    SUB_NONE  = 0x00000000
-    SUB_TO    = 0x00000001
-    SUB_FROM  = 0x00000002
-    SUB_BOTH  = 0x00000004
+    attr_accessor :groups, :name, :pending
+    attr_reader   :subscription
 
     PEND_NONE = 0x00000000
     PEND_IN   = 0x00000001
     PEND_OUT  = 0x00000002
 
     def initialize
-        @subscription = SUB_NONE
-        @pending = PEND_NONE
+        @groups = []
         @name = nil
+        @subscription = 'none'
+        @pending = PEND_NONE
+    end
+
+    ######
+    public
+    ######
+
+    def subscription=(value)
+        unless value =~ /^(to|from|both)$/
+            raise ArgumentError, "subscription must be 'to', 'from', or 'both'"
+        end
+
+        @subscription = value
+    end
+
+    def pending_in=(value)
+        unless value == true or value == false
+            raise ArgumentError, 'value must be true or false'
+        end
+
+        if value
+            @pending |= PEND_IN
+        else
+            @pending &= ~PEND_IN
+        end
+    end
+
+    def pending_out=(value)
+        unless value == true or value == false
+            raise ArgumentError, 'value must be true or false'
+        end
+
+        if value 
+            @pending |= PEND_OUT
+        else
+            @pending &= ~PEND_OUT
+        end
+    end
+
+    def pending_none=(value)
+        unless value == true or value == false
+            raise ArgumentError, 'value must be true'
+        end
+
+        @pending = PEND_NONE
+    end
+
+
+    def pending_none?
+        return (@pending == PEND_NONE) ? true : false
+    end
+
+    def pending_in?
+        return (PEND_IN & @pending != 0) ? true : false
+    end
+
+    def pending_out?
+        return (PEND_OUT & @pending != 0) ? true : false
     end
 end
 
@@ -401,7 +428,7 @@ class LocalContact < Contact
     ######
 
     def to_yaml_properties
-        %w( @user @subscription @pending @name )
+        %w( @user @subscription @pending @name @groups )
     end
 
     def jid
@@ -427,7 +454,7 @@ class RemoteContact < Contact
     ######
 
     def to_yaml_properties
-        %w( @node @domain @subscription @pending @name )
+        %w( @node @domain @subscription @pending @name @groups )
     end
 
     def jid

@@ -39,9 +39,7 @@ def handle_presence(elem)
         return
     end
 
-    elem.attributes['type'] ||= 'none'
-    
-    methname = 'presence_' + elem.attributes['type']
+    methname = 'presence_' + (elem.attributes['type'] or 'none')
 
     unless respond_to?(methname)
         write Stanza.error(elem, 'bad-request', 'cancel')
@@ -96,6 +94,263 @@ def presence_unavailable(elem)
     end
 
     @resource.broadcast_presence(elem)
+end
+
+def presence_subscribe(elem)
+    if not elem.attributes['to'] or elem.attributes['to'].include?('/')
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return
+    end
+
+    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
+        write Stanza.error(elem, 'feature-not-implented', 'cancel')
+        return
+    end
+
+    suser = DB::User.users[elem.attributes['to']]
+
+    unless suser
+        write Stanza.error(elem, 'item-not-found', 'cancel')
+        return
+    end
+
+    # Update our roster entry.
+    myc = @resource.user.roster[suser.jid]
+    route = true
+
+    if not myc
+        myc = DB::LocalContact.new(suser)
+        myc.pending_out = true
+        @resource.user.add_contact(myc)
+    else
+        if myc.subscription == 'none'
+            if myc.pending_none? 
+                myc.pending_out = true
+            elsif myc.pending_out? and myc.pending_in?
+                # No state change.
+            elsif myc.pending_out?
+                # No state change.
+            elsif myc.pending_in?
+                myc.pending_out = true
+            end
+        elsif myc.subscription == 'to'
+            if myc.pending_none?
+                # No state change.
+            elsif myc.pending_in?
+                # No state change.
+            end
+        elsif myc.subscription == 'from'
+            if myc.pending_none?
+                myc.pending_out = true
+            elsif myc.pending_out?
+                # No state change.
+            end
+        elsif myc.subscription == 'both'
+            # No state change.
+        end
+    end
+
+    # Update their roster entry.
+    myc = suser.roster[@resource.user.jid]
+    route = true
+
+    if not myc
+        myc = DB::LocalContact.new(@resource.user)
+        myc.pending_in = true
+        suser.add_contact(myc)
+    else
+        if myc.subscription == 'none'
+            if myc.pending_none?
+                myc.pending_in = true
+            elsif myc.pending_out? and myc.pending_in?
+                # No state change.
+                route = false
+            elsif myc.pending_out?
+                myc.pending_in = true
+            elsif myc.pending_in?
+                # No state change.
+                route = false
+            end
+        elsif myc.subscription == 'to'
+            if myc.pending_none?
+                myc.pending_in = true
+            elsif myc.pending_in?
+                # No state change.
+                route = false
+            end
+        elsif myc.subscription == 'from'
+            if myc.pending_none?
+                # No state change.
+                route = false
+            elsif myc.pending_out?
+                # No state change.
+                route = false
+            end
+        elsif myc.subscription == 'both'
+            # No state change.
+            route = false
+        end
+    end
+
+    if route
+        elem.add_attribute('from', @resource.user.jid)
+        @resource.send_directed_presence(elem.attributes['to'], elem)
+        @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+
+        # Roster push to all of our resources.
+        iq = REXML::Element.new('iq')
+        iq.add_attribute('type', 'set')
+        iq.add_attribute('id', 'push' + rand(1000000).to_s)
+
+        query = REXML::Element.new('query')
+        query.add_namespace('jabber:iq:roster')
+
+        item = REXML::Element.new('item')
+        item.add_attribute('jid', elem.attributes['to'])
+        item.add_attribute('ask', 'subscribe')
+        item.add_attribute('subscription',
+                           @resource.user.roster[suser.jid].subscription)
+
+        query << item
+        iq    << query
+
+        @resource.user.resources.each do |n, rec|
+            next unless rec.interested?
+            rec.stream.write iq
+        end
+    end
+end
+
+def presence_subscribed(elem)
+    if not elem.attributes['to'] or elem.attributes['to'].include?('/')
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return
+    end
+
+    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
+        write Stanza.error(elem, 'feature-not-implented', 'cancel')
+        return
+    end
+
+    suser = DB::User.users[elem.attributes['to']]
+
+    unless suser
+        write Stanza.error(elem, 'item-not-found', 'cancel')
+        return
+    end
+
+    # Update our roster entry.
+    myc = @resource.user.roster[suser.jid]
+    route = true
+
+    if not myc
+        # No state change.
+        route = false
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+            route = false
+        elsif myc.pending_out? and myc.pending_in?
+            myc.subscription = 'from'
+            myc.pending_in = false
+        elsif myc.pending_out?
+            # No state change.
+            route = false
+        elsif myc.pending_in?
+            myc.subscription = 'from'
+            myc.pending_none = true
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            # No state change.
+            route = false
+        elsif myc.pending_in?
+            myc.subscription = 'both'
+            myc.pending_none = true
+        end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            # No state change.
+            route = false
+        elsif myc.pending_out?
+            # No state change.
+            route = false
+        end
+    elsif myc.subscription == 'both'
+        # No state change.
+        route = false
+    end
+
+    if route
+        elem.add_attribute('from', @resource.user.jid)
+        @resource.send_directed_presence(elem.attributes['to'], elem)
+        @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+    end
+
+    # Update their roster entry.
+    myc = suser.roster[@resource.user.jid]
+
+    if not myc
+        # No state change.
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out? and myc.pending_in?
+            myc.subscription = 'to'
+            myc.pending_out = false
+        elsif myc.pending_out?
+            myc.subscription = 'to'
+            myc.pending_none = true
+        elsif myc.pending_in?
+            # No state change.
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_in?
+            # No state change.
+        end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out?
+            myc.subscription = 'both'
+            myc.pending_none = true
+        end
+    elsif myc.subscription == 'both'
+        # No state change.
+    end
+
+    # Only do the below if we routed earlier.
+    return unless route
+
+    # Roster push to all of our resources.
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('type', 'set')
+    iq.add_attribute('id', 'push' + rand(1000000).to_s)
+
+    query = REXML::Element.new('query')
+    query.add_namespace('jabber:iq:roster')
+
+    item = REXML::Element.new('item')
+    item.add_attribute('jid', elem.attributes['to'])
+    item.add_attribute('subscription',
+                       @resource.user.roster[suser.jid].subscription)
+
+    query << item
+    iq    << query
+
+    @resource.user.resources.each do |n, rec|
+        next unless rec.interested?
+
+        rec.stream.write iq
+    end
+
+    # Send our presence to them.
+    suser.resources.each do |n, rec|
+        next unless rec.available?
+        @resource.send_presence(rec)
+    end
 end
 
 end # module Presence

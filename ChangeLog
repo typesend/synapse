@@ -1,4 +1,15 @@
 ------------------------------------------------------------------------
+r82 | rakaur | 2008-10-09 16:34:14 -0400 (Thu, 09 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+
+Added removal of users via jabber:iq:register. It's not perfect yet.
+Added resource limiting, closes #55.
+
+------------------------------------------------------------------------
 r81 | rakaur | 2008-10-09 12:24:28 -0400 (Thu, 09 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog
