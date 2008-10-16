@@ -309,7 +309,7 @@ class Resource
 
         # Check to see if it's to a remote user.
         unless $config.hosts.include?(domain)
-            @stream.write Stanza.error(stana, 'feature-not-implemented',
+            @stream.write Stanza.error(stanza, 'feature-not-implemented',
                                        'cancel')
             return
         end

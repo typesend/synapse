@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------
+r83 | rakaur | 2008-10-14 13:33:18 -0400 (Tue, 14 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+
+Haven't committed in a long time. Been working on presence stuff. It sucks.
+In this commit subscribe/subscribed work so far. They're not pretty. All the details aren't there yet.
+Still have a ways to go, see #62.
+
+------------------------------------------------------------------------
 r82 | rakaur | 2008-10-09 16:34:14 -0400 (Thu, 09 Oct 2008) | 3 lines
 Changed paths:
    M /trunk/ChangeLog

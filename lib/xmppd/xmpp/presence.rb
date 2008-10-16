@@ -70,6 +70,7 @@ def presence_none(elem)
         @resource.send_roster_presence
 
         # Do they have any offline stazas?
+        return unless elem.elements['priority']
         return if elem.elements['priority'].text.to_i < 0
 
         # XXX - only deliver messages for now
@@ -150,9 +151,11 @@ def presence_subscribe(elem)
         end
     end
 
+    # XXX - route
+
     # Update their roster entry.
     myc = suser.roster[@resource.user.jid]
-    route = true
+    deliver = true
 
     if not myc
         myc = DB::LocalContact.new(@resource.user)
@@ -164,35 +167,37 @@ def presence_subscribe(elem)
                 myc.pending_in = true
             elsif myc.pending_out? and myc.pending_in?
                 # No state change.
-                route = false
+                deliver = false
             elsif myc.pending_out?
                 myc.pending_in = true
             elsif myc.pending_in?
                 # No state change.
-                route = false
+                deliver = false
             end
         elsif myc.subscription == 'to'
             if myc.pending_none?
                 myc.pending_in = true
             elsif myc.pending_in?
                 # No state change.
-                route = false
+                deliver = false
             end
         elsif myc.subscription == 'from'
+            # XXX - auto reply 'subscribed'
             if myc.pending_none?
                 # No state change.
-                route = false
+                deliver = false
             elsif myc.pending_out?
                 # No state change.
-                route = false
+                deliver = false
             end
         elsif myc.subscription == 'both'
+            # XXX - auto reply 'subscribed'
             # No state change.
-            route = false
+            deliver = false
         end
     end
 
-    if route
+    if deliver
         elem.add_attribute('from', @resource.user.jid)
         @resource.send_directed_presence(elem.attributes['to'], elem)
         @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
@@ -205,13 +210,7 @@ def presence_subscribe(elem)
         query = REXML::Element.new('query')
         query.add_namespace('jabber:iq:roster')
 
-        item = REXML::Element.new('item')
-        item.add_attribute('jid', elem.attributes['to'])
-        item.add_attribute('ask', 'subscribe')
-        item.add_attribute('subscription',
-                           @resource.user.roster[suser.jid].subscription)
-
-        query << item
+        query << @resource.user.roster[suser.jid].to_xml
         iq    << query
 
         @resource.user.resources.each do |n, rec|
@@ -281,12 +280,6 @@ def presence_subscribed(elem)
         route = false
     end
 
-    if route
-        elem.add_attribute('from', @resource.user.jid)
-        @resource.send_directed_presence(elem.attributes['to'], elem)
-        @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
-    end
-
     # Update their roster entry.
     myc = suser.roster[@resource.user.jid]
 
@@ -321,8 +314,12 @@ def presence_subscribed(elem)
         # No state change.
     end
 
-    # Only do the below if we routed earlier.
+    # Only do the below if we route.
     return unless route
+
+    elem.add_attribute('from', @resource.user.jid)
+    @resource.send_directed_presence(elem.attributes['to'], elem)
+    @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
 
     # Roster push to all of our resources.
     iq = REXML::Element.new('iq')
@@ -332,12 +329,7 @@ def presence_subscribed(elem)
     query = REXML::Element.new('query')
     query.add_namespace('jabber:iq:roster')
 
-    item = REXML::Element.new('item')
-    item.add_attribute('jid', elem.attributes['to'])
-    item.add_attribute('subscription',
-                       @resource.user.roster[suser.jid].subscription)
-
-    query << item
+    query << @resource.user.roster[suser.jid].to_xml
     iq    << query
 
     @resource.user.resources.each do |n, rec|

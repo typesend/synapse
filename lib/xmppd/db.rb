@@ -252,6 +252,7 @@ class User
         # If there is a tie, the last one in the loop wins.
         @resources.each do |name, rec|
             next unless rec.available?
+            next unless rec.presence_stanza.elements['priority']
             p = rec.presence_stanza.elements['priority'].text.to_i
             next if p < 0 # Skip negative priorities.
 
@@ -321,16 +322,7 @@ class User
         query = REXML::Element.new('query')
         query.add_namespace('jabber:iq:roster')
 
-        @roster.each do |k, c|
-            item = REXML::Element.new('item')
-            item.add_attribute('jid', c.jid)
-            item.add_attribute('name', c.name) if c.name
-            item.add_attribute('subscription', c.subscription)
-
-            item.add_attribute('ask', 'subscribe') if c.pending_out?
-
-            query << item
-        end
+        @roster.each { |name, contact| query << contact.to_xml }
 
         query
     end
@@ -409,6 +401,23 @@ class Contact
 
     def pending_out?
         return (PEND_OUT & @pending != 0) ? true : false
+    end
+
+    def to_xml
+        item = REXML::Element.new('item')
+        item.add_attribute('jid', self.jid)
+        item.add_attribute('name', @name) if @name
+        item.add_attribute('subscription', @subscription)
+
+        item.add_attribute('ask', 'subscribe') if pending_out?
+
+        @groups.each do |g|
+            group = REXML::Element.new('group')
+            group.text = g
+            item << group
+        end if @groups
+
+        item
     end
 end
 

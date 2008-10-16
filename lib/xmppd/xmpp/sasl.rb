@@ -62,7 +62,13 @@ def startsasl(response)
 
     # Compute response and see if it matches.
     # Sorry, but there's no pretty way to do this.
-    a1 = "%s:%s:%s" % [a1_h, response['nonce'], response['cnonce']]
+    if response['authzid']
+        a1 = "%s:%s:%s:%s" % [a1_h, response['nonce'], response['cnonce'],
+                              response['authzid']]
+    else
+        a1 = "%s:%s:%s" % [a1_h, response['nonce'], response['cnonce']]
+    end
+
     a2 = "AUTHENTICATE:%s" % response['digest-uri']
 
     myresp = "%s:%s:%s:%s:auth:%s" % [hh(a1), response['nonce'],

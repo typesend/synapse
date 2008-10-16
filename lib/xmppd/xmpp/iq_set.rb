@@ -167,6 +167,114 @@ def squery_register(stanza)
     write iq
 end
 
+def squery_roster(elem)
+    item = elem.elements['query'].elements['item']
+
+    unless item and item.attributes['jid']
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return self
+    end
+
+    if item.attributes['jid'].include?('/')
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return self
+    end
+
+    # Separate out the JID parts.
+    jid          = item.attributes['jid']
+    node, domain = jid.split('@')
+
+    # Check to see if it's to a remote user.
+    unless $config.hosts.include?(domain)
+        write Stanza.error(elem, 'feature-not-implemented', 'cancel')
+        return
+    end
+
+    # Must be to a local user.
+    user = DB::User.users[jid]
+
+    unless user
+        write Stanza.error(stanza, 'item-not-found', 'cancel')
+        return
+    end
+
+    contact = @resource.user.roster[jid]
+
+    if item.attributes['subscription'] == 'remove'
+        unless contact
+            write Stanza.error(elem, 'item-not-found', 'modify')
+            return self
+        end
+
+        @resource.user.delete_contact(jid)
+
+        iq = REXML::Element.new('iq')
+        iq.add_attribute('id', elem.attributes['id'])
+        iq.add_attribute('type', 'result')
+
+        write iq
+
+        elem.add_attribute('id', 'push' + rand(1000000).to_s)
+        elem.delete_attribute('from')
+
+        @resource.user.resources.each do |n, rec|
+            next unless rec.interested?
+            rec.stream.write elem
+        end
+
+        # Subscription stuff?
+        if @resource.user.subscribed?(user)
+            presence = REXML::Element.new('presence')
+            presence.add_attribute('type', 'unsubscribe')
+            presence.add_attribute('to', jid)
+            presence.add_attribute('from', @resource.user.jid)
+            # XXX do the presence stuff
+            @resource.send_directed_presence(jid, presence)
+        end
+
+        if user.subscribed?(@resource.user)
+            presence = REXML::Element.new('presence')
+            presence.add_attribute('type', 'unsubscribed')
+            presence.add_attribute('to', jid)
+            presence.add_attribute('from', @resource.user.jid)
+            # XXX do the presence stuff
+            @resource.send_directed_presence(jid, presence)
+        end
+
+        return self
+    end
+
+    unless contact
+        contact = DB::LocalContact.new(user)
+        @resource.user.add_contact(contact)
+    end
+
+    contact.name   = item.attributes['name'] ? item.attributes['name'] : nil
+    contact.groups = item.elements.collect { |e| e.text if e.name == 'group' }
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('id', elem.attributes['id'])
+    iq.add_attribute('type', 'result')
+
+    write iq
+
+    # Now roster push it out.
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('id', 'push' + rand(1000000).to_s)
+    iq.add_attribute('type', 'set')
+
+    query = REXML::Element.new('query')
+    query.add_namespace('jabber:iq:roster')
+
+    query << contact.to_xml
+    iq    << query
+
+    @resource.user.resources.each do |n, rec|
+        next unless rec.interested?
+        rec.stream.write iq
+    end
+end
+
 #
 # Handle a <bind/> element within an <iq/> stanza.
 # This binds the client resource.
