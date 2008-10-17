@@ -392,6 +392,31 @@ def set_session(elem)
     self
 end
 
+def set_vCard(elem)
+    stanza = elem
+    elem = stanza.root.elements['vCard']
+
+    # Verify namespace.
+    unless elem.attributes['xmlns'] == 'vcard-temp'
+        write Stanza.error(stanza, 'bad-request', 'modify')
+        return self
+    end
+
+    jid   = stanza.attributes['to']
+    jid ||= @resource.jid
+
+    unless jid == @resource.jid
+        write Stanza.error(stanza, 'not-allowed', 'cancel')
+        return self
+    end
+
+    @resource.user.vcard = elem.to_s
+
+    write Stanza.new_iq('result', stanza.attributes['id'])
+
+    self
+end
+
 end # module SET
 end # module IQ
 end # module XMPP

@@ -40,7 +40,7 @@ class User
     @@users = {}
     @@need_dump = false
 
-    attr_accessor :offline_stanzas
+    attr_accessor :offline_stanzas, :vcard
     attr_reader   :node, :domain, :password, :resources, :roster
 
     def initialize(node, domain, password)
@@ -79,7 +79,7 @@ class User
     ######
 
     def to_yaml_properties
-        %w( @node @domain @password @roster @offline_stanzas )
+        %w( @node @domain @password @roster @offline_stanzas @vcard )
     end
 
     def User.users

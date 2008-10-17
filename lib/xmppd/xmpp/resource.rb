@@ -283,9 +283,25 @@ class Resource
         #
         q = stanza.elements['query']
         if q and not resource and q.attributes['xmlns'] == 'jabber:iq:roster'
-            squery_roster(stanza)
+            @stream.squery_roster(stanza)
+            return self
+        end if stanza.attributes['type'] == 'set'
+
+        #
+        # This is a special case for vCard gets.
+        #
+        q = stanza.elements['vCard']
+
+        if q and not resource and q.attributes['xmlns'] == 'vcard-temp'
+            if stanza.attributes['type'] == 'get'
+                @stream.get_vCard(stanza)
+            elsif stanza.attributes['type'] == 'set'
+                @stream.set_vCard(stanza)
+            end
+
             return self
         end
+        
 
         # Are they online?
         unless user.available?

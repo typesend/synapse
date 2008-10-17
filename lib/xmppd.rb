@@ -143,7 +143,7 @@ class XMPPd
         Timer::Timer.new('save user db', 300, true) { DB::User.dump }
 
         # Clean out useless roster entries and resend subscription requests.
-        Timer::Timer.new('prune rosters', 30, true) do
+        Timer::Timer.new('prune rosters', 86400, true) do
             DB::User.users.each { |jid, user| user.clean_roster }
         end
 

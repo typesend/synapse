@@ -1,4 +1,18 @@
 ------------------------------------------------------------------------
+r86 | rakaur | 2008-10-17 10:43:56 -0400 (Fri, 17 Oct 2008) | 4 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd.rb
+
+Fix some typos.
+Add roster pruning/cleaning/etc timer, closes #65.
+Fuck Ruby's threads.
+
+------------------------------------------------------------------------
 r85 | rakaur | 2008-10-16 20:19:04 -0400 (Thu, 16 Oct 2008) | 2 lines
 Changed paths:
    M /trunk/ChangeLog

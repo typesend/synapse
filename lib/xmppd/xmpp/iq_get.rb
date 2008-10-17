@@ -134,6 +134,7 @@ FEATURES = [ 'http://jabber.org/protocol/disco#items',
              'stringprep',
              'dnssrv',
              'msgoffline',
+             'vcard-temp',
              'urn:xmpp:delay',
              'jabber:iq:easter',
              'jabber:iq:version' ]
@@ -266,6 +267,52 @@ def gquery_version(stanza)
     iq << query
 
     write iq
+end
+
+# This implements XEP-0054.
+def get_vCard(elem)
+    stanza = elem
+    elem = stanza.root.elements['vCard']
+
+    # Verify the namespace.
+    unless elem.attributes['xmlns'] == 'vcard-temp'
+        write Stanza.error(stanza, 'bad-request', 'modify')
+        return self
+    end
+
+    # Separate out the JID parts.
+    jid              = stanza.attributes['to']
+    jid            ||= @resource.jid
+    node,   domain   = jid.split('@')
+    domain, resource = domain.split('/')
+
+    vcard = @resource.user.vcard
+
+    unless jid == @resource.jid
+        # Must be to a local user.
+        user = DB::User.users[node + '@' + domain]
+
+        unless user and @resource.user.subscribed?(user)
+            write Stanza.error(stanza, 'service-unavailable', 'cancel')
+            return
+        end
+
+        vcard = user.vcard
+    end
+
+    if not vcard or vcard.empty?
+        #write Stanza.error(stanza, 'item-not-found', 'cancel')
+        #return self
+
+        write %{<iq type='result' id='#{stanza.attributes['id']}' } +
+              %{from='#{jid}'><vCard xmlns='vcard-temp'/></iq>} 
+
+        return self
+    end
+
+    # I need to build this myself. Just suffice it to say REXML blows.
+    write %{<iq type='result' id='#{stanza.attributes['id']}' } +
+          %{from='#{jid}'>#{vcard}</iq>}
 end
 
 end # module GET
