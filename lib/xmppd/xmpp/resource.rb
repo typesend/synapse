@@ -278,6 +278,15 @@ class Resource
             end
         end
 
+        #
+        # This is a special case for roster sets.
+        #
+        q = stanza.elements['query']
+        if q and not resource and q.attributes['xmlns'] == 'jabber:iq:roster'
+            squery_roster(stanza)
+            return self
+        end
+
         # Are they online?
         unless user.available?
             @stream.write Stanza.error(stanza, 'service-unavailable', 'cancel')

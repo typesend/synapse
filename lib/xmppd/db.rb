@@ -148,7 +148,7 @@ class User
         raise DBError, "#{jid} does not exist" unless @@users[jid]
 
         user = @@users[jid]
-        @@users.delete jid
+        @@users.delete(jid)
 
         # Disconnect any active resources.
         user.resources.each { |n, rec| rec.stream.close } if user.resources
@@ -195,7 +195,7 @@ class User
 
     def delete_contact(ujid)
         if @roster[ujid]
-            @roster[ujid] = nil
+            @roster.delete(ujid)
 
             $log.xmppd.debug "DB::User.delete_contact(): #{jid} -> #{ujid}"
 
@@ -324,13 +324,63 @@ class User
         @roster.each { |name, contact| query << contact.to_xml }
         return query
     end
+
+    def clean_roster
+        return unless @roster
+        return if @roster.empty?
+
+        @roster.each do |j, c|
+            if c.subscription == 'none' and c.pending_none?
+                delete_contact(j)
+
+                if available?
+                    #
+                    # God, Ruby's threads are totally useless. I can't even
+                    # get a thread to look at stanza.rb because *something*
+                    # happens and everything stops working.
+                    #
+                    iq    = REXML::Element.new('iq')
+                    query = REXML::Element.new('query')
+                    item  = REXML::Element.new('item')
+
+                    iq.add_attribute('id', 'rubysucks')
+                    iq.add_attribute('type', 'set')
+
+                    query.add_namespace('jabber:iq:roster')
+
+                    item.add_attribute('jid', j)
+                    item.add_attribute('subscription', 'remove')
+                    puts "added the attributes.."
+
+                    query << item
+                    iq    << query
+
+                    @resources.each { |n, rec| rec.stream.write iq }
+                end
+            end
+
+            next unless c.pending_out?
+
+            if ($time - c.stime) >= 86400 # One day.
+                presence = REXML::Element.new('presence')
+                presence.add_attribute('type', 'subscribe')
+                presence.add_attribute('to', j)
+                presence.add_attribute('from', jid)
+
+                if available?
+                    front_resource.send_directed_presence(j, presence)
+                    c.stime = $time
+                end
+            end
+        end
+    end
 end
 
 #
 # A contact in a roster.
 #
 class Contact
-    attr_accessor :groups, :name, :pending
+    attr_accessor :groups, :name, :pending, :stime
     attr_reader   :subscription
 
     PEND_NONE = 0x00000000
@@ -388,7 +438,6 @@ class Contact
         @pending = PEND_NONE
     end
 
-
     def pending_none?
         return (@pending == PEND_NONE) ? true : false
     end
@@ -435,7 +484,7 @@ class LocalContact < Contact
     ######
 
     def to_yaml_properties
-        %w( @user @subscription @pending @name @groups )
+        %w( @user @stime @subscription @pending @name @groups )
     end
 
     def jid
@@ -461,7 +510,7 @@ class RemoteContact < Contact
     ######
 
     def to_yaml_properties
-        %w( @node @domain @subscription @pending @name @groups )
+        %w( @node @stime @domain @subscription @pending @name @groups )
     end
 
     def jid

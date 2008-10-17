@@ -1,4 +1,16 @@
 ------------------------------------------------------------------------
+r85 | rakaur | 2008-10-16 20:19:04 -0400 (Thu, 16 Oct 2008) | 2 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/stanza.rb
+
+Cleaned up lots of XML generation stuff, closes #63.
+
+------------------------------------------------------------------------
 r84 | rakaur | 2008-10-16 16:29:01 -0400 (Thu, 16 Oct 2008) | 8 lines
 Changed paths:
    M /trunk/ChangeLog

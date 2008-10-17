@@ -198,6 +198,7 @@ def presence_subscribe(elem)
     end
 
     if deliver
+        @resource.user.roster[elem.attributes['to']].stime = $time
         elem.add_attribute('from', @resource.user.jid)
         @resource.send_directed_presence(elem.attributes['to'], elem)
         @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }

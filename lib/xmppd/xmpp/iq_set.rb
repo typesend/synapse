@@ -177,6 +177,12 @@ def squery_roster(stanza)
     jid          = item.attributes['jid']
     node, domain = jid.split('@')
 
+    # Apparently they can't add themselves. Lame.
+    if jid == @resource.user.jid
+        write Stanza.error(stanza, 'not-allowed', 'cancel')
+        return
+    end
+
     # Check to see if it's to a remote user.
     unless $config.hosts.include?(domain)
         write Stanza.error(stanza, 'feature-not-implemented', 'cancel')
@@ -201,7 +207,7 @@ def squery_roster(stanza)
 
         @resource.user.delete_contact(jid)
 
-        write Stanza.new_iq('result', stanza.attibutes['id'])
+        write Stanza.new_iq('result', stanza.attributes['id'])
 
         stanza.add_attribute('id', 'push' + rand(1000000).to_s)
         stanza.delete_attribute('from')
@@ -241,7 +247,7 @@ def squery_roster(stanza)
     contact.name   = item.attributes['name'] ? item.attributes['name'] : nil
     contact.groups = item.elements.collect do |e|
                          if e.name == 'group'
-                             IDN::Stringprep.resourceprep(e.text)
+                             IDN::Stringprep.resourceprep(e.text[0, 1023])
                          end
                      end
 
