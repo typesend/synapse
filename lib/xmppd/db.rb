@@ -18,6 +18,7 @@ require 'yaml'
 #
 # Import required xmppd modules.
 #
+require 'xmppd/xmpp/stanza'
 
 #
 # The DB namespace.
@@ -319,12 +320,9 @@ class User
     end
 
     def roster_to_xml
-        query = REXML::Element.new('query')
-        query.add_namespace('jabber:iq:roster')
-
+        query = XMPP::Stanza.new_query('jabber:iq:roster')
         @roster.each { |name, contact| query << contact.to_xml }
-
-        query
+        return query
     end
 end
 

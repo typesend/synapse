@@ -99,11 +99,7 @@ def squery_register(stanza)
             return self
         end
 
-        iq = REXML::Element.new('iq')
-        iq.add_attribute('type', 'result')
-        iq.add_attribute('id', stanza.attributes['id'])
-
-        write iq
+        write Stanza.new_iq('result', stanza.attributes['id'])
 
         DB::User.delete(@jid)
 
@@ -146,12 +142,9 @@ def squery_register(stanza)
         user = DB::User.new(username, @myhost, password)
     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
+    iq = Stanza.new_iq('result', stanza.attributes['id'])
 
-    query = REXML::Element.new('query')
-    query.add_namespace('jabber:iq:register')
+    query = Stanza.new_query('jabber:iq:register')
 
     un = REXML::Element.new('username')
     pw = REXML::Element.new('password')
@@ -167,16 +160,16 @@ def squery_register(stanza)
     write iq
 end
 
-def squery_roster(elem)
-    item = elem.elements['query'].elements['item']
+def squery_roster(stanza)
+    item = stanza.elements['query'].elements['item']
 
     unless item and item.attributes['jid']
-        write Stanza.error(elem, 'bad-request', 'modify')
+        write Stanza.error(stanza, 'bad-request', 'modify')
         return self
     end
 
     if item.attributes['jid'].include?('/')
-        write Stanza.error(elem, 'bad-request', 'modify')
+        write Stanza.error(stanza, 'bad-request', 'modify')
         return self
     end
 
@@ -186,7 +179,7 @@ def squery_roster(elem)
 
     # Check to see if it's to a remote user.
     unless $config.hosts.include?(domain)
-        write Stanza.error(elem, 'feature-not-implemented', 'cancel')
+        write Stanza.error(stanza, 'feature-not-implemented', 'cancel')
         return
     end
 
@@ -202,24 +195,20 @@ def squery_roster(elem)
 
     if item.attributes['subscription'] == 'remove'
         unless contact
-            write Stanza.error(elem, 'item-not-found', 'modify')
+            write Stanza.error(stanza, 'item-not-found', 'modify')
             return self
         end
 
         @resource.user.delete_contact(jid)
 
-        iq = REXML::Element.new('iq')
-        iq.add_attribute('id', elem.attributes['id'])
-        iq.add_attribute('type', 'result')
+        write Stanza.new_iq('result', stanza.attibutes['id'])
 
-        write iq
-
-        elem.add_attribute('id', 'push' + rand(1000000).to_s)
-        elem.delete_attribute('from')
+        stanza.add_attribute('id', 'push' + rand(1000000).to_s)
+        stanza.delete_attribute('from')
 
         @resource.user.resources.each do |n, rec|
             next unless rec.interested?
-            rec.stream.write elem
+            rec.stream.write stanza
         end
 
         # Subscription stuff?
@@ -250,22 +239,17 @@ def squery_roster(elem)
     end
 
     contact.name   = item.attributes['name'] ? item.attributes['name'] : nil
-    contact.groups = item.elements.collect { |e| e.text if e.name == 'group' }
+    contact.groups = item.elements.collect do |e|
+                         if e.name == 'group'
+                             IDN::Stringprep.resourceprep(e.text)
+                         end
+                     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('id', elem.attributes['id'])
-    iq.add_attribute('type', 'result')
-
-    write iq
+    write Stanza.new_iq('result', stanza.attributes['id'])
 
     # Now roster push it out.
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('id', 'push' + rand(1000000).to_s)
-    iq.add_attribute('type', 'set')
-
-    query = REXML::Element.new('query')
-    query.add_namespace('jabber:iq:roster')
-
+    iq    = Stanza.new_iq('set')
+    query = Stanza.new_query('jabber:iq:roster')
     query << contact.to_xml
     iq    << query
 
@@ -335,9 +319,7 @@ def set_bind(elem)
         return self
     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
+    iq = Stanza.new_iq('result', stanza.attributes['id'])
 
     bind = REXML::Element.new('bind')
     bind.add_namespace('urn:ietf:params:xml:ns:xmpp-bind')
@@ -391,11 +373,7 @@ def set_session(elem)
         return self
     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
-    write iq
+    write Stanza.new_iq('result', stanza.attributes['id'])
     
     # This only serves to let Features::list() know what to do.
     @state |= Stream::STATE_SESSION

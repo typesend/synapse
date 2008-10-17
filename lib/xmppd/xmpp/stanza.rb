@@ -10,6 +10,7 @@
 #
 # Import required Ruby modules.
 #
+require 'digest/md5'
 require 'idn'
 require 'rexml/document'
 
@@ -60,6 +61,43 @@ def error(stanza, defined_condition, type)
     stzerr << err
 
     return stzerr
+end
+
+#
+# Generate an <iq/> stanza.
+#
+# type:: [String] value of the 'type' attribute, must be one of:
+#     - get
+#     - set
+#     - result
+# id:: [String] specify an id value, defaults to random
+#
+# return:: [REXML::Element] the <iq/> stanza
+#
+def new_iq(type, id = Digest::MD5.hexdigest(rand(1000000).to_s)[8...16])
+    unless type =~ /^(get|set|result)$/
+        raise ArgumentError, "type must be 'get', 'set', or 'result'"
+    end
+
+    iq = REXML::Element.new('iq')
+    iq.add_attribute('id', id)
+    iq.add_attribute('type', type)
+
+    return iq
+end
+
+#
+# Generate a <query/> element.
+#
+# xmlns:: [String] value of the xmlns attribute
+#
+# return:: [REXML::Element] the <query/> element
+#
+def new_query(xmlns)
+    query = REXML::Element.new('query')
+    query.add_namespace(xmlns)
+
+    return query
 end
 
 end # module Stanza

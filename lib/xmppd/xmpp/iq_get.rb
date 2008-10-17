@@ -104,12 +104,8 @@ def gquery_disco_items(stanza)
         return self
     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
-    query = REXML::Element.new('query')
-    query.add_namespace('http://jabber.org/protocol/disco#items')
+    iq    = Stanza.new_iq('result', stanza.attributes['id'])
+    query = Stanza.new_query('http://jabber.org/protocol/disco#items')
 
     # If it's to a bare JID, we handle it.
     jid_to = stanza.attributes['to']
@@ -148,12 +144,8 @@ def gquery_disco_info(stanza)
         return self
     end
 
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
-    query = REXML::Element.new('query')
-    query.add_namespace('http://jabber.org/protocol/disco#info')
+    iq    = Stanza.new_iq('result', stanza.attributes['id'])
+    query = Stanza.new_query('http://jabber.org/protocol/disco#info')
 
     # If it's to a bare JID, we handle it.
     jid_to = stanza.attributes['to']
@@ -199,12 +191,8 @@ end
 
 # This implements XEP-0077.
 def gquery_register(stanza)
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
-    query = REXML::Element.new('query')
-    query.add_namespace('jabber:iq:register')
+    iq    = Stanza.new_iq(result, stanza.attributes['id'])
+    query = Stanza.new_query('jabber:iq:register')
 
     if sasl?
         user = DB::User.users[@jid]
@@ -246,12 +234,9 @@ def gquery_register(stanza)
 end
  
 def gquery_roster(stanza)
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
+    iq    = Stanza.new_iq('result', stanza.attributes['id'])
     query = DB::User.users[@jid].roster_to_xml
-    iq << query
+    iq    << query
 
     write iq
 
@@ -263,12 +248,8 @@ end
 
 # This implements XEP-0092.
 def gquery_version(stanza)
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'result')
-    iq.add_attribute('id', stanza.attributes['id'])
-
-    query = REXML::Element.new('query')
-    query.add_namespace('jabber:iq:version')
+    iq    = Stanza.new_iq('result', stanza.attributes['id'])
+    query = Stanza.new_query('jabber:iq:version')
 
     name = REXML::Element.new('name')
     name.text = 'xmppd'

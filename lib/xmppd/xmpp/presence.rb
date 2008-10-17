@@ -203,12 +203,8 @@ def presence_subscribe(elem)
         @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
 
         # Roster push to all of our resources.
-        iq = REXML::Element.new('iq')
-        iq.add_attribute('type', 'set')
-        iq.add_attribute('id', 'push' + rand(1000000).to_s)
-
-        query = REXML::Element.new('query')
-        query.add_namespace('jabber:iq:roster')
+        iq    = Stanza.new_iq('set')
+        query = Stanza.new_query('jabber:iq:roster')
 
         query << @resource.user.roster[suser.jid].to_xml
         iq    << query
@@ -322,12 +318,8 @@ def presence_subscribed(elem)
     @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
 
     # Roster push to all of our resources.
-    iq = REXML::Element.new('iq')
-    iq.add_attribute('type', 'set')
-    iq.add_attribute('id', 'push' + rand(1000000).to_s)
-
-    query = REXML::Element.new('query')
-    query.add_namespace('jabber:iq:roster')
+    iq    = Stanza.new_iq('set')
+    query = Stanza.new_query('jabber:iq:roster')
 
     query << @resource.user.roster[suser.jid].to_xml
     iq    << query

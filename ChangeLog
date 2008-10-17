@@ -1,4 +1,22 @@
 ------------------------------------------------------------------------
+r84 | rakaur | 2008-10-16 16:29:01 -0400 (Thu, 16 Oct 2008) | 8 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/presence.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd/xmpp/sasl.rb
+
+Fixed a bug in SASL DIGEST-MD5. Now processes optional authzid properly.
+Fixed a crash in presence.rb when checking for offline messages.
+Fixed a crash in db.rb when checking for front-resource.
+Cleaned up the presence subscriptions a little bit.
+Added processing of roster sets. This implements adding, modifying, and removing roster items, closes #40.
+Fixed a typo in resource.rb: stana => stanza.
+Simplified some to_xml methods in db.rb.
+
+------------------------------------------------------------------------
 r83 | rakaur | 2008-10-14 13:33:18 -0400 (Tue, 14 Oct 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
