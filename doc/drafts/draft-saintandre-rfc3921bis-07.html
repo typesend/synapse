@@ -2143,7 +2143,7 @@ Server Processing of Outbound Directed Presence</h3>
 <ol class="text">
 <li>If the user sends directed available or unavailable presence to a contact that is in the user's roster with a subscription type of "from" or "both" after having sent initial presence and before sending unavailable presence broadcast (i.e., during the user's presence session), the user's server MUST locally deliver or remotely route the full XML of that presence stanza but SHOULD NOT otherwise modify the contact's status regarding presence broadcast (i.e., it SHOULD include the contact's JID in any subsequent presence broadcasts initiated by the user).
 </li>
-<li>If the user sends directed presence to an entity that is not in the user's roster with a subscription type of "from" or "both" after having sent initial presence and before sending unavailable presence broadcast (i.e., during the user's presence session), the user's server MUST locally deliver or remotely route the full XML of that presence stanza to the entity but MUST NOT modify the contact's status regarding available presence broadcast (i.e., it MUST NOT include the entity's JID in any subsequent broadcasts of available presence initiated by the user); however, if the available resource from which the user sent the directed presence become unavailable, the user's server MUST route that unavailable presence to the entity (if the user has not yet sent directed unavailable presence to that entity).
+<li>If the user sends directed presence to an entity that is not in the user's roster with a subscription type of "from" or "both" after having sent initial presence and before sending unavailable presence broadcast (i.e., during the user's presence session), the user's server MUST locally deliver or remotely route the full XML of that presence stanza to the entity but MUST NOT modify the contact's status regarding available presence broadcast (i.e., it MUST NOT include the entity's JID in any subsequent broadcasts of available presence initiated by the user); however, if the available resource from which the user sent the directed presence becomes unavailable, the user's server MUST route that unavailable presence to the entity (if the user has not yet sent directed unavailable presence to that entity).
 </li>
 <li>If the user sends directed presence without first sending initial presence or after having sent unavailable presence broadcast (i.e., the resource is connected but not available), the user's server MUST treat the entity to which the user sends directed presence as in case #2 above.
 </li>
@@ -2580,7 +2580,7 @@ US: &lt;iq to='romeo@example.net/balcony'
         id='ex1'
         type='result'&gt;
       &lt;query xmlns='jabber:iq:roster'&gt;
-        &lt;item jid='romeo@example.com'
+        &lt;item jid='juliet@example.com'
               name='Juliet'
               subscription='both'&gt;
           &lt;group&gt;Friends&lt;/group&gt;
@@ -2961,7 +2961,7 @@ Message</h3>
 </p>
 <p>For a message stanza of type "chat", "groupchat", or "normal", the server SHOULD add the message to offline storage or forward the message to the user via a non-XMPP messaging system (e.g., to the user's email account).  However, if offline message storage or message forwarding is not enabled, the server MUST return a &lt;service-unavailable/&gt; stanza error to the sender.
 </p>
-<p>For a message stanza of type "headline", the server SHOULD NOT add the message to offline storage but instead SHOULD silently discard the message (i.e., neither deliver it to the intended recipient nor return an error to the sender).
+<p>For a message stanza of type "headline", according to local service policies the server MUST either (1) add the message to offline storage or (2) silently discard the message (i.e., neither deliver it to the intended recipient nor return an error to the sender).
 </p>
 <p>For a message stanza of type "error", the server MUST NOT add the message to offline storage but instead SHOULD silently discard the message (i.e., neither deliver it to the intended recipient nor return an error to the sender).
 </p>

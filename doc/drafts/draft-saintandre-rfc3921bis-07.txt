@@ -2606,9 +2606,9 @@ Internet-Draft                   XMPP IM                       July 2008
        MUST NOT include the entity's JID in any subsequent broadcasts of
        available presence initiated by the user); however, if the
        available resource from which the user sent the directed presence
-       become unavailable, the user's server MUST route that unavailable
-       presence to the entity (if the user has not yet sent directed
-       unavailable presence to that entity).
+       becomes unavailable, the user's server MUST route that
+       unavailable presence to the entity (if the user has not yet sent
+       directed unavailable presence to that entity).
    3.  If the user sends directed presence without first sending initial
        presence or after having sent unavailable presence broadcast
        (i.e., the resource is connected but not available), the user's
@@ -3275,7 +3275,7 @@ Internet-Draft                   XMPP IM                       July 2008
            id='ex1'
            type='result'>
          <query xmlns='jabber:iq:roster'>
-           <item jid='romeo@example.com'
+           <item jid='juliet@example.com'
                  name='Juliet'
                  subscription='both'>
              <group>Friends</group>
@@ -3832,10 +3832,10 @@ Internet-Draft                   XMPP IM                       July 2008
    message forwarding is not enabled, the server MUST return a <service-
    unavailable/> stanza error to the sender.
 
-   For a message stanza of type "headline", the server SHOULD NOT add
-   the message to offline storage but instead SHOULD silently discard
-   the message (i.e., neither deliver it to the intended recipient nor
-   return an error to the sender).
+   For a message stanza of type "headline", according to local service
+   policies the server MUST either (1) add the message to offline
+   storage or (2) silently discard the message (i.e., neither deliver it
+   to the intended recipient nor return an error to the sender).
 
    For a message stanza of type "error", the server MUST NOT add the
    message to offline storage but instead SHOULD silently discard the

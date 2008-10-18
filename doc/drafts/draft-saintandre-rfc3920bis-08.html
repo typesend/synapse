@@ -144,11 +144,11 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">P. Saint-Andre, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">XMPP Standards Foundation</td></tr>
-<tr><td class="header">Obsoletes: <a href='ftp://ftp.isi.edu/in-notes/rfc3920.txt'>3920</a> (if&nbsp;approved)</td><td class="header">September 18, 2008</td></tr>
+<tr><td class="header">Obsoletes: <a href='ftp://ftp.isi.edu/in-notes/rfc3920.txt'>3920</a> (if&nbsp;approved)</td><td class="header">October 16, 2008</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">&nbsp;</td></tr>
-<tr><td class="header">Expires: March 22, 2009</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: April 19, 2009</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
-<h1><br />Extensible Messaging and Presence Protocol (XMPP): Core<br />draft-saintandre-rfc3920bis-07</h1>
+<h1><br />Extensible Messaging and Presence Protocol (XMPP): Core<br />draft-saintandre-rfc3920bis-08</h1>
 
 <h3>Status of this Memo</h3>
 <p>
@@ -174,7 +174,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 22, 2009.</p>
+This Internet-Draft will expire on April 19, 2009.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -644,6 +644,8 @@ Inclusion of Text Declaration<br />
 Character Encoding<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#xml-whitespace">12.7.</a>&nbsp;
 Whitespace<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#xml-versions">12.8.</a>&nbsp;
+XML Versions<br />
 <a href="#compliance">13.</a>&nbsp;
 Compliance Requirements<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#compliance-server">13.1.</a>&nbsp;
@@ -831,7 +833,7 @@ Overview</h3>
 </p>
 <p></p>
 <blockquote class="text">
-<p>Note: <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a> defines the XMPP features needed to provide the basic instant messaging and presence functionality that is described in <a class='info' href='#IMP-REQS'>[IMP&#8209;REQS]<span> (</span><span class='info'>Day, M., Aggarwal, S., and J. Vincent, &ldquo;Instant Messaging / Presence Protocol Requirements,&rdquo; February&nbsp;2000.</span><span>)</span></a>.
+<p>Note: <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a> defines the XMPP features needed to provide the basic instant messaging and presence functionality that is described in <a class='info' href='#IMP-REQS'>[IMP&#8209;REQS]<span> (</span><span class='info'>Day, M., Aggarwal, S., and J. Vincent, &ldquo;Instant Messaging / Presence Protocol Requirements,&rdquo; February&nbsp;2000.</span><span>)</span></a>.
 </p>
 </blockquote>
 
@@ -894,11 +896,11 @@ Functional Summary</h3>
 </p>
 <p></p>
 <blockquote class="text">
-<p>* Note: Depending on local service policies, it is possible that a deployed server will use the older server dialback protocol to provide weak identity verification in cases where SASL negotiation would not result in strong authentication (e.g., because TLS negotiation was not mandated by the peer server, or because the certificate presented by the peer server during TLS negotiation is self-signed and thus provides only weak identity); for details, see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>* Note: Depending on local service policies, it is possible that a deployed server will use the older server dialback protocol to provide weak identity verification in cases where SASL negotiation would not result in strong authentication (e.g., because TLS negotiation was not mandated by the peer server, or because the certificate presented by the peer server during TLS negotiation is self-signed and thus provides only weak identity); for details, see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>.
 </p>
 </blockquote>
 
-<p>In the sections following discussion of XMPP architecture and XMPP addresses, this document specifies how clients connect to servers and specifies the basic semantics of XML stanzas.  However, this document does not define the "payloads" of the XML stanzas that might be exchanged once a connection is successfully established; instead, those payloads are defined by various XMPP extensions.  For example, <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a> defines extensions for basic instant messaging and presence functionality.  In addition, various specifications produced in the XSF's XEP series <a class='info' href='#XEP-0001'>[XEP&#8209;0001]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;XMPP Extension Protocols,&rdquo; December&nbsp;2006.</span><span>)</span></a> define extensions for a wide range of more advanced functionality.
+<p>In the sections following discussion of XMPP architecture and XMPP addresses, this document specifies how clients connect to servers and specifies the basic semantics of XML stanzas.  However, this document does not define the "payloads" of the XML stanzas that might be exchanged once a connection is successfully established; instead, those payloads are defined by various XMPP extensions.  For example, <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a> defines extensions for basic instant messaging and presence functionality.  In addition, various specifications produced in the XSF's XEP series <a class='info' href='#XEP-0001'>[XEP&#8209;0001]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;XMPP Extension Protocols,&rdquo; January&nbsp;2008.</span><span>)</span></a> define extensions for a wide range of more advanced functionality.
 </p>
 <a name="intro-conventions"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -985,7 +987,7 @@ romeo@example.net           juliet@im.example.com
 </pre></div>
 <p></p>
 <blockquote class="text">
-<p>Note: Architectures that employ <a class='info' href='#streams'>XML streams<span> (</span><span class='info'>XML Streams</span><span>)</span></a> and <a class='info' href='#stanzas'>XML stanzas<span> (</span><span class='info'>XML Stanzas</span><span>)</span></a> but that establish peer-to-peer connections directly between clients using technologies based on <a class='info' href='#LINKLOCAL'>[LINKLOCAL]<span> (</span><span class='info'>Cheshire, S., Aboba, B., and E. Guttman, &ldquo;Dynamic Configuration of IPv4 Link-Local Addresses,&rdquo; May&nbsp;2005.</span><span>)</span></a> have been deployed, but such architectures are not XMPP and are best described as "XMPP-like"; for details, see <a class='info' href='#XEP-0174'>[XEP&#8209;0174]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Link-Local Messaging,&rdquo; June&nbsp;2007.</span><span>)</span></a>.  In addition, XML streams can be established end-to-end over any reliable transport, including extensions to XMPP itself; for details, see <a class='info' href='#XEP-0246'>[XEP&#8209;0246]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;End-to-End XML Streams,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>Note: Architectures that employ <a class='info' href='#streams'>XML streams<span> (</span><span class='info'>XML Streams</span><span>)</span></a> and <a class='info' href='#stanzas'>XML stanzas<span> (</span><span class='info'>XML Stanzas</span><span>)</span></a> but that establish peer-to-peer connections directly between clients using technologies based on <a class='info' href='#LINKLOCAL'>[LINKLOCAL]<span> (</span><span class='info'>Cheshire, S., Aboba, B., and E. Guttman, &ldquo;Dynamic Configuration of IPv4 Link-Local Addresses,&rdquo; May&nbsp;2005.</span><span>)</span></a> have been deployed, but such architectures are not XMPP and are best described as "XMPP-like"; for details, see <a class='info' href='#XEP-0174'>[XEP&#8209;0174]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Link-Local Messaging,&rdquo; September&nbsp;2007.</span><span>)</span></a>.  In addition, XML streams can be established end-to-end over any reliable transport, including extensions to XMPP itself; for details, see <a class='info' href='#XEP-0246'>[XEP&#8209;0246]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;End-to-End XML Streams,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
 </p>
 </blockquote>
 
@@ -1011,9 +1013,9 @@ Server</h3>
 <p>
         </p>
 <ul class="text">
-<li>Storing XML data that is used by clients (e.g., contact lists for users of XMPP-based instant messaging and presence applications as defined in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>); in this case, the relevant XML stanza is handled directly by the server itself on behalf of the client and is not routed to a foreign server or delivered to a local entity.
+<li>Storing XML data that is used by clients (e.g., contact lists for users of XMPP-based instant messaging and presence applications as defined in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>); in this case, the relevant XML stanza is handled directly by the server itself on behalf of the client and is not routed to a foreign server or delivered to a local entity.
 </li>
-<li>Hosting local services that also use XMPP as the basis for communication but that provide additional functionality beyond that defined in this document or in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>; examples include multi-user conferencing services as specified in <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; April&nbsp;2007.</span><span>)</span></a> and publish-subscribe services as specified in <a class='info' href='#XEP-0060'>[XEP&#8209;0060]<span> (</span><span class='info'>Millard, P., Saint-Andre, P., and R. Meijer, &ldquo;Publish-Subscribe,&rdquo; September&nbsp;2007.</span><span>)</span></a>.
+<li>Hosting local services that also use XMPP as the basis for communication but that provide additional functionality beyond that defined in this document or in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>; examples include multi-user conferencing services as specified in <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; July&nbsp;2007.</span><span>)</span></a> and publish-subscribe services as specified in <a class='info' href='#XEP-0060'>[XEP&#8209;0060]<span> (</span><span class='info'>Millard, P., Saint-Andre, P., and R. Meijer, &ldquo;Publish-Subscribe,&rdquo; September&nbsp;2007.</span><span>)</span></a>.
 </li>
 </ul><p>
       
@@ -1065,7 +1067,7 @@ Overview</h3>
                      ; code point that satisfies the Resourceprep
                      ; profile of stringprep
 </pre></div>
-<p>All JIDs are based on the foregoing structure.  One common use of this structure is to identify a messaging and presence account, the server that hosts the account, and a connected resource (e.g., a specific device) in the form of &lt;node@domain/resource&gt;.  However, node types other than clients are possible; for example, a specific chat room offered by a multi-user conference service (see <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; April&nbsp;2007.</span><span>)</span></a>) could be addressed as &lt;room@service&gt; (where "room" is the name of the chat room and "service" is the hostname of the multi-user conference service) and a specific occupant of such a room could be addressed as &lt;room@service/nick&gt; (where "nick" is the occupant's room nickname).  Many other JID types are possible (e.g., &lt;domain/resource&gt; could be a server-side script or service).
+<p>All JIDs are based on the foregoing structure.  One common use of this structure is to identify a messaging and presence account, the server that hosts the account, and a connected resource (e.g., a specific device) in the form of &lt;node@domain/resource&gt;.  However, node types other than clients are possible; for example, a specific chat room offered by a multi-user conference service (see <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; July&nbsp;2007.</span><span>)</span></a>) could be addressed as &lt;room@service&gt; (where "room" is the name of the chat room and "service" is the hostname of the multi-user conference service) and a specific occupant of such a room could be addressed as &lt;room@service/nick&gt; (where "nick" is the occupant's room nickname).  Many other JID types are possible (e.g., &lt;domain/resource&gt; could be a server-side script or service).
 </p>
 <p>Each allowable portion of a JID (node identifier, domain identifier, and resource identifier) MUST NOT be more than 1023 bytes in length, resulting in a maximum total size (including the '@' and '/' separators) of 3071 bytes.
 </p>
@@ -1139,7 +1141,7 @@ Determination of Addresses</h3>
 
 <p>After the parties to an XML stream have completed the appropriate aspects of stream negotiation (typically <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a> and, if appropriate, <a class='info' href='#bind'>resource binding<span> (</span><span class='info'>Resource Binding</span><span>)</span></a>) the receiving entity for a stream MUST determine the initiating entity's JID.
 </p>
-<p>For server-to-server communication, the initiating server's JID MUST be the authorization identity (as defined by <a class='info' href='#SASL'>[SASL]<span> (</span><span class='info'>Melnikov, A. and K. Zeilenga, &ldquo;Simple Authentication and Security Layer (SASL),&rdquo; June&nbsp;2006.</span><span>)</span></a>), either (1) as directly communicated by the initiating server during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a> or (2) as derived by the receiving server from the authentication identity if no authorization identity was specified during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>.  (For information about the determination of addresses in the absence of SASL negotiation when the older server dialback protocol is used, see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>.)
+<p>For server-to-server communication, the initiating server's JID MUST be the authorization identity (as defined by <a class='info' href='#SASL'>[SASL]<span> (</span><span class='info'>Melnikov, A. and K. Zeilenga, &ldquo;Simple Authentication and Security Layer (SASL),&rdquo; June&nbsp;2006.</span><span>)</span></a>), either (1) as directly communicated by the initiating server during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a> or (2) as derived by the receiving server from the authentication identity if no authorization identity was specified during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>.  (For information about the determination of addresses in the absence of SASL negotiation when the older server dialback protocol is used, see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>.)
 </p>
 <p>For client-to-server communication, the client's bare JID (&lt;node@domain&gt;) MUST be the authorization identity (as defined by <a class='info' href='#SASL'>[SASL]<span> (</span><span class='info'>Melnikov, A. and K. Zeilenga, &ldquo;Simple Authentication and Security Layer (SASL),&rdquo; June&nbsp;2006.</span><span>)</span></a>), either (1) as directly communicated by the client during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a> or (2) as derived by the server from the authentication identity if no authorization identity was specified during <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>.  The resource identifier portion of the full JID (&lt;node@domain/resource&gt;) MUST be the resource identifier negotiated by the client and server during <a class='info' href='#bind'>resource binding<span> (</span><span class='info'>Resource Binding</span><span>)</span></a>.
 </p>
@@ -1167,9 +1169,9 @@ Hostname Resolution</h3>
 <p>
         </p>
 <ol class="text">
-<li>Attempt to resolve the hostname using a <a class='info' href='#DNS-SRV'>[DNS&#8209;SRV]<span> (</span><span class='info'>Gulbrandsen, A., Vixie, P., and L. Esibov, &ldquo;A DNS RR for specifying the location of services (DNS SRV),&rdquo; February&nbsp;2000.</span><span>)</span></a> Service of "xmpp-client" (for client-to-server connections) or "xmpp-server" (for server-to-server connections) and a Proto of "tcp", resulting in resource records such as "_xmpp-client._tcp.example.net." or "_xmpp-server._tcp.im.example.com.".  The result of the SRV lookup will be one or more combinations of a port and hostname; the initiating entity MUST resolve one of the hostnames in order to determine an IP address at which to connect.
+<li>Attempt to resolve the hostname using (a) a <a class='info' href='#DNS-SRV'>[DNS&#8209;SRV]<span> (</span><span class='info'>Gulbrandsen, A., Vixie, P., and L. Esibov, &ldquo;A DNS RR for specifying the location of services (DNS SRV),&rdquo; February&nbsp;2000.</span><span>)</span></a> Service of "xmpp-client" (for client-to-server connections) or "xmpp-server" (for server-to-server connections) and (b) a Proto of "tcp", resulting in resource records such as "_xmpp-client._tcp.example.net." or "_xmpp-server._tcp.im.example.com.".  The result of the SRV lookup will be one or more combinations of a port and hostname, which hostnames the initiating entity MUST resolve according to returned SRV record weight (if the result of the SRV lookup is a single RR with a Target of ".", i.e. the root domain, the initiating entity MUST abort SRV processing but SHOULD attempt a fallback resolution as described below).  The initiating entity uses the IP address(es) from the first successfully resolved hostname (with the corresponding port number returned by the SRV lookup) in order to connect to the receiving entity.  If the initiating entity fails to connect using one of the IP addresses, the initiating entity uses the next resolved IP address to connect.  If the initiating entity fails to connect using all resolved IP addresses, then the initiating entity repeats the process of resolution and connection for the next hostname returned by the SRV lookup.
 </li>
-<li>If the SRV lookup fails, the fallback SHOULD be a normal IPv4 or IPv6 address record resolution to determine the IP address, where the port used is the "xmpp-client" port of 5222 for client-to-server connections or the "xmpp-server" port 5269 for server-to-server connections.
+<li>If the SRV lookup aborts or fails, the fallback SHOULD be a normal IPv4 or IPv6 address record resolution to determine the IP address, where the port used is the "xmpp-client" port of 5222 for client-to-server connections or the "xmpp-server" port 5269 for server-to-server connections.
 </li>
 <li>For client-to-server connections, the fallback MAY be a <a class='info' href='#DNS-TXT'>[DNS&#8209;TXT]<span> (</span><span class='info'>Rosenbaum, R., &ldquo;Using the Domain Name System To Store Arbitrary String Attributes,&rdquo; May&nbsp;1993.</span><span>)</span></a> lookup for alternative connection methods, for example as described in <a class='info' href='#XEP-0156'>[XEP&#8209;0156]<span> (</span><span class='info'>Hildebrand, J. and P. Saint-Andre, &ldquo;Discovering Alternative XMPP Connection Methods,&rdquo; June&nbsp;2007.</span><span>)</span></a>.
 </li>
@@ -1178,13 +1180,13 @@ Hostname Resolution</h3>
 </p>
 <p></p>
 <blockquote class="text">
-<p>Note: If the initiating entity has been explicitly configured to associate a particular hostname (and potentially port) with the original hostname of the receiving entity (say, to "hardcode" an association between an original hostname of example.net and a configured hostname and of webcm.example.com:80), the initiating entity SHALL use the configured name instead of the original name when following the resolution process described above.
+<p>Note: If the initiating entity has been explicitly configured to associate a particular hostname (and potentially port) with the original hostname of the receiving entity (say, to "hardcode" an association between an original hostname of example.net and a configured hostname and of webcm.example.com:80), the initiating entity SHALL use the configured name instead of performing the foregoing resolution process on the original name.
 </p>
 </blockquote>
 
 <p></p>
 <blockquote class="text">
-<p>Note: Many XMPP servers are implemented in such a way that they can host additional services (beyond those defined in this specification and <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>) at hostnames that are subdomains of the hostname of the main XMPP service (e.g., conference.example.net for a <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; April&nbsp;2007.</span><span>)</span></a> service associated with the example.net XMPP service) or subdomains of the first-level domain of the underlying host (e.g., muc.example.com for a <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; April&nbsp;2007.</span><span>)</span></a> service associated with the im.example.com XMPP service).  If an entity from a remote domain wishes to use such additional services, it would generate an appropriate XML stanza and the remote domain itself would attempt to resolve the service's hostname via an SRV lookup on resource records such as "_xmpp-server._tcp.conference.example.net." or "_xmpp-server._tcp.muc.example.com.".  Therefore if a service wishes to enable entities from remote domains to access these additional services, it needs to advertise the appropriate "_xmpp-server" SRV records in addition to the "_xmpp-server" record for its main XMPP service.
+<p>Note: Many XMPP servers are implemented in such a way that they can host additional services (beyond those defined in this specification and <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>) at hostnames that are subdomains of the hostname of the main XMPP service (e.g., conference.example.net for a <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; July&nbsp;2007.</span><span>)</span></a> service associated with the example.net XMPP service) or subdomains of the first-level domain of the underlying host (e.g., muc.example.com for a <a class='info' href='#XEP-0045'>[XEP&#8209;0045]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Multi-User Chat,&rdquo; July&nbsp;2007.</span><span>)</span></a> service associated with the im.example.com XMPP service).  If an entity from a remote domain wishes to use such additional services, it would generate an appropriate XML stanza and the remote domain itself would attempt to resolve the service's hostname via an SRV lookup on resource records such as "_xmpp-server._tcp.conference.example.net." or "_xmpp-server._tcp.muc.example.com.".  Therefore if a service wishes to enable entities from remote domains to access these additional services, it needs to advertise the appropriate "_xmpp-server" SRV records in addition to the "_xmpp-server" record for its main XMPP service.
 </p>
 </blockquote>
 
@@ -1551,9 +1553,9 @@ R: &lt;stream:features&gt;
      &lt;/starttls&gt;
    &lt;/stream:features&gt;
 </pre></div>
-<p>Stream features are used mainly to advertise <a class='info' href='#tls'>TLS negotiation<span> (</span><span class='info'>STARTTLS Negotiation</span><span>)</span></a>, <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>, and <a class='info' href='#bind'>resource binding<span> (</span><span class='info'>Resource Binding</span><span>)</span></a>; however, stream features also can be used to advertise features associated with various XMPP extensions.  If an entity does not understand or support a feature that has been advertised, it MUST silently ignore the associated feature advertisement.
+<p>Stream features are used mainly to advertise <a class='info' href='#tls'>TLS negotiation<span> (</span><span class='info'>STARTTLS Negotiation</span><span>)</span></a>, <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>, and <a class='info' href='#bind'>resource binding<span> (</span><span class='info'>Resource Binding</span><span>)</span></a>; however, stream features also can be used to advertise features associated with various XMPP extensions.
 </p>
-<p>If it is necessary for a feature to be successfully negotiated before the initiating entity is allowed to proceed with the sending of XML stanzas or with further steps of the stream negotiation, the advertisement of that feature MUST include an empty &lt;required/&gt; child element.
+<p>If it is mandatory for a feature to be successfully negotiated before the initiating entity will be allowed to proceed with the sending of XML stanzas or with further steps of the stream negotiation, the advertisement of that feature SHOULD include an empty &lt;required/&gt; child element but MAY include neither a &lt;required/&gt; element not an &lt;optional/&gt; element (i.e., features default to required).
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 R: &lt;stream:features&gt;
      &lt;bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'&gt;
@@ -1569,6 +1571,8 @@ R: &lt;stream:features&gt;
      &lt;/session&gt;
    &lt;/stream:features&gt;
 </pre></div>
+<p>If an entity does not understand or support a feature that has been advertised, it MUST still inspect the feature advertisement to determine if negotiation of the feature is mandatory.  If negotiation of an unsupported feature is mandatory (as determined by inclusion of the &lt;required/&gt; child element or the absence of an &lt;optional/&gt; child element), then the entity MUST abort the stream negotiation process.  If negotiation of an unsupported feature is discretionary (as determined by inclusion of the &lt;optional/&gt; child element or the absence of a child element), the entity MUST silently ignore the associated feature advertisement and proceed with the stream negotiation process.
+</p>
 <p></p>
 <blockquote class="text">
 <p>Note: Implementations based on an earlier revision of this specification do not include the &lt;optional/&gt; child element and they include the &lt;required/&gt; child element only in the case of the STARTTLS feature.  Entities MUST accept stream feature advertisements without the child elements, and SHOULD consider consider negotiation of such features to be discretionary.
@@ -1644,7 +1648,7 @@ S: &lt;/stream:stream&gt;
 <a name="rfc.section.5.7.3"></a><h3>5.7.3.&nbsp;
 Handling of Idle Streams</h3>
 
-<p>An XML stream can become idle, i.e., neither entity has sent XMPP traffic over the stream for some period of time.  A server MAY close an idle stream with a local client or remote server, preferably through use of the &lt;connection-timeout/&gt; stream error.  The idle timeout period is a matter of implementation and local service policy;  however, it is RECOMMENDED to be liberal in accepting idle streams, since experience has shown that doing so improves the reliability of communications over XMPP networks.  In particular, it is typically more efficient to maintain a stream between two servers than it is to aggressively timeout such a stream, especially with regard to synchronization of presence information as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>; therefore it is RECOMMENDED to maintain such a stream since experience has shown that server-to-server streams are cyclical and typically need to be re-established every 24 to 48 hours if they are timed out.
+<p>An XML stream can become idle, i.e., neither entity has sent XMPP traffic over the stream for some period of time.  A server MAY close an idle stream with a local client or remote server, preferably through use of the &lt;connection-timeout/&gt; stream error.  The idle timeout period is a matter of implementation and local service policy;  however, it is RECOMMENDED to be liberal in accepting idle streams, since experience has shown that doing so improves the reliability of communications over XMPP networks.  In particular, it is typically more efficient to maintain a stream between two servers than it is to aggressively timeout such a stream, especially with regard to synchronization of presence information as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>; therefore it is RECOMMENDED to maintain such a stream since experience has shown that server-to-server streams are cyclical and typically need to be re-established every 24 to 48 hours if they are timed out.
 </p>
 <p>An XML stream can appear idle at the XMPP level because the undelying TCP connection has become idle (e.g., a client's network connection has been lost).  The typical method for detecting an idle TCP connection is to send a space character (U+0020) over the TCP connection between XML stanzas, which is allowed for XML streams as described under <a class='info' href='#xml-whitespace'>Section&nbsp;12.7<span> (</span><span class='info'>Whitespace</span><span>)</span></a>.  <a name='anchor15'></a>The sending of such a space character is called a WHITESPACE PING.  The time between such whitespace pings is a matter of implementation and local service policy; however, it is RECOMMENDED that these pings be sent not more than once every 60 seconds.
 </p>
@@ -1998,7 +2002,7 @@ invalid-id</h3>
 
 <p>The stream ID or server dialback ID is invalid or does not match an ID previously provided.
 </p>
-<p>(In the following example, the server dialback ID is invalid; see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>.)
+<p>(In the following example, the server dialback ID is invalid; see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>.)
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 P: &lt;db:verify
        from='example.net'
@@ -2811,9 +2815,7 @@ Data Formatting</h3>
 <a name="rfc.section.7.2.4"></a><h3>7.2.4.&nbsp;
 Security Layers</h3>
 
-<p>Upon successful SASL negotiation that involves negotiation of a security layer, the initiating entity MUST discard any knowledge obtained from the receiving entity that was not obtained via the SASL negotiation.
-</p>
-<p>Upon successful SASL negotiation that involves negotiation of a security layer, the receiving entity MUST discard any knowledge obtained from the initiating entity that was not obtained via the SASL negotiation.  The receiving entity MUST also include an updated list of SASL mechanisms with the stream features it sends after SASL negotiation so that the initiating entity is able to detect any changes to the list of mechanisms supported by the receiving entity.
+<p>Upon successful SASL negotiation that involves negotiation of a security layer, both the initiating entity and the receiving MUST discard any application-layer state (i.e, state from the XMPP layer, excluding state from the TLS negotiation or SASL negotiation).
 </p>
 <a name="sasl-rules-username"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -2841,6 +2843,12 @@ Authorization Identities</h3>
 
 <p>If the initiating entity wishes to act on behalf of another entity and the selected SASL mechanism supports transmission of an authorization identity, the initiating entity MUST provide an authorization identity during SASL negotiation.  If the initiating entity does not wish to act on behalf of another entity, it MUST NOT provide an authorization identity.  As specified in <a class='info' href='#SASL'>[SASL]<span> (</span><span class='info'>Melnikov, A. and K. Zeilenga, &ldquo;Simple Authentication and Security Layer (SASL),&rdquo; June&nbsp;2006.</span><span>)</span></a>, the initiating entity MUST NOT provide an authorization identity unless the authorization identity is different from the default authorization identity derived from the authentication identity.  If provided, the value of the authorization identity MUST be a bare JID of the form &lt;domain&gt; (i.e., an XMPP domain identifier only) for servers and a bare JID of the form &lt;node@domain&gt; (i.e., node identifier and domain identifier) for clients.
 </p>
+<p></p>
+<blockquote class="text">
+<p>Note: The authorization identity communited during SASL negotiation is used to determine the canonical address for the initiating client or server according to the receiving server, as described under <a class='info' href='#addressing-determination'>Section&nbsp;3.5<span> (</span><span class='info'>Determination of Addresses</span><span>)</span></a>.
+</p>
+</blockquote>
+
 <a name="sasl-rules-rountrips"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.2.7"></a><h3>7.2.7.&nbsp;
@@ -3003,6 +3011,12 @@ Success</h3>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 R: &lt;success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/&gt;
 </pre></div>
+<p></p>
+<blockquote class="text">
+<p>Note: The authorization identity communited during SASL negotiation is used to determine the canonical address for the initiating client or server according to the receiving server, as described under <a class='info' href='#addressing-determination'>Section&nbsp;3.5<span> (</span><span class='info'>Determination of Addresses</span><span>)</span></a>.
+</p>
+</blockquote>
+
 <p>Upon receiving the &lt;success/&gt; element, the initiating entity MUST initiate a new stream over the existing TCP connection by sending a new initial stream header to the receiving entity.
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 I: &lt;stream:stream
@@ -3033,19 +3047,6 @@ R: &lt;stream:stream
 <p>The receiving entity MUST also send stream features, containing any further available features or containing no features (via an empty &lt;features/&gt; element).
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 R: &lt;stream:features&gt;
-     &lt;bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'&gt;
-       &lt;required/&gt;
-     &lt;/bind&gt;
-   &lt;/stream:features&gt;
-</pre></div>
-<p>As noted, if the successful SASL negotiation involved negotiation of a security layer, the receiving entity MUST also include an updated list of SASL mechanisms with the stream features so that the initiating entity is able to detect any changes to the list of mechanisms supported by the receiving entity.
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-R: &lt;stream:features&gt;
-     &lt;mechanisms xmlns='urn:ietf:params:xml:ns:xmpp-sasl'&gt;
-       &lt;mechanism&gt;EXTERNAL&lt;/mechanism&gt;
-       &lt;mechanism&gt;PLAIN&lt;/mechanism&gt;
-       &lt;optional/&gt;
-     &lt;/mechanisms&gt;
      &lt;bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'&gt;
        &lt;required/&gt;
      &lt;/bind&gt;
@@ -3338,21 +3339,7 @@ Generation of Resource Identifiers</h3>
 
 <p>A resource identifier MUST at a minimum be unique among the connected resources for that &lt;node@domain&gt;.  Enforcement of this policy is the responsibility of the server.
 </p>
-<p>A resource identifier can be security-critical.  For example, if a malicious entity can guess a client's resource identifier then it might be able to determine if the client (and therefore the controlling principal) is online or offline, thus resulting in a presence leak as described under <a class='info' href='#security-leak'>Section&nbsp;15.13<span> (</span><span class='info'>Presence Leaks</span><span>)</span></a>.  Traditionally, XMPP resource identifiers have been generated by clients in ways that are not secure (e.g., hardcoding the resource identifier to the name of the client or to a common location such as "home" or "work").  However, for the sake of proper security, a resource identifier SHOULD be random (see <a class='info' href='#RANDOM'>[RANDOM]<span> (</span><span class='info'>Eastlake, D., Schiller, J., and S. Crocker, &ldquo;Randomness Requirements for Security,&rdquo; June&nbsp;2005.</span><span>)</span></a>).  It is RECOMMENDED that the resource identifier incorporate a Universally Unique Identifier (UUID), for which the format specified in <a class='info' href='#UUID'>[UUID]<span> (</span><span class='info'>Leach, P., Mealling, M., and R. Salz, &ldquo;A Universally Unique IDentifier (UUID) URN Namespace,&rdquo; July&nbsp;2005.</span><span>)</span></a> is RECOMMENDED.
-</p>
-<p>The use of a suitably random resource identifier can be ensured in the following ways:
-</p>
-<p>
-        </p>
-<ol class="text">
-<li>If the client asks the server to generate a resource identifier, the identifier MUST be random.
-</li>
-<li>If the client generates a resource identifier, the identifer SHOULD be random.  However, the client MAY allow a human user to explicitly configure the client so that the user can set the resource identifier to be a human-friendly text string; in this case the client MUST warn the user that doing so might result in the potential for presence leaks and SHOULD warn the user that the user's preferred resource identifier MAY be overridden or modified by the server.
-</li>
-<li>If the server modifies the client-generated resource identifier, it SHOULD do so in such a way that the modified resource identifier preserves the user's preferred text (say, "home") but appends suitably random text (e.g., "4db06f06-1ea4-11dc-aca3-000bcd821bfb"), resulting in a resource identifier that combines both the user-preferred text and random text (e.g., "home 4db06f06-1ea4-11dc-aca3-000bcd821bfb").
-</li>
-</ol><p>
-      
+<p>A resource identifier can be security-critical.  For example, if a malicious entity can guess a client's resource identifier then it might be able to determine if the client (and therefore the controlling principal) is online or offline, thus resulting in a presence leak as described under <a class='info' href='#security-leak'>Section&nbsp;15.13<span> (</span><span class='info'>Presence Leaks</span><span>)</span></a>.  To prevent that possibility, a client can either (1) generate a random resource identifier on its own or (2) ask the server to generate a resource identifier on its behalf, which MUST be random (see <a class='info' href='#RANDOM'>[RANDOM]<span> (</span><span class='info'>Eastlake, D., Schiller, J., and S. Crocker, &ldquo;Randomness Requirements for Security,&rdquo; June&nbsp;2005.</span><span>)</span></a>).  When generating a random resource identifier, it is RECOMMENDED that the resource identifier be a Universally Unique Identifier (UUID), for which the format specified in <a class='info' href='#UUID'>[UUID]<span> (</span><span class='info'>Leach, P., Mealling, M., and R. Salz, &ldquo;A Universally Unique IDentifier (UUID) URN Namespace,&rdquo; July&nbsp;2005.</span><span>)</span></a> is RECOMMENDED.
 </p>
 <a name="bind-servergen"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -3447,23 +3434,11 @@ C: &lt;iq id='bind_2' type='set'&gt;
      &lt;/bind&gt;
    &lt;/iq&gt;
 </pre></div>
-<p>The server MUST either accept the client-submitted resource identifier or generate a random resource identifier for the client.
-</p>
-<p>If the server accept the client-submitted resource identifier, it MUST return an IQ stanza of type "result" to the client, including a &lt;jid/&gt; child element that specifies the full JID for the connected resource and contains without modification the client-submitted text.
+<p>The server SHOULD accept the client-submitted resource identifier.  It does so by returning an IQ stanza of type "result" to the client, including a &lt;jid/&gt; child element that specifies the full JID for the connected resource and contains without modification the client-submitted text.
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 S: &lt;iq id='bind_2' type='result'&gt;
     &lt;bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'&gt;
       &lt;jid&gt;juliet@im.example.com/balcony&lt;/jid&gt;
-    &lt;/bind&gt;
-   &lt;/iq&gt;
-</pre></div>
-<p>If the server generates a resource identifier on behalf of the client, it MUST so generate the resource identifier, which SHOULD incorporate the human-friendly text submitted by the client.
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-S: &lt;iq id='bind_2' type='result'&gt;
-    &lt;bind xmlns='urn:ietf:params:xml:ns:xmpp-bind'&gt;
-      &lt;jid&gt;
-   juliet@im.example.com/balcony 4db06f06-1ea4-11dc-aca3-000bcd821bfb
-      &lt;/jid&gt;
     &lt;/bind&gt;
    &lt;/iq&gt;
 </pre></div>
@@ -3665,7 +3640,7 @@ S: &lt;message from='romeo@example.net'
 <a name="rfc.section.9"></a><h3>9.&nbsp;
 XML Stanzas</h3>
 
-<p>After a client has connected to a server or two servers have connected to each other, either party can send XML stanzas over the negotiated stream.  Three kinds of XML stanza are defined for the 'jabber:client' and 'jabber:server' namespaces: &lt;message/&gt;, &lt;presence/&gt;, and &lt;iq/&gt;.  In addition, there are five common attributes for these stanza types.  These common attributes, as well as the basic semantics of the three stanza types, are defined herein; more detailed information regarding the syntax of XML stanzas for instant messaging and presence applications is provided in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>, and for other applications in the relevant XMPP extension specifications.
+<p>After a client has connected to a server or two servers have connected to each other, either party can send XML stanzas over the negotiated stream.  Three kinds of XML stanza are defined for the 'jabber:client' and 'jabber:server' namespaces: &lt;message/&gt;, &lt;presence/&gt;, and &lt;iq/&gt;.  In addition, there are five common attributes for these stanza types.  These common attributes, as well as the basic semantics of the three stanza types, are defined herein; more detailed information regarding the syntax of XML stanzas for instant messaging and presence applications is provided in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>, and for other applications in the relevant XMPP extension specifications.
 </p>
 <p>A server MUST NOT process a partial stanza and MUST NOT attach meaning to the transmission timing of any part of a stanza (before receipt of the close tag).
 </p>
@@ -3747,7 +3722,7 @@ Client-to-Server Streams</h3>
 <p>
             </p>
 <ol class="text">
-<li>When the server receives an XML stanza from a client and the stanza does not include a 'from' attribute, the server MUST add a 'from' attribute to the stanza, where the value of the 'from' attribute is the full JID (&lt;node@domain/resource&gt;) determined by the server for the connected resource that generated the stanza (see <a class='info' href='#addressing-determination'>Section&nbsp;3.5<span> (</span><span class='info'>Determination of Addresses</span><span>)</span></a>), or the bare JID (&lt;node@domain&gt;) in the case of subscription-related presence stanzas (see <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>); the only exception to this rule occurs when multiple resources are bound to the same stream as described under <a class='info' href='#bind-multi'>Section&nbsp;8.6<span> (</span><span class='info'>Binding Multiple Resources</span><span>)</span></a>.
+<li>When the server receives an XML stanza from a client and the stanza does not include a 'from' attribute, the server MUST add a 'from' attribute to the stanza, where the value of the 'from' attribute is the full JID (&lt;node@domain/resource&gt;) determined by the server for the connected resource that generated the stanza (see <a class='info' href='#addressing-determination'>Section&nbsp;3.5<span> (</span><span class='info'>Determination of Addresses</span><span>)</span></a>), or the bare JID (&lt;node@domain&gt;) in the case of subscription-related presence stanzas (see <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>); the only exception to this rule occurs when multiple resources are bound to the same stream as described under <a class='info' href='#bind-multi'>Section&nbsp;8.6<span> (</span><span class='info'>Binding Multiple Resources</span><span>)</span></a>.
 </li>
 <li>When the server receives an XML stanza from a client and the stanza includes a 'from' attribute, the server MUST either (a) validate that the value of the 'from' attribute provided by the client is that of a connected resource for the associated entity or (b) override the provided 'from' attribute by adding a 'from' attribute as specified under Rule #1.
 </li>
@@ -3772,7 +3747,7 @@ Server-to-Server Streams</h3>
 <ol class="text">
 <li>A stanza MUST possess a 'from' attribute whose value is an XMPP address; if a server receives a stanza that does not meet this restriction, it MUST generate an &lt;improper-addressing/&gt; stream error.
 </li>
-<li>The domain identifier portion of the JID contained in the 'from' attribute MUST match the hostname of the sending server (or any validated domain thereof) as communicated in the SASL negotiation (see <a class='info' href='#sasl'>Section&nbsp;7<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>), server dialback (see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>, or similar means; if a server receives a stanza that does not meet this restriction, it MUST generate an &lt;invalid-from/&gt; stream error.
+<li>The domain identifier portion of the JID contained in the 'from' attribute MUST match the hostname of the sending server (or any validated domain thereof) as communicated in the SASL negotiation (see <a class='info' href='#sasl'>Section&nbsp;7<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>), server dialback (see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>, or similar means; if a server receives a stanza that does not meet this restriction, it MUST generate an &lt;invalid-from/&gt; stream error.
 </li>
 </ol><p>
           
@@ -3791,7 +3766,7 @@ id</h3>
 <a name="rfc.section.9.1.4"></a><h3>9.1.4.&nbsp;
 type</h3>
 
-<p>The 'type' attribute specifies the purpose or context of the message, presence, or IQ stanza.  The particular allowable values for the 'type' attribute vary depending on whether the stanza is a message, presence, or IQ stanza.  The defined values for message and presence stanzas are specific to instant messaging and presence applications and therefore are specified in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>, whereas the values for IQ stanzas specify the role of an IQ stanza in a structured request-response exchange and therefore are specified under <a class='info' href='#stanzas-semantics-iq'>Section&nbsp;9.2.3<span> (</span><span class='info'>IQ Semantics</span><span>)</span></a>.  The only 'type' value common to all three stanzas is "error"; see <a class='info' href='#stanzas-error'>Section&nbsp;9.3<span> (</span><span class='info'>Stanza Errors</span><span>)</span></a>.
+<p>The 'type' attribute specifies the purpose or context of the message, presence, or IQ stanza.  The particular allowable values for the 'type' attribute vary depending on whether the stanza is a message, presence, or IQ stanza.  The defined values for message and presence stanzas are specific to instant messaging and presence applications and therefore are specified in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>, whereas the values for IQ stanzas specify the role of an IQ stanza in a structured request-response exchange and therefore are specified under <a class='info' href='#stanzas-semantics-iq'>Section&nbsp;9.2.3<span> (</span><span class='info'>IQ Semantics</span><span>)</span></a>.  The only 'type' value common to all three stanzas is "error"; see <a class='info' href='#stanzas-error'>Section&nbsp;9.3<span> (</span><span class='info'>Stanza Errors</span><span>)</span></a>.
 </p>
 <a name="stanzas-attributes-lang"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -3850,7 +3825,7 @@ Message Semantics</h3>
 <a name="rfc.section.9.2.2"></a><h3>9.2.2.&nbsp;
 Presence Semantics</h3>
 
-<p><a name='anchor18'></a>The &lt;presence/&gt; stanza can be seen as a specialized broadcast or "publish-subscribe" mechanism, whereby multiple entities receive information (in this case, network availability information) about an entity to which they have subscribed.  In general, a publishing entity (client) SHOULD send a presence stanza with no 'to' attribute, in which case the server to which the entity is connected SHOULD broadcast or multiplex that stanza to all subscribed entities.  However, a publishing entity MAY also send a presence stanza with a 'to' attribute, in which case the server SHOULD route or deliver that stanza to the intended recipient.  See <a class='info' href='#rules'>Section&nbsp;11<span> (</span><span class='info'>Server Rules for Processing XML Stanzas</span><span>)</span></a> for general routing and delivery rules related to XML stanzas, and <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a> for rules specific to presence applications.
+<p><a name='anchor18'></a>The &lt;presence/&gt; stanza can be seen as a specialized broadcast or "publish-subscribe" mechanism, whereby multiple entities receive information (in this case, network availability information) about an entity to which they have subscribed.  In general, a publishing entity (client) SHOULD send a presence stanza with no 'to' attribute, in which case the server to which the entity is connected SHOULD broadcast or multiplex that stanza to all subscribed entities.  However, a publishing entity MAY also send a presence stanza with a 'to' attribute, in which case the server SHOULD route or deliver that stanza to the intended recipient.  See <a class='info' href='#rules'>Section&nbsp;11<span> (</span><span class='info'>Server Rules for Processing XML Stanzas</span><span>)</span></a> for general routing and delivery rules related to XML stanzas, and <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a> for rules specific to presence applications.
 </p>
 <a name="stanzas-semantics-iq"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -3893,13 +3868,13 @@ Requesting                  Responding
 <li>The 'type' attribute is REQUIRED for IQ stanzas.  The value MUST be one of the following (if the value is other than one of the following strings, the recipient or an intermediate router MUST return a stanza error of &lt;bad-request/&gt;):
             
 <ul class="text">
-<li>get -- The stanza is a request for information or requirements.
+<li>get -- The stanza requests information, inquires about what data is needed in order to complete further operations, etc.
 </li>
-<li>set -- The stanza provides required data, sets new values, or replaces existing values.
+<li>set -- The stanza provides data that is needed for an operation to be completed, sets new values, replaces existing values, etc.
 </li>
 <li>result -- The stanza is a response to a successful get or set request.
 </li>
-<li>error -- An error has occurred regarding processing or delivery of a previously-sent get or set request (see <a class='info' href='#stanzas-error'>Section&nbsp;9.3<span> (</span><span class='info'>Stanza Errors</span><span>)</span></a>).
+<li>error -- The stanza reports an error that has occurred regarding processing or delivery of a previously-sent get or set request (see <a class='info' href='#stanzas-error'>Section&nbsp;9.3<span> (</span><span class='info'>Stanza Errors</span><span>)</span></a>).
 </li>
 </ul>
           
@@ -4624,7 +4599,7 @@ Application-Specific Conditions</h3>
 <a name="rfc.section.9.4"></a><h3>9.4.&nbsp;
 Extended Content</h3>
 
-<p><a name='anchor21'></a>While the message, presence, and IQ stanzas provide basic semantics for messaging, availability, and request-response interactions, XMPP uses XML namespaces (see <a class='info' href='#XML-NAMES'>[XML&#8209;NAMES]<span> (</span><span class='info'>Layman, A., Hollander, D., Tobin, R., and T. Bray, &ldquo;Namespaces in XML 1.1 (Second Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a> to extend the basic stanza syntax for the purpose of providing additional functionality.  Thus a message or presence stanza MAY contain one or more optional child elements specifying content that extends the meaning of the message (e.g., an XHTML-formatted version of the message body as described in <a class='info' href='#XEP-0071'>[XEP&#8209;0071]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;XHTML-IM,&rdquo; August&nbsp;2007.</span><span>)</span></a>), and an IQ stanza of type "get" or "set" MUST contain one such child element.  This child element MAY have any name and MUST possess a namespace declaration (other than "jabber:client", "jabber:server", or "http://etherx.jabber.org/streams") that defines all data contained within the child element.  Such a child element is said to be EXTENDED CONTENT and its namespace name is said to be an EXTENDED NAMESPACE.
+<p><a name='anchor21'></a>While the message, presence, and IQ stanzas provide basic semantics for messaging, availability, and request-response interactions, XMPP uses XML namespaces (see <a class='info' href='#XML-NAMES'>[XML&#8209;NAMES]<span> (</span><span class='info'>Layman, A., Hollander, D., Tobin, R., and T. Bray, &ldquo;Namespaces in XML 1.1 (Second Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a> to extend the basic stanza syntax for the purpose of providing additional functionality.  Thus a message or presence stanza MAY contain one or more optional child elements specifying content that extends the meaning of the message (e.g., an XHTML-formatted version of the message body as described in <a class='info' href='#XEP-0071'>[XEP&#8209;0071]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;XHTML-IM,&rdquo; September&nbsp;2007.</span><span>)</span></a>), and an IQ stanza of type "get" or "set" MUST contain one such child element.  This child element MAY have any name and MUST possess a namespace declaration (other than "jabber:client", "jabber:server", or "http://etherx.jabber.org/streams") that defines all data contained within the child element.  Such a child element is said to be EXTENDED CONTENT and its namespace name is said to be an EXTENDED NAMESPACE.
 </p>
 <p>Support for any given extended namespace is OPTIONAL on the part of any implementation.  If an entity does not understand such a namespace, the entity's expected behavior depends on whether the entity is (1) the recipient or (2) an entity that is routing the stanza to the recipient.
 </p>
@@ -5045,13 +5020,13 @@ S2: &lt;/stream:stream&gt;
 <a name="rfc.section.11"></a><h3>11.&nbsp;
 Server Rules for Processing XML Stanzas</h3>
 
-<p>An XMPP server MUST ensure in-order processing of XML stanzas between any two entities.  This includes stanzas sent by a client to its server for direct processing by the server (e.g., in-order processing of a roster get and initial presence as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>).
+<p>An XMPP server MUST ensure in-order processing of XML stanzas between any two entities.  This includes stanzas sent by a client to its server for direct processing by the server (e.g., in-order processing of a roster get and initial presence as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>).
 </p>
 <p>Beyond the requirement for in-order processing, each server implementation will contain its own logic for processing stanzas it receives.  Such logic determines whether the server needs to ROUTE a given stanza to another domain, DELIVER it to a local entity (typically a connected client associated with a local account), or HANDLE it directly within the server itself.  The following rules apply.
 </p>
 <p></p>
 <blockquote class="text">
-<p>Note: Particular XMPP applications MAY specify delivery rules that modify or supplement the following rules; for example, a set of delivery rules for instant messaging and presence applications is defined in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>Note: Particular XMPP applications MAY specify delivery rules that modify or supplement the following rules; for example, a set of delivery rules for instant messaging and presence applications is defined in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>.
 </p>
 </blockquote>
 
@@ -5079,7 +5054,7 @@ Message</h3>
 <a name="rfc.section.11.1.3"></a><h3>11.1.3.&nbsp;
 Presence</h3>
 
-<p>If the server receives a presence stanza with no 'to' attribute, it MUST broadcast it to the entities that are subscribed to the sending entity's presence, if applicable (<a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a> defines the semantics of such broadcasting for presence applications).
+<p>If the server receives a presence stanza with no 'to' attribute, it MUST broadcast it to the entities that are subscribed to the sending entity's presence, if applicable (<a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a> defines the semantics of such broadcasting for presence applications).
 </p>
 <a name="rules-noto-IQ"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -5091,7 +5066,7 @@ IQ</h3>
 <p>
           </p>
 <ol class="text">
-<li>If the IQ stanza is of type "get" or "set" and the server understands the namespace that qualifies the payload, the server MUST handle the stanza on behalf of the sending entity or return an appropriate error to the sending entity.  While the meaning of "handle" is determined by the semantics of the qualifying namespace, in general the server shall respond to the IQ stanza of type "get" or "set" by returning an appropriate IQ stanza of type "result" or "error", responding as if the server were the bare JID of the sending entity.  As an example, if the sending entity sends an IQ stanza of type "get" where the payload is qualified by the 'jabber:iq:roster' namespace (as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>), then the server shall return the roster associated with the sending entity's bare JID to the particular resource of the sending entity that requested the roster.
+<li>If the IQ stanza is of type "get" or "set" and the server understands the namespace that qualifies the payload, the server MUST handle the stanza on behalf of the sending entity or return an appropriate error to the sending entity.  While the meaning of "handle" is determined by the semantics of the qualifying namespace, in general the server shall respond to the IQ stanza of type "get" or "set" by returning an appropriate IQ stanza of type "result" or "error", responding as if the server were the bare JID of the sending entity.  As an example, if the sending entity sends an IQ stanza of type "get" where the payload is qualified by the 'jabber:iq:roster' namespace (as described in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>), then the server shall return the roster associated with the sending entity's bare JID to the particular resource of the sending entity that requested the roster.
 </li>
 <li>If the IQ stanza is of type "get" or "set" and the server does not understand the namespace that qualifies the payload, the server MUST return an error to the sending entity, which MUST be &lt;service-unavailable/&gt;.
 </li>
@@ -5128,7 +5103,7 @@ Node at Domain</h3>
 
 <p></p>
 <blockquote class="text">
-<p>Note: For addresses of this type, more detailed rules in the context of instant messaging and presence applications are provided in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>Note: For addresses of this type, more detailed rules in the context of instant messaging and presence applications are provided in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>.
 </p>
 </blockquote>
 
@@ -5249,7 +5224,7 @@ Restrictions</h3>
 </ul><p>
       
 </p>
-<p>An XMPP implementation MUST behave as follow with regard to these features:
+<p>An XMPP implementation MUST behave as follows with regard to these features:
 </p>
 <p>
         </p>
@@ -5364,11 +5339,27 @@ Extended Namespaces</h3>
 <a name="rfc.section.12.3"></a><h3>12.3.&nbsp;
 Well-Formedness</h3>
 
-<p>An XMPP entity MUST NOT accept XML data from another entity if that data is not well-formed in accordance with both the definition of "well-formed" in Section 2.1 of <a class='info' href='#XML'>[XML]<span> (</span><span class='info'>Paoli, J., Maler, E., Sperberg-McQueen, C., Yergeau, F., and T. Bray, &ldquo;Extensible Markup Language (XML) 1.0 (Fourth Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a> and the definition of "namespace-well-formed" in Section 7 of <a class='info' href='#XML-NAMES'>[XML&#8209;NAMES]<span> (</span><span class='info'>Layman, A., Hollander, D., Tobin, R., and T. Bray, &ldquo;Namespaces in XML 1.1 (Second Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a>.  If an XMPP entity receives XML data that is not well-formed, it MUST return an &lt;xml-not-well-formed/&gt; stream error and close the stream over which the data was received.
+<p>There are two varieties of well-formedness:
+</p>
+<p>
+        </p>
+<ul class="text">
+<li>"XML-well-formedness" in accordance with the definition of "well-formed" in Section 2.1 of <a class='info' href='#XML'>[XML]<span> (</span><span class='info'>Paoli, J., Maler, E., Sperberg-McQueen, C., Yergeau, F., and T. Bray, &ldquo;Extensible Markup Language (XML) 1.0 (Fourth Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a>.
+</li>
+<li>"Namespace-well-formedness" in accordance with the definition of "namespace-well-formed" in Section 7 of <a class='info' href='#XML-NAMES'>[XML&#8209;NAMES]<span> (</span><span class='info'>Layman, A., Hollander, D., Tobin, R., and T. Bray, &ldquo;Namespaces in XML 1.1 (Second Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a>.
+</li>
+</ul><p>
+      
+</p>
+<p>The following rules apply.
+</p>
+<p>An XMPP entity MUST NOT generate data that is not XML-well-formed.  An XMPP entity MUST NOT accept data that is not XML-well-formed; instead it MUST return an &lt;xml-not-well-formed/&gt; stream error and close the stream over which the data was received.
+</p>
+<p>An XMPP entity MUST NOT generate data that is not namespace-well-formed.  An XMPP server SHOULD NOT route or deliver data that is not namespace-well-formed, and SHOULD return a stanza error of &lt;not-acceptable/&ggt; or a stream error of &lt;xml-not-well-formed/&gt; in response to the receipt of such data.
 </p>
 <p></p>
 <blockquote class="text">
-<p>Note: Because this restriction was underspecified in an earlier revision of this specification, it is possible that implementations based on that revision will send data that does not comply with the restriction; an entity SHOULD be liberal in accepting such data.
+<p>Note: Because these restrictions were underspecified in an earlier revision of this specification, it is possible that implementations based on that revision will send data that does not comply with the restrictions; an entity SHOULD be liberal in accepting such data.
 </p>
 </blockquote>
 
@@ -5406,12 +5397,19 @@ Whitespace</h3>
 
 <p>Except where explicitly disallowed (e.g., during <a class='info' href='#tls'>TLS negotiation<span> (</span><span class='info'>STARTTLS Negotiation</span><span>)</span></a> and <a class='info' href='#sasl'>SASL negotiation<span> (</span><span class='info'>SASL Negotiation</span><span>)</span></a>), either entity MAY send whitespace within the root stream element as separators between XML stanzas or between any other first-level elements sent over the stream.  One common use for sending such whitespace is explained under <a class='info' href='#streams-close-idle'>Section&nbsp;5.7.3<span> (</span><span class='info'>Handling of Idle Streams</span><span>)</span></a>.
 </p>
+<a name="xml-versions"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.12.8"></a><h3>12.8.&nbsp;
+XML Versions</h3>
+
+<p>XMPP is an application profile of XML 1.0.  A future version of XMPP might be defined in terms of higher versions of XML, but this specification addresses XML 1.0 only.
+</p>
 <a name="compliance"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.13"></a><h3>13.&nbsp;
 Compliance Requirements</h3>
 
-<p>This section summarizes the specific aspects of the Extensible Messaging and Presence Protocol that MUST be supported by servers and clients in order to be considered compliant implementations, as well as additional protocol aspects that SHOULD be supported.  For compliance purposes, we draw a distinction between core protocols (which MUST be supported by any server or client, regardless of the specific application) and instant messaging and presence protocols (which MUST be supported only by instant messaging and presence applications built on top of the core protocols).  Compliance requirements that apply to all servers and clients are specified in this section; compliance requirements for instant messaging and presence applications are specified in the corresponding section of <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>This section summarizes the specific aspects of the Extensible Messaging and Presence Protocol that MUST be supported by servers and clients in order to be considered compliant implementations, as well as additional protocol aspects that SHOULD be supported.  For compliance purposes, we draw a distinction between core protocols (which MUST be supported by any server or client, regardless of the specific application) and instant messaging and presence protocols (which MUST be supported only by instant messaging and presence applications built on top of the core protocols).  Compliance requirements that apply to all servers and clients are specified in this section; compliance requirements for instant messaging and presence applications are specified in the corresponding section of <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>.
 </p>
 <a name="compliance-server"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -5432,7 +5430,7 @@ Servers</h3>
 </li>
 </ul>
 
-<p>For backward compatibility with the large deployed base of XMPP servers, server developers are advised to implement the server dialback protocol first specified in <a class='info' href='#RFC3920'>[RFC3920]<span> (</span><span class='info'>Saint-Andre, P., Ed., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Core,&rdquo; October&nbsp;2004.</span><span>)</span></a> and now documented in <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>, since that protocol is widely used for weak identity verification of peer servers in the absence of domain certificates.
+<p>For backward compatibility with the large deployed base of XMPP servers, server developers are advised to implement the server dialback protocol first specified in <a class='info' href='#RFC3920'>[RFC3920]<span> (</span><span class='info'>Saint-Andre, P., Ed., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Core,&rdquo; October&nbsp;2004.</span><span>)</span></a> and now documented in <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>, since that protocol is widely used for weak identity verification of peer servers in the absence of domain certificates.
 </p>
 <a name="compliance-client"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -5912,7 +5910,7 @@ Denial of Service</h3>
 </li>
 <li>A server implementation SHOULD enable a server administrator to limit the number of TCP connection attempts that it will accept from a given IP address in a given time period.  (While it is possible to limit the number of connections at the TCP layer rather than at the XMPP application layer, this is not advisable because limits at the TCP layer might result in an inability to access non-XMPP services.)  If an entity attempts to connect but the maximum number of connections has been reached, the receiving server MUST NOT allow the new connection to proceed.
 </li>
-<li>A server MUST NOT process XML stanzas from clients that have not yet provided appropriate authentication credentials and MUST NOT process XML stanzas from peer servers whose identity it has not either authenticated via SASL or weakly verified via server dialback (see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; June&nbsp;2008.</span><span>)</span></a>).
+<li>A server MUST NOT process XML stanzas from clients that have not yet provided appropriate authentication credentials and MUST NOT process XML stanzas from peer servers whose identity it has not either authenticated via SASL or weakly verified via server dialback (see <a class='info' href='#XEP-0220'>[XEP&#8209;0220]<span> (</span><span class='info'>Saint-Andre, P. and J. Miller, &ldquo;Server Dialback,&rdquo; October&nbsp;2008.</span><span>)</span></a>).
 </li>
 <li>A server implementation SHOULD enable a server administrator to limit the number of connected resources it will allow an account to bind at any one time.  If a client attempts to bind a resource but it has already reached the configured number of allowable resources, the receiving server MUST return a &lt;resource-constraint/&gt; stanza error.
 </li>
@@ -5936,7 +5934,9 @@ Denial of Service</h3>
 <a name="rfc.section.15.13"></a><h3>15.13.&nbsp;
 Presence Leaks</h3>
 
-<p>One of the core aspects of XMPP is presence, i.e., widespread information about the network availability of XMPP entities.  Although presence is discussed more fully in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>, it is important to note that an XMPP server MUST NOT disclose an entity's presence to entities that are not authorized to know that information (such a disclosure is called a PRESENCE LEAK).  In particular at the core XMPP level, real-time addressing and network availability is associated with a specific connected resource; therefore, any disclosure of a connected resource's full JID comprises a presence leak.  To help prevent such a presence leak, a server MUST NOT return different stanza errors if a potential attacker sends XML stanzas to the entity's bare JID (&lt;node@domain&gt;) or full JID (&lt;node@domain/resource&gt;).
+<p>One of the core aspects of XMPP is presence: information about the network availability of an XMPP entity (i.e., whether the entity is currently online or offline).  A PRESENCE LEAK occurs when an entity's network availability is inadvertently and involuntarily revealed to a second entity that is not authorized to know the first entity's network availability.
+</p>
+<p>Although presence is discussed more fully in <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>, it is important to note that an XMPP server MUST NOT leak presence.  In particular at the core XMPP level, real-time addressing and network availability is associated with a specific connected resource; therefore, any disclosure of a connected resource's full JID comprises a presence leak.  To help prevent such a presence leak, a server MUST NOT return different stanza errors if a potential attacker sends XML stanzas to the entity's bare JID (&lt;node@domain&gt;) or full JID (&lt;node@domain/resource&gt;).
 </p>
 <a name="security-harvesting"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -6262,13 +6262,13 @@ The Unicode Standard, Version 3.2.0 is defined by The Unicode Standard, Version 
 <tr><td class="author-text" valign="top"><a name="USINGTLS">[USINGTLS]</a></td>
 <td class="author-text"><a href="mailto:chris.newman@innosoft.com">Newman, C.</a>, &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc2595.txt">Using TLS with IMAP, POP3 and ACAP</a>,&rdquo; RFC&nbsp;2595, June&nbsp;1999.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0001">[XEP-0001]</a></td>
-<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0001.html">XMPP Extension Protocols</a>,&rdquo; XSF XEP&nbsp;0001, December&nbsp;2006.</td></tr>
+<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0001.html">XMPP Extension Protocols</a>,&rdquo; XSF XEP&nbsp;0001, January&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0045">[XEP-0045]</a></td>
-<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0045.html">Multi-User Chat</a>,&rdquo; XSF XEP&nbsp;0045, April&nbsp;2007.</td></tr>
+<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0045.html">Multi-User Chat</a>,&rdquo; XSF XEP&nbsp;0045, July&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0060">[XEP-0060]</a></td>
 <td class="author-text"><a href="mailto:">Millard, P.</a>, <a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, and <a href="mailto:ralphm@ik.nu">R. Meijer</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0060.html">Publish-Subscribe</a>,&rdquo; XSF XEP&nbsp;0060, September&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0071">[XEP-0071]</a></td>
-<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0071.html">XHTML-IM</a>,&rdquo; XSF XEP&nbsp;0071, August&nbsp;2007.</td></tr>
+<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0071.html">XHTML-IM</a>,&rdquo; XSF XEP&nbsp;0071, September&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0077">[XEP-0077]</a></td>
 <td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0077.html">In-Band Registration</a>,&rdquo; XSF XEP&nbsp;0077, January&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0124">[XEP-0124]</a></td>
@@ -6278,7 +6278,7 @@ The Unicode Standard, Version 3.2.0 is defined by The Unicode Standard, Version 
 <tr><td class="author-text" valign="top"><a name="XEP-0165">[XEP-0165]</a></td>
 <td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0165.html">Best Practices to Prevent JID Mimicking</a>,&rdquo; XSF XEP&nbsp;0165, July&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0174">[XEP-0174]</a></td>
-<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0174.html">Link-Local Messaging</a>,&rdquo; XSF XEP&nbsp;0174, June&nbsp;2007.</td></tr>
+<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0174.html">Link-Local Messaging</a>,&rdquo; XSF XEP&nbsp;0174, September&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0175">[XEP-0175]</a></td>
 <td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0175.html">Best Practices for Use of SASL ANONYMOUS</a>,&rdquo; XSF XEP&nbsp;0175, September&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0178">[XEP-0178]</a></td>
@@ -6288,7 +6288,7 @@ The Unicode Standard, Version 3.2.0 is defined by The Unicode Standard, Version 
 <tr><td class="author-text" valign="top"><a name="XEP-0206">[XEP-0206]</a></td>
 <td class="author-text"><a href="mailto:ian.paterson@clientside.co.uk">Paterson, I.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0206.html">XMPP Over BOSH</a>,&rdquo; XSF XEP&nbsp;0206, June&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0220">[XEP-0220]</a></td>
-<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a> and <a href="mailto:jeremie@jabber.org">J. Miller</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0220.html">Server Dialback</a>,&rdquo; XSF XEP&nbsp;0220, June&nbsp;2008.</td></tr>
+<td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a> and <a href="mailto:jeremie@jabber.org">J. Miller</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0220.html">Server Dialback</a>,&rdquo; XSF XEP&nbsp;0220, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XEP-0246">[XEP-0246]</a></td>
 <td class="author-text"><a href="mailto:stpeter@jabber.org">Saint-Andre, P.</a>, &ldquo;<a href="http://www.xmpp.org/extensions/xep-0246.html">End-to-End XML Streams</a>,&rdquo; XSF XEP&nbsp;0246, June&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XML-FRAG">[XML-FRAG]</a></td>
@@ -6298,7 +6298,7 @@ The Unicode Standard, Version 3.2.0 is defined by The Unicode Standard, Version 
 <tr><td class="author-text" valign="top"><a name="XML-SCHEMA">[XML-SCHEMA]</a></td>
 <td class="author-text">Thompson, H., Maloney, M., Mendelsohn, N., and D. Beech, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-1-20041028">XML Schema Part 1: Structures Second Edition</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xmlschema-1-20041028, October&nbsp;2004 (<a href="http://www.w3.org/TR/2004/REC-xmlschema-1-20041028">HTML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="XMPP-IM">[XMPP-IM]</a></td>
-<td class="author-text">Saint-Andre, P., &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-saintandre-rfc3921bis-05.txt">Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence</a>,&rdquo; draft-saintandre-rfc3921bis-05 (work in progress), June&nbsp;2008.</td></tr>
+<td class="author-text">Saint-Andre, P., &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-saintandre-rfc3921bis-06.txt">Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence</a>,&rdquo; draft-saintandre-rfc3921bis-06 (work in progress), July&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="XMPP-URI">[XMPP-URI]</a></td>
 <td class="author-text">Saint-Andre, P., &ldquo;<a href="ftp://ftp.isi.edu/in-notes/rfc5122.txt">Internationalized Resource Identifiers (IRIs) and Uniform Resource Identifiers (URIs) for the Extensible Messaging and Presence Protocol (XMPP)</a>,&rdquo; RFC&nbsp;5122, February&nbsp;2008.</td></tr>
 </table>
@@ -6613,7 +6613,7 @@ XML Schemas</h3>
 
 <p>Because validation of XML streams and stanzas is optional, the following XML schemas are provided for descriptive purposes only.  These schemas are not normative.
 </p>
-<p>The following schemas formally define various XML namespaces used in the core XMPP protocols, in conformance with <a class='info' href='#XML-SCHEMA'>[XML&#8209;SCHEMA]<span> (</span><span class='info'>Thompson, H., Maloney, M., Mendelsohn, N., and D. Beech, &ldquo;XML Schema Part 1: Structures Second Edition,&rdquo; October&nbsp;2004.</span><span>)</span></a>.  For schemas defining the 'jabber:client' and 'jabber:server' namespaces, refer to <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; June&nbsp;2008.</span><span>)</span></a>.
+<p>The following schemas formally define various XML namespaces used in the core XMPP protocols, in conformance with <a class='info' href='#XML-SCHEMA'>[XML&#8209;SCHEMA]<span> (</span><span class='info'>Thompson, H., Maloney, M., Mendelsohn, N., and D. Beech, &ldquo;XML Schema Part 1: Structures Second Edition,&rdquo; October&nbsp;2004.</span><span>)</span></a>.  For schemas defining the 'jabber:client' and 'jabber:server' namespaces, refer to <a class='info' href='#XMPP-IM'>[XMPP&#8209;IM]<span> (</span><span class='info'>Saint-Andre, P., &ldquo;Extensible Messaging and Presence Protocol (XMPP): Instant Messaging and  Presence,&rdquo; July&nbsp;2008.</span><span>)</span></a>.
 </p>
 <a name="schemas-streams"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -7080,8 +7080,6 @@ Differences From RFC 3920</h3>
 </li>
 <li>Specified return of &lt;restricted-xml/&gt; stream error in response to receipt of prohibited XML features.
 </li>
-<li>Specified that SASL mechanisms must be sent both before and after negotiation of SASL security layers.
-</li>
 <li>Specified that TLS plus SASL PLAIN is a mandatory-to-implement technology for client-to-server connections, since implementation of SASL EXTERNAL is uncommon in XMPP clients, in part because underlying security features such as end-user X.509 certificates are not yet widely deployed.
 </li>
 <li>Added the &lt;account-disabled/&gt;, &lt;credentials-expired/&gt;, &lt;encryption-required/&gt;, &lt;malformed-request/&gt;, and &lt;transition-needed/&gt; SASL error conditions to handle error flows mistakenly left out of RFC 3920 or discussed in RFC 4422 but not in RFC 2222.
@@ -7094,7 +7092,15 @@ Differences From RFC 3920</h3>
 </li>
 <li>Removed unnecessary requirement for escaping of characters that map to certain predefined entities, which do not need to be escaped in XML.
 </li>
-<li>More clearly specified well-formedness requirements.
+<li>Clarified process of DNS SRV lookups and fallbacks.
+</li>
+<li>Clarified handling of SASL security layers.
+</li>
+<li>Clarified handling of stream features, regularized use of the &ltl;required/&gt; child element, and defined use of the &lt;optional/&gt; child element.
+</li>
+<li>Clarified handling of data that violates the well-formedness definitions for XML 1.0 and XML namespaces.
+</li>
+<li>Specified security considerations in more detail, especially with regard to presence leaks and denial of service attacks.
 </li>
 <li>Moved historical documentation of the server dialback protocol from this specification to a separate specification maintained by the XMPP Standards Foundation.
 </li>
