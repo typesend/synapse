@@ -42,22 +42,23 @@ Special thanks to:
 
 == References
 
-  [XMPP-CORE]   -- RFC 3920 -- XMPP: Core
-  [XMPP-IM]     -- RFC 3921 -- XMPP: Instant Messaging and Presence
-  [BASE64]      -- RFC 3548 -- The Base16, Base32, and Base64 Data Encodings
-  [DIGEST-MD5]  -- RFC 2831 -- Using Digest Authentication as a SASL Mechanism
-  [PLAIN]       -- RFC 4616 -- The PLAIN SASL Mechanism
-  [STRINGPREP]  -- RFC 3454 -- Preparation of Internationalized Strings
-  [IDN]         -- RFC 3491 -- Stringprep Profile for Domain Names
-  [SASL]        -- RFC 2222 -- Simple Authentication and Security Layer
-  [SRV]         -- RFC 2782 -- DNS RR SRV
-  [TLS]         -- RFC 2246 -- Transport Layer Security
-  [IQ-VERSION]  -- XEP 0092 -- Software Verson
-  [DISCO]       -- XEP 0030 -- Service Discovery
-  [MSGOFFLINE]  -- XEP 0160 -- Best Practices for Handling Offline Messages
-  [DELAY]       -- XEP 0203 -- Delayed Delivery
-  [IQ-REGISTER] -- XEP 0077 -- In-Band Registration
-  [VCARD-TEMP]  -- XEP 0054 -- vcard-temp
+  [   XMPP-CORE] -- RFC 3920 -- XMPP: Core
+  [     XMPP-IM] -- RFC 3921 -- XMPP: Instant Messaging and Presence
+  [      BASE64] -- RFC 3548 -- The Base16, Base32, and Base64 Data Encodings
+  [  DIGEST-MD5] -- RFC 2831 -- Using Digest Authentication as a SASL Mechanism
+  [       PLAIN] -- RFC 4616 -- The PLAIN SASL Mechanism
+  [  STRINGPREP] -- RFC 3454 -- Preparation of Internationalized Strings
+  [         IDN] -- RFC 3491 -- Stringprep Profile for Domain Names
+  [        SASL] -- RFC 2222 -- Simple Authentication and Security Layer
+  [         SRV] -- RFC 2782 -- DNS RR SRV
+  [         TLS] -- RFC 2246 -- Transport Layer Security
+  [  IQ-VERSION] -- XEP 0092 -- Software Verson
+  [       DISCO] -- XEP 0030 -- Service Discovery
+  [  MSGOFFLINE] -- XEP 0160 -- Best Practices for Handling Offline Messages
+  [       DELAY] -- XEP 0203 -- Delayed Delivery
+  [ IQ-REGISTER] -- XEP 0077 -- In-Band Registration
+  [  VCARD-TEMP] -- XEP 0054 -- vcard-temp
+  [VCARD-AVATAR] -- XEP 0153 -- vCard-Based Avatar
 
 
 == Presentation

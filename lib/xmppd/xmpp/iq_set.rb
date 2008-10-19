@@ -95,7 +95,7 @@ end
 def squery_register(stanza)
     if stanza.elements['query'].elements['remove']
         unless sasl?
-            write Stanza.error(stanza, 'not-allowed', 'cancel')
+            write Stanza.error(stanza, 'forbidden', 'cancel')
             return self
         end
 
@@ -287,6 +287,13 @@ def set_bind(elem)
     recs = DB::User.users[@jid].resources
     if recs and recs.length > 10
         write Stanza.error(stanza, 'resource-constraint', 'cancel')
+        return self
+    end
+
+    # Does this stream already have a resource?
+    # We currently do not support multiple bindings.
+    unless @resource.nil?
+        write Stanza.error(stanza, 'not-allowed', 'cancel')
         return self
     end
 

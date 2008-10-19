@@ -39,6 +39,9 @@ $listeners = []
 # Logger.
 $log = nil
 
+# When we launched.
+$start = Time.now.to_f
+
 # The current epoch time.
 $time = Time.now.to_f
 

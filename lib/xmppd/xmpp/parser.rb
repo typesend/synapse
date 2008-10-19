@@ -1,6 +1,6 @@
 #
 # synapse: a small XMPP server
-# xmpp/parser.rb: parses XML
+# xmpp/parser.rb: parse and do initial XML processing
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
@@ -48,6 +48,7 @@ module Parser
 class ParserError < Exception
 end
 
+# XXX - future site of stanza rule processing a la #60.
 def dispatch(stanza)
     # Do flood checks.
     return if @flood['killed']

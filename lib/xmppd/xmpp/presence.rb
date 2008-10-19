@@ -217,6 +217,31 @@ def presence_subscribe(elem)
     end
 end
 
+def presence_unsubscribe(elem)
+    if not elem.attributes['to'] or elem.attributes['to'].include?('/')
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return
+    end
+
+    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
+        write Stanza.error(elem, 'feature-not-implented', 'cancel')
+        return
+    end
+
+    suser = DB::User.users[elem.attributes['to']]
+
+    unless suser
+        write Stanza.error(elem, 'item-not-found', 'cancel')
+        return
+    end
+
+    # Update our roster entry.
+    myc = @resource.user.roster[suser.jid]
+    route = true
+
+#    if not myc
+end
+
 def presence_subscribed(elem)
     if not elem.attributes['to'] or elem.attributes['to'].include?('/')
         write Stanza.error(elem, 'bad-request', 'modify')
@@ -337,6 +362,32 @@ def presence_subscribed(elem)
         @resource.send_presence(rec)
     end
 end
+
+def presence_unsubscribed(elem)
+    if not elem.attributes['to'] or elem.attributes['to'].include?('/')
+        write Stanza.error(elem, 'bad-request', 'modify')
+        return
+    end
+
+    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
+        write Stanza.error(elem, 'feature-not-implented', 'cancel')
+        return
+    end
+
+    suser = DB::User.users[elem.attributes['to']]
+
+    unless suser
+        write Stanza.error(elem, 'item-not-found', 'cancel')
+        return
+    end
+
+    # Update our roster entry.
+    myc = @resource.user.roster[suser.jid]
+    route = true
+
+#    if not myc
+end
+
 
 end # module Presence
 end # module XMPP

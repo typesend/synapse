@@ -1,4 +1,86 @@
 ------------------------------------------------------------------------
+r89 | rakaur | 2008-10-18 16:37:19 -0400 (Sat, 18 Oct 2008) | 1 line
+Changed paths:
+   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html
+   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt
+   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html
+   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt
+   A /trunk/doc/drafts/html/draft-saintandre-rfc3920bis-08.html (from /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html:88)
+   A /trunk/doc/drafts/html/draft-saintandre-rfc3921bis-07.html (from /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html:88)
+   A /trunk/doc/drafts/text/draft-saintandre-rfc3920bis-08.txt (from /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt:88)
+   A /trunk/doc/drafts/text/draft-saintandre-rfc3921bis-07.txt (from /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt:88)
+
+Just updating some documentation.
+------------------------------------------------------------------------
+r88 | rakaur | 2008-10-18 16:35:15 -0400 (Sat, 18 Oct 2008) | 1 line
+Changed paths:
+   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.html
+   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.txt
+   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html
+   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt
+   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.html
+   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.txt
+   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html
+   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt
+   A /trunk/doc/drafts/html
+   A /trunk/doc/drafts/text
+   A /trunk/doc/drafts/xml
+   A /trunk/doc/drafts/xml/draft-saintandre-rfc3920bis-08.xml
+   A /trunk/doc/drafts/xml/draft-saintandre-rfc3921bis-07.xml
+   A /trunk/doc/extensions/html
+   A /trunk/doc/extensions/html/xep-0030.html (from /trunk/doc/extensions/xep-0030.html:83)
+   A /trunk/doc/extensions/html/xep-0054.html
+   A /trunk/doc/extensions/html/xep-0077.html (from /trunk/doc/extensions/xep-0077.html:83)
+   A /trunk/doc/extensions/html/xep-0092.html (from /trunk/doc/extensions/xep-0092.html:83)
+   A /trunk/doc/extensions/html/xep-0160.html (from /trunk/doc/extensions/xep-0160.html:83)
+   A /trunk/doc/extensions/html/xep-0186.html (from /trunk/doc/extensions/xep-0186.html:83)
+   A /trunk/doc/extensions/html/xep-0203.html (from /trunk/doc/extensions/xep-0203.html:83)
+   A /trunk/doc/extensions/html/xmpp.css (from /trunk/doc/extensions/xmpp.css:83)
+   D /trunk/doc/extensions/xep-0030.html
+   D /trunk/doc/extensions/xep-0077.html
+   D /trunk/doc/extensions/xep-0092.html
+   D /trunk/doc/extensions/xep-0160.html
+   D /trunk/doc/extensions/xep-0186.html
+   D /trunk/doc/extensions/xep-0203.html
+   A /trunk/doc/extensions/xml
+   A /trunk/doc/extensions/xml/xep-0030.xml
+   A /trunk/doc/extensions/xml/xep-0054.xml
+   A /trunk/doc/extensions/xml/xep-0077.xml
+   A /trunk/doc/extensions/xml/xep-0092.xml
+   A /trunk/doc/extensions/xml/xep-0160.xml
+   A /trunk/doc/extensions/xml/xep-0186.xml
+   A /trunk/doc/extensions/xml/xep-0203.xml
+   D /trunk/doc/extensions/xmpp.css
+   A /trunk/doc/rfcs/html
+   A /trunk/doc/rfcs/html/rfc3920.html (from /trunk/doc/rfcs/rfc3920.html:83)
+   A /trunk/doc/rfcs/html/rfc3921.html (from /trunk/doc/rfcs/rfc3921.html:83)
+   D /trunk/doc/rfcs/rfc3920.html
+   D /trunk/doc/rfcs/rfc3920.txt
+   D /trunk/doc/rfcs/rfc3921.html
+   D /trunk/doc/rfcs/rfc3921.txt
+   A /trunk/doc/rfcs/text
+   A /trunk/doc/rfcs/text/rfc3920.txt (from /trunk/doc/rfcs/rfc3920.txt:83)
+   A /trunk/doc/rfcs/text/rfc3921.txt (from /trunk/doc/rfcs/rfc3921.txt:83)
+   A /trunk/doc/rfcs/xml
+   A /trunk/doc/rfcs/xml/rfc3920.xml
+   A /trunk/doc/rfcs/xml/rfc3921.xml
+
+Just updating some documentation.
+------------------------------------------------------------------------
+r87 | rakaur | 2008-10-17 14:32:27 -0400 (Fri, 17 Oct 2008) | 3 lines
+Changed paths:
+   M /trunk/ChangeLog
+   M /trunk/README
+   M /trunk/lib/xmppd/db.rb
+   M /trunk/lib/xmppd/xmpp/iq_get.rb
+   M /trunk/lib/xmppd/xmpp/iq_set.rb
+   M /trunk/lib/xmppd/xmpp/resource.rb
+   M /trunk/lib/xmppd.rb
+
+Add support for vcard-temp, closes #22.
+Fixed some bugs in special handlers in XMPP::Resource.send_iq.
+
+------------------------------------------------------------------------
 r86 | rakaur | 2008-10-17 10:43:56 -0400 (Fri, 17 Oct 2008) | 4 lines
 Changed paths:
    M /trunk/ChangeLog
