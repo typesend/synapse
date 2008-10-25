@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
-# $Id$
+# $Id: presence.rb 90 2008-10-19 04:46:48Z rakaur $
 #
 
 #
@@ -239,7 +239,129 @@ def presence_unsubscribe(elem)
     myc = @resource.user.roster[suser.jid]
     route = true
 
-#    if not myc
+@logger.unknown "%s unsub -> %s" % [@resource.user.jid, suser.jid]
+
+@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
+                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
+
+    if not myc
+        # No state change.
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out? and myc.pending_in?
+            myc.pending_out = false
+        elsif myc.pending_out?
+            myc.pending_out = false
+        elsif myc.pending_in?
+            # No state change.
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            myc.subscription = 'none'
+        elsif myc.pending_in?
+            myc.subscription = 'none'
+        end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out?
+            myc.pending_out = false
+        end
+    elsif myc.subscription == 'both'
+        myc.subscription = 'from'
+    end
+
+@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
+                [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
+
+    # XXX - route
+
+    # Update their roster entry.
+    myc       = suser.roster[@resource.user.jid]
+    autoreply = false
+    deliver   = false
+
+@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
+                [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
+
+    if not myc
+        # No state change.
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out? and myc.pending_in?
+            myc.pending_in = false
+            authreply = true
+        elsif myc.pending_out?
+            # No state change.
+        elsif myc.pending_in?
+            myc.pending_in = false
+            autoreply = true
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_in?
+            myc.pending_in = false
+            autoreply = true
+        end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            myc.subscription = 'none'
+            autoreply = true
+        elsif myc.pending_out?
+            myc.subscription = 'none'
+            autoreply = true
+        end
+    elsif myc.subscription == 'both'
+        myc.subscription = 'to'
+        autoreply = true
+    end
+
+    if autoreply
+        presence = REXML::Element.new('presence')
+        presence.add_attribute('from', suser.jid)
+        presence.add_attribute('to', @resource.user.jid)
+        presence.add_attribute('type', 'unsubscribed')
+    @logger.unknown "Autoreplying to #{@resource.user.jid} " +
+                    "on behalf of #{suser.jid}"
+        suser.resources.each do |n, rec|
+            rec.send_directed_presence(@resource.user.jid, presence)
+            rec.dp_to.delete_if { |to| to =~ /#{suser.jid}/ }
+        end
+    end
+
+@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
+                [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
+
+    # Roster push to all of our resources.
+    if @resource.user.roster[suser.jid]
+        iq    = Stanza.new_iq('set')
+        query = Stanza.new_query('jabber:iq:roster')
+
+        query << @resource.user.roster[suser.jid].to_xml
+        iq    << query
+
+        @resource.user.resources.each do |n, rec|
+            next unless rec.interested?
+            rec.stream.write iq
+        end
+    end
+
+    # Roster push to all of their resources.
+    if suser.roster[@resource.user.jid]
+        iq    = Stanza.new_iq('set')
+        query = Stanza.new_query('jabber:iq:roster')
+
+        query << suser.roster[@resource.user.jid].to_xml
+        iq    << query
+
+        suser.resources.each do |n, rec|
+            next unless rec.interested?
+            rec.stream.write iq
+        end
+    end
 end
 
 def presence_subscribed(elem)
@@ -385,9 +507,119 @@ def presence_unsubscribed(elem)
     myc = @resource.user.roster[suser.jid]
     route = true
 
-#    if not myc
-end
+@logger.unknown "%s unsub'd -> %s" % [@resource.user.jid, suser.jid]
 
+@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
+                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
+
+    if not myc
+        # No state change.
+        route = false
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+            route = false
+        elsif myc.pending_out? and myc.pending_in?
+            myc.pending_in = false
+        elsif myc.pending_out?
+            # No state change.
+        elsif myc.pending_in?
+            myc.pending_in = false
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            # No state change.
+            route = false
+        elsif myc.pending_in?
+            myc.pending_in = false
+         end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            myc.subscription = 'none'
+        elsif myc.pending_out?
+            myc.subscription = 'none'
+        end
+    elsif myc.subscription == 'both'
+        myc.subscription = 'to'
+    end
+
+@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
+                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
+
+    # XXX - route
+
+    # Update their roster entry.
+    myc = suser.roster[@resource.user.jid]
+    deliver = false
+
+@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
+                 [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
+
+    if not myc
+        # No state change.
+    elsif myc.subscription == 'none'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out? and myc.pending_in?
+            myc.pending_out = false
+        elsif myc.pending_out?
+            myc.pending_out = false
+        elsif myc.pending_in?
+            # No state change.
+        end
+    elsif myc.subscription == 'to'
+        if myc.pending_none?
+            myc.subscription = 'none'
+        elsif myc.pending_in?
+            myc.subscription = 'none'
+        end
+    elsif myc.subscription == 'from'
+        if myc.pending_none?
+            # No state change.
+        elsif myc.pending_out?
+            myc.pending_out = false
+        end
+    elsif myc.subscription == 'both'
+        myc.subscription = 'from'
+    end
+
+@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
+                 [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
+
+    # Only do the below if we route.
+    return unless route
+
+    elem.add_attribute('from', @resource.user.jid)
+    @resource.send_directed_presence(elem.attributes['to'], elem)
+    @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+
+    # Roster push to all of our resources.
+    iq    = Stanza.new_iq('set')
+    query = Stanza.new_query('jabber:iq:roster')
+
+    query << @resource.user.roster[suser.jid].to_xml
+    iq    << query
+
+    @resource.user.resources.each do |n, rec|
+        next unless rec.interested?
+
+        rec.stream.write iq
+    end
+
+    # Roster push to all of their resources.
+    if suser.roster[@resource.user.jid]
+        iq    = Stanza.new_iq('set')
+        query = Stanza.new_query('jabber:iq:roster')
+
+        query << suser.roster[@resource.user.jid].to_xml
+        iq    << query
+
+        suser.resources.each do |n, rec|
+            next unless rec.interested?
+            rec.stream.write iq
+        end
+    end
+end
 
 end # module Presence
 end # module XMPP

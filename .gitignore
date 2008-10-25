@@ -1,0 +1,7 @@
+etc/REAL.pem
+etc/ssl.crt
+etc/ssl.key
+etc/xmppd.conf
+etc/xmppd.pem
+var/
+

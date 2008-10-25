@@ -192,7 +192,7 @@ end
 
 # This implements XEP-0077.
 def gquery_register(stanza)
-    iq    = Stanza.new_iq(result, stanza.attributes['id'])
+    iq    = Stanza.new_iq('result', stanza.attributes['id'])
     query = Stanza.new_query('jabber:iq:register')
 
     if sasl?

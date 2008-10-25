@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2006 Eric Will <rakaur@malkier.net>
 #
-# $Id$
+# $Id: db.rb 90 2008-10-19 04:46:48Z rakaur $
 #
 
 #
@@ -350,7 +350,6 @@ class User
 
                     item.add_attribute('jid', j)
                     item.add_attribute('subscription', 'remove')
-                    puts "added the attributes.."
 
                     query << item
                     iq    << query
@@ -399,8 +398,8 @@ class Contact
     ######
 
     def subscription=(value)
-        unless value =~ /^(to|from|both)$/
-            raise ArgumentError, "subscription must be 'to', 'from', or 'both'"
+        unless value =~ /^(to|from|both|none)$/
+            raise ArgumentError, 'subscription must be /(to|from|both|none)/'
         end
 
         @subscription = value

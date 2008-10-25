@@ -4,7 +4,7 @@
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
 #
-# $Id$
+# $Id: iq_set.rb 90 2008-10-19 04:46:48Z rakaur $
 #
 
 # Import required Ruby modules.
@@ -205,9 +205,9 @@ def squery_roster(stanza)
             return self
         end
 
-        @resource.user.delete_contact(jid)
-
         write Stanza.new_iq('result', stanza.attributes['id'])
+@logger.unknown "%s is removing %s from roster" % \
+                [@resource.user.jid, user.jid]
 
         stanza.add_attribute('id', 'push' + rand(1000000).to_s)
         stanza.delete_attribute('from')
@@ -219,22 +219,33 @@ def squery_roster(stanza)
 
         # Subscription stuff?
         if @resource.user.subscribed?(user)
+@logger.unknown "%s is subscribed to %s, sending unsub" % \
+                [@resource.user.jid, user.jid]
+
             presence = REXML::Element.new('presence')
             presence.add_attribute('type', 'unsubscribe')
             presence.add_attribute('to', jid)
             presence.add_attribute('from', @resource.user.jid)
-            # XXX do the presence stuff
+
             @resource.send_directed_presence(jid, presence)
+            presence_unsubscribe(presence)
         end
 
         if user.subscribed?(@resource.user)
+@logger.unknown "%s is subscribed to %s, sending unsub'd" % \
+                [user.jid, @resource.user.jid]
+
             presence = REXML::Element.new('presence')
             presence.add_attribute('type', 'unsubscribed')
             presence.add_attribute('to', jid)
             presence.add_attribute('from', @resource.user.jid)
-            # XXX do the presence stuff
+
             @resource.send_directed_presence(jid, presence)
+            presence_unsubscribed(presence)
         end
+
+        #@resource.user.clean_roster
+        #user.clean_roster
 
         return self
     end
