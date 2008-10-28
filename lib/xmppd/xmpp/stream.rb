@@ -392,6 +392,9 @@ class Stream
 
     # This module defines our parsing methods.
     include XMPP::Parser
+    
+    # This module defines our processing methods.
+    include XMPP::Process
 
     #
     # Resolve a host and port for a remote server.

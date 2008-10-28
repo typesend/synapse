@@ -48,10 +48,34 @@ module Parser
 class ParserError < Exception
 end
 
-# XXX - future site of stanza rule processing a la #60.
-def dispatch(stanza)
-    # Do flood checks.
-    return if @flood['killed']
+STANZAS = ['stream', 'starttls', 'auth', 'response',
+           'iq', 'presence', 'message']
+
+def preprocess_stanza(stanza)
+    # Do flood checks.  
+    return if flooding? if @resource and not @resource.user.operator?
+    
+    # Is it a legal stanza type?
+    unless STANZAS.include?(stanza.name)
+        if client?
+            $log.c2s.error "Unknown stanza from #{@host}: " +
+                           "'#{stanza.name}' (no '#{methname}')"
+        else
+            $log.s2s.error "Unknown stanza from #{@host}: " +
+                           "'#{stanza.name}' (no '#{methname}')"
+        end
+
+        error('invalid-namespace')
+        
+        return
+    end
+    
+    # Run through stanza processing rules specific by section 11 in RFC3290.
+    process_stanza(stanza)
+end  
+
+def flooding?
+    return true if @flood['killed']
 
     # Reset the timer if they're below the rate limits.
     if ($time - @flood['mtime']) > 10 or not message_ready?
@@ -67,24 +91,9 @@ def dispatch(stanza)
         error('policy-violation', { 'name' => 'rate-limit-exceeded',
                                     'text' => '>30 stanzas in <10 seconds' })
 
-        return
-    end unless @resource.user.operator? if @resource
-
-    methname = "handle_#{stanza.name}"
-
-    unless respond_to?(methname)
-        if client?
-            $log.c2s.error "Unknown stanza from #{@host}: " +
-                           "'#{stanza.name}' (no '#{methname}')"
-        else
-            $log.s2s.error "Unknown stanza from #{@host}: " +
-                           "'#{stanza.name}' (no '#{methname}')"
-        end
-
-        error('invalid-namespace')
-    else
-        send(methname, stanza)
+        return true
     end
+    return false
 end
 
 def parser_initialize
@@ -107,7 +116,7 @@ def parser_initialize
         if qname == 'stream:stream' and @current.nil?
             close
         else
-            dispatch(@current) unless @current.parent
+            preprocess_stanza(@current) unless @current.parent
             @current = @current.parent
         end
     end
