@@ -48,7 +48,7 @@ def handle_presence(elem)
         send(methname, elem)
     end
 end
- 
+
 # No type signals avilability.
 def presence_none(elem)
     if elem.attributes['to']

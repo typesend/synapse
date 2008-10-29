@@ -302,7 +302,6 @@ class Resource
             return self
         end
         
-
         # Are they online?
         unless user.available?
             @stream.write Stanza.error(stanza, 'service-unavailable', 'cancel')
@@ -325,64 +324,6 @@ class Resource
         to_stream.write stanza
 
         self
-    end
-
-    def send_message(stanza)
-        # Separate out the JID parts.
-        node,   domain   = stanza.attributes['to'].split('@')
-        domain, resource = domain.split('/')
-
-        # Check to see if it's to a remote user.
-        unless $config.hosts.include?(domain)
-            @stream.write Stanza.error(stanza, 'feature-not-implemented',
-                                       'cancel')
-            return
-        end
-
-        # Must be to a local user.
-        user = DB::User.users[node + '@' + domain]
-
-        unless user
-            @stream.write Stanza.error(stanza, 'service-unavailable', 'cancel')
-            return
-        end
-
-        # Are they online?
-        # XXX - this gets stored plain in the db... maybe zlib it?
-        unless user.available?
-            return unless stanza.name == 'message'
-            return if stanza.attributes['type'] == 'groupchat'
-            return if stanza.attributes['type'] == 'headline'
-            return if stanza.attributes['type'] == 'error'
-
-            # This implements XEP-0203.
-            datetime = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-            delay = REXML::Element.new('delay')
-            delay.add_attribute('stamp', datetime)
-            delay.add_attribute('from', @myhost)
-            delay.add_namespace('urn:xmpp:delay')
-            delay.text = 'Offline Storage'
-
-            stanza << delay
-            user.offline_stanzas['message'] << stanza.to_s
-
-            return
-        end
-
-        # If it's to a specific resource, try to find it.
-        if resource and user.resources[resource]
-            to_stream = user.resources[resource].stream
-        else
-            to_stream = user.front_resource.stream
-
-            # The spec is silent on whether we should rewrite the 'to'.
-            # Since it says to treat it as a bare JID, I think rewriting
-            # it is best.
-            stanza.attributes['to'] = user.jid
-        end
-
-        # And deliver!
-        to_stream.write stanza
     end
 end
 

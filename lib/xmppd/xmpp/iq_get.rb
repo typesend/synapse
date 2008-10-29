@@ -279,40 +279,22 @@ def get_vCard(elem)
         write Stanza.error(stanza, 'bad-request', 'modify')
         return self
     end
-
-    # Separate out the JID parts.
-    jid              = stanza.attributes['to']
-    jid            ||= @resource.jid
-    node,   domain   = jid.split('@')
-    domain, resource = domain.split('/')
+    
+    # We don't have to worry about 'to' here.
+    # If we're here, it's for this user.
 
     vcard = @resource.user.vcard
 
-    unless jid == @resource.jid
-        # Must be to a local user.
-        user = DB::User.users[node + '@' + domain]
-
-        unless user and @resource.user.subscribed?(user)
-            write Stanza.error(stanza, 'service-unavailable', 'cancel')
-            return
-        end
-
-        vcard = user.vcard
-    end
-
     if not vcard or vcard.empty?
+        # The XEP says to do this, but most clients expect just an empty one.
         #write Stanza.error(stanza, 'item-not-found', 'cancel')
         #return self
 
-        write %{<iq type='result' id='#{stanza.attributes['id']}' } +
-              %{from='#{jid}'><vCard xmlns='vcard-temp'/></iq>} 
-
-        return self
+        vcard = "<vCard xmlns='vcard-temp'/>"
     end
 
     # I need to build this myself. Just suffice it to say REXML blows.
-    write %{<iq type='result' id='#{stanza.attributes['id']}' } +
-          %{from='#{jid}'>#{vcard}</iq>}
+    write %{<iq type='result' id='#{stanza.attributes['id']}'>#{vcard}</iq>}
 end
 
 end # module GET
