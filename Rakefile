@@ -39,14 +39,22 @@ Rake::TestTask.new do |t|
 end
 
 #
-# Subversion stuff.
+# git stuff.
+#
+# $ rake push
+#
+desc 'Push current repository to git origin'
+task :push => [:check_commit] do
+    sh 'git push origin master'
+end
+
 #
 # $ rake commit
 #
 desc 'Commit current working copy'
 task :commit => [:clobber, :test] do
-    sh 'svn log -vrHEAD:1 > ChangeLog'
-    sh 'svn commit --editor-cmd=vi'   
+    sh 'git log --stat=80 > ChangeLog'
+    sh 'git commit -a'   
 end
 
 #
@@ -71,8 +79,10 @@ end
 
 task :check_commit do
     print '>>> checking that working copy is in sync... '      
+
+    statln = `git status | wc -l`.gsub(/\s/, '')
  
-    unless `svn status`.empty?
+    unless statln == '2' or statln == '4'
         puts 'no'
         puts "You need to `rake commit' first."
         exit
@@ -87,7 +97,7 @@ task :update_version => [:check_ver] do
     t = Time.now
 
     release_date = '%s-%s-%s' % [t.year.to_s, t.month.to_s, t.day.to_s]
-    svn_version = 'r' << `svnversion -n .`
+    git_version = `git log HEAD^..HEAD | grep commit`.gsub('commit ', '').chomp
 
     open('lib/xmppd/version.rb', 'w') do |f|
         f.puts '#'
@@ -96,15 +106,13 @@ task :update_version => [:check_ver] do
         f.puts '#'
         f.puts '# Copyright (c) 2006 Eric Will <rakaur@malkier.net>'
         f.puts '#'
-        f.puts '# $Id$'
-        f.puts '#'
         f.puts
         f.puts "$version = '%s'" % ENV['VER']
         f.puts "$release_date = '%s'" % release_date
-        f.puts "$svn_version = '%s'" % svn_version
+        f.puts "$git_version = '%s'" % git_version
     end
 
-    puts '%s (%s)' % [ENV['VER'], svn_version]
+    puts '%s (%s)' % [ENV['VER'], git_version]
 end
 #
 # Documentation generation.

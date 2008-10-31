@@ -1,1221 +1,1421 @@
-------------------------------------------------------------------------
-r89 | rakaur | 2008-10-18 16:37:19 -0400 (Sat, 18 Oct 2008) | 1 line
-Changed paths:
-   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html
-   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt
-   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html
-   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt
-   A /trunk/doc/drafts/html/draft-saintandre-rfc3920bis-08.html (from /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html:88)
-   A /trunk/doc/drafts/html/draft-saintandre-rfc3921bis-07.html (from /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html:88)
-   A /trunk/doc/drafts/text/draft-saintandre-rfc3920bis-08.txt (from /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt:88)
-   A /trunk/doc/drafts/text/draft-saintandre-rfc3921bis-07.txt (from /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt:88)
-
-Just updating some documentation.
-------------------------------------------------------------------------
-r88 | rakaur | 2008-10-18 16:35:15 -0400 (Sat, 18 Oct 2008) | 1 line
-Changed paths:
-   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.html
-   D /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.txt
-   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.html
-   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-08.txt
-   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.html
-   D /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.txt
-   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.html
-   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-07.txt
-   A /trunk/doc/drafts/html
-   A /trunk/doc/drafts/text
-   A /trunk/doc/drafts/xml
-   A /trunk/doc/drafts/xml/draft-saintandre-rfc3920bis-08.xml
-   A /trunk/doc/drafts/xml/draft-saintandre-rfc3921bis-07.xml
-   A /trunk/doc/extensions/html
-   A /trunk/doc/extensions/html/xep-0030.html (from /trunk/doc/extensions/xep-0030.html:83)
-   A /trunk/doc/extensions/html/xep-0054.html
-   A /trunk/doc/extensions/html/xep-0077.html (from /trunk/doc/extensions/xep-0077.html:83)
-   A /trunk/doc/extensions/html/xep-0092.html (from /trunk/doc/extensions/xep-0092.html:83)
-   A /trunk/doc/extensions/html/xep-0160.html (from /trunk/doc/extensions/xep-0160.html:83)
-   A /trunk/doc/extensions/html/xep-0186.html (from /trunk/doc/extensions/xep-0186.html:83)
-   A /trunk/doc/extensions/html/xep-0203.html (from /trunk/doc/extensions/xep-0203.html:83)
-   A /trunk/doc/extensions/html/xmpp.css (from /trunk/doc/extensions/xmpp.css:83)
-   D /trunk/doc/extensions/xep-0030.html
-   D /trunk/doc/extensions/xep-0077.html
-   D /trunk/doc/extensions/xep-0092.html
-   D /trunk/doc/extensions/xep-0160.html
-   D /trunk/doc/extensions/xep-0186.html
-   D /trunk/doc/extensions/xep-0203.html
-   A /trunk/doc/extensions/xml
-   A /trunk/doc/extensions/xml/xep-0030.xml
-   A /trunk/doc/extensions/xml/xep-0054.xml
-   A /trunk/doc/extensions/xml/xep-0077.xml
-   A /trunk/doc/extensions/xml/xep-0092.xml
-   A /trunk/doc/extensions/xml/xep-0160.xml
-   A /trunk/doc/extensions/xml/xep-0186.xml
-   A /trunk/doc/extensions/xml/xep-0203.xml
-   D /trunk/doc/extensions/xmpp.css
-   A /trunk/doc/rfcs/html
-   A /trunk/doc/rfcs/html/rfc3920.html (from /trunk/doc/rfcs/rfc3920.html:83)
-   A /trunk/doc/rfcs/html/rfc3921.html (from /trunk/doc/rfcs/rfc3921.html:83)
-   D /trunk/doc/rfcs/rfc3920.html
-   D /trunk/doc/rfcs/rfc3920.txt
-   D /trunk/doc/rfcs/rfc3921.html
-   D /trunk/doc/rfcs/rfc3921.txt
-   A /trunk/doc/rfcs/text
-   A /trunk/doc/rfcs/text/rfc3920.txt (from /trunk/doc/rfcs/rfc3920.txt:83)
-   A /trunk/doc/rfcs/text/rfc3921.txt (from /trunk/doc/rfcs/rfc3921.txt:83)
-   A /trunk/doc/rfcs/xml
-   A /trunk/doc/rfcs/xml/rfc3920.xml
-   A /trunk/doc/rfcs/xml/rfc3921.xml
-
-Just updating some documentation.
-------------------------------------------------------------------------
-r87 | rakaur | 2008-10-17 14:32:27 -0400 (Fri, 17 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd.rb
-
-Add support for vcard-temp, closes #22.
-Fixed some bugs in special handlers in XMPP::Resource.send_iq.
-
-------------------------------------------------------------------------
-r86 | rakaur | 2008-10-17 10:43:56 -0400 (Fri, 17 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd.rb
-
-Fix some typos.
-Add roster pruning/cleaning/etc timer, closes #65.
-Fuck Ruby's threads.
-
-------------------------------------------------------------------------
-r85 | rakaur | 2008-10-16 20:19:04 -0400 (Thu, 16 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-
-Cleaned up lots of XML generation stuff, closes #63.
-
-------------------------------------------------------------------------
-r84 | rakaur | 2008-10-16 16:29:01 -0400 (Thu, 16 Oct 2008) | 8 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-
-Fixed a bug in SASL DIGEST-MD5. Now processes optional authzid properly.
-Fixed a crash in presence.rb when checking for offline messages.
-Fixed a crash in db.rb when checking for front-resource.
-Cleaned up the presence subscriptions a little bit.
-Added processing of roster sets. This implements adding, modifying, and removing roster items, closes #40.
-Fixed a typo in resource.rb: stana => stanza.
-Simplified some to_xml methods in db.rb.
-
-------------------------------------------------------------------------
-r83 | rakaur | 2008-10-14 13:33:18 -0400 (Tue, 14 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-
-Haven't committed in a long time. Been working on presence stuff. It sucks.
-In this commit subscribe/subscribed work so far. They're not pretty. All the details aren't there yet.
-Still have a ways to go, see #62.
-
-------------------------------------------------------------------------
-r82 | rakaur | 2008-10-09 16:34:14 -0400 (Thu, 09 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-
-Added removal of users via jabber:iq:register. It's not perfect yet.
-Added resource limiting, closes #55.
-
-------------------------------------------------------------------------
-r81 | rakaur | 2008-10-09 12:24:28 -0400 (Thu, 09 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   A /trunk/doc/extensions/xep-0030.html
-   A /trunk/doc/extensions/xep-0077.html
-   A /trunk/doc/extensions/xep-0092.html
-   A /trunk/doc/extensions/xep-0160.html
-   A /trunk/doc/extensions/xep-0203.html
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/iq.rb
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/message.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Implemented XEP-0077, closes #5.
-Fixed some bugs.
-
-------------------------------------------------------------------------
-r80 | rakaur | 2008-10-08 17:21:27 -0400 (Wed, 08 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/iq.rb
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-   M /trunk/lib/xmppd/xmpp/message.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Another big commit. Implemented Service Discovery, which closes #15.
-Reworked the IQ stanza stuff, which closes #56.
-I think the processing works now, still need to look at presence. See #60.
-
-------------------------------------------------------------------------
-r79 | rakaur | 2008-10-07 23:37:27 -0400 (Tue, 07 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-
-Implement XEP-0092, software version. Closes #23.
-
-------------------------------------------------------------------------
-r78 | rakaur | 2008-10-07 20:44:50 -0400 (Tue, 07 Oct 2008) | 5 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/bin/xmppd
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/iq.rb
-   M /trunk/lib/xmppd/xmpp/iq_get.rb
-   M /trunk/lib/xmppd/xmpp/iq_set.rb
-   A /trunk/lib/xmppd/xmpp/message.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-   M /trunk/lib/xmppd/xmpp.rb
-   M /trunk/lib/xmppd.rb
-   M /trunk/test/ts_xmppd.rb
-
-Big commit.
-Add message stuff, including offline messages (XEP-0160) with delay (XEP-0203). Closes #16 and #57.
-Fix up IQ stuff a little more.
-General cleanups.
-
-------------------------------------------------------------------------
-r77 | rakaur | 2008-10-07 14:36:25 -0400 (Tue, 07 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/doc/object_tree.txt
-   M /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/configure/parser.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/iq.rb
-   A /trunk/lib/xmppd/xmpp/iq_get.rb
-   A /trunk/lib/xmppd/xmpp/iq_set.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/test/tc_db.rb
-
-Resorted the IQ stuff. Still not sure I'm happy with it. See #56.
-Fixed a few random things.
-
-------------------------------------------------------------------------
-r76 | rakaur | 2008-10-07 10:11:17 -0400 (Tue, 07 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/doc/object_tree.txt
-   D /trunk/lib/xmppd/xmpp/client_iq.rb
-   D /trunk/lib/xmppd/xmpp/client_presence.rb
-   A /trunk/lib/xmppd/xmpp/iq.rb (from /trunk/lib/xmppd/xmpp/client_iq.rb:75)
-   A /trunk/lib/xmppd/xmpp/presence.rb (from /trunk/lib/xmppd/xmpp/client_presence.rb:75)
-
-Just cleaning some stuff up.
-IQ and Presence don't need to be under Client. Gotta start refactoring via #56.
-
-------------------------------------------------------------------------
-r75 | rakaur | 2008-10-07 10:02:23 -0400 (Tue, 07 Oct 2008) | 1 line
-Changed paths:
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-
-Intermediate commit to get svn to shut up.
-------------------------------------------------------------------------
-r74 | rakaur | 2008-10-07 09:27:30 -0400 (Tue, 07 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/doc/object_tree.txt
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-
-Continue the documentation saga.
-
-------------------------------------------------------------------------
-r73 | rakaur | 2008-10-06 18:56:36 -0400 (Mon, 06 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-
-Continuing the documentation saga.
-IQ handling is just... ugh... need to rework it, see #56.
-
-------------------------------------------------------------------------
-r72 | rakaur | 2008-10-06 15:19:10 -0400 (Mon, 06 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Continue the documentation effort.
-
-------------------------------------------------------------------------
-r71 | rakaur | 2008-10-06 10:50:23 -0400 (Mon, 06 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Added rate limiting, closing #51.
-
-------------------------------------------------------------------------
-r70 | rakaur | 2008-10-06 07:41:00 -0400 (Mon, 06 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/Rakefile
-   M /trunk/etc/example.conf
-   A /trunk/lib/xmppd/base64.rb
-   M /trunk/lib/xmppd/configure/auth.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/timer.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Fixed timeouts, closing #48.
-Make some fixes for ruby19. Won't run yet because IDN doesn't work.
-
-------------------------------------------------------------------------
-r69 | rakaur | 2008-10-05 10:54:41 -0400 (Sun, 05 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-This commit doesn't work. Trying to stamp out a bug.
-
-------------------------------------------------------------------------
-r68 | rakaur | 2008-10-05 00:36:23 -0400 (Sun, 05 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Changed the resource binding to not modify a client's provided resource.
-
-------------------------------------------------------------------------
-r67 | rakaur | 2008-10-04 19:45:01 -0400 (Sat, 04 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Move some stuff from Stream#close to ClientStream#close where it should have been.
-Fix some typos in resource.rb.
-Document the hell out of stream.rb.
-
-------------------------------------------------------------------------
-r66 | rakaur | 2008-10-04 14:51:23 -0400 (Sat, 04 Oct 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Got rid of the useless Stanza classes. Just pass the REXML::Elements now. Closes #53.
-Also, documented the hell out of resource.rb. Going to keep on doing this. Part of #31.
-
-------------------------------------------------------------------------
-r65 | rakaur | 2008-10-03 13:33:37 -0400 (Fri, 03 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-
-Fixed the certfile stuff so it only asks for the password once.
-
-------------------------------------------------------------------------
-r64 | rakaur | 2008-10-02 18:28:28 -0400 (Thu, 02 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Fixed some bugs with available resources. A resource may now become available after being unavailable and everything works right.
-Finished directed presence, which finishes off presence, closing #41.
-Imposed a stanza limit of 65536. There is currently no standard for handling this, see #50.
-
-------------------------------------------------------------------------
-r63 | rakaur | 2008-10-02 12:25:42 -0400 (Thu, 02 Oct 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-   M /trunk/lib/xmppd.rb
-
-Fixed up the parser to kind of work.
-Cleaned up the REXML creation stuff.
-Added a limit on the buffer waiting to be parsed.
-
-------------------------------------------------------------------------
-r62 | rakaur | 2008-10-01 10:08:21 -0400 (Wed, 01 Oct 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   M /trunk/Rakefile
-   M /trunk/bin/xmppd
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/configure/auth.rb
-   M /trunk/lib/xmppd/configure/configuration.rb
-   M /trunk/lib/xmppd/configure/deny.rb
-   M /trunk/lib/xmppd/configure/listen.rb
-   M /trunk/lib/xmppd/configure/logging.rb
-   M /trunk/lib/xmppd/configure/operator.rb
-   M /trunk/lib/xmppd/configure/parser.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/log.rb
-   M /trunk/lib/xmppd/timer.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/version.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-   M /trunk/lib/xmppd/xmpp.rb
-   M /trunk/lib/xmppd.rb
-   M /trunk/test/tc_config.rb
-   M /trunk/test/tc_db.rb
-   M /trunk/test/tc_logging.rb
-   M /trunk/test/tc_stream.rb
-   M /trunk/test/tc_timer.rb
-   M /trunk/test/ts_xmppd.rb
-
-Named 'synapse.' Fitting, I think.
-
-------------------------------------------------------------------------
-r61 | rakaur | 2008-09-30 17:25:19 -0400 (Tue, 30 Sep 2008) | 1 line
-Changed paths:
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Clean up some stuff.
-------------------------------------------------------------------------
-r60 | rakaur | 2008-09-30 17:05:47 -0400 (Tue, 30 Sep 2008) | 1 line
-Changed paths:
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-
-Fixing svn:keywords.
-------------------------------------------------------------------------
-r59 | rakaur | 2008-09-30 16:58:41 -0400 (Tue, 30 Sep 2008) | 6 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   A /trunk/lib/xmppd/xmpp/parser.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Gotta make sure to commit while I remember. Big commit.
-Cleaned up stanza classes.
-Made resource stuff more sane.
-The XML is now parsed by a SAX parser, and can handle partial stanzas. This took me days.
-More later, after I clean this up.
-
-------------------------------------------------------------------------
-r58 | rakaur | 2008-09-29 14:29:26 -0400 (Mon, 29 Sep 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   A /trunk/lib/xmppd/xmpp/stanza.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Cleaned up stanza classes. See #43.
-Still need to work on storing the actual XML. Things are messing up for some reason and my brain hurts.
-
-------------------------------------------------------------------------
-r57 | rakaur | 2008-09-29 10:03:35 -0400 (Mon, 29 Sep 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-See comment in stream.rb on #45.
-
-------------------------------------------------------------------------
-r56 | rakaur | 2008-09-26 16:07:39 -0400 (Fri, 26 Sep 2008) | 6 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-   M /trunk/lib/xmppd.rb
-
-Still gotta get private keys/passphases working right.
-Did a bunch of clean ups. Now stuff doesn't have to edit other stuff's states. This is good.
-Finally got parsing to work with Psi. REXML sucks, and my UNGODLY hacky work-around is to wrap everything in a <xmppd/> element.
-Hopefully move away from REXML in the future. Maybe hpricot or xml-simple.
-More cleanups.
-
-------------------------------------------------------------------------
-r55 | rakaur | 2008-09-23 14:26:28 -0400 (Tue, 23 Sep 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Huge commit. Presence now broadcasts, at least locally. I think all of it finally works.
-Need to write some new unit tests... XXX
-
-------------------------------------------------------------------------
-r54 | rakaur | 2008-09-22 16:47:48 -0400 (Mon, 22 Sep 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/doc/extensions
-   A /trunk/doc/extensions/xep-0186.html
-   A /trunk/doc/extensions/xmpp.css
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/client_presence.rb
-
-Add some more docs, and remove useless sending of XML.
-
-------------------------------------------------------------------------
-r53 | rakaur | 2008-09-22 14:27:29 -0400 (Mon, 22 Sep 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-
-Carrying over shrike's CLIENTINFO legacy... :)
-
-------------------------------------------------------------------------
-r52 | rakaur | 2008-09-19 17:02:16 -0400 (Fri, 19 Sep 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/Rakefile
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   A /trunk/lib/xmppd/xmpp/client_presence.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-
-Added lots of useful stuff to Resource.
-Added the beginnings of <presence/> processing.
-Still buggy, haven't done any kind of broadcasting stuff yet.
-
-------------------------------------------------------------------------
-r51 | rakaur | 2008-09-18 16:14:15 -0400 (Thu, 18 Sep 2008) | 1 line
-Changed paths:
-   A /trunk/doc
-   A /trunk/doc/drafts
-   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.html
-   A /trunk/doc/drafts/draft-saintandre-rfc3920bis-07.txt
-   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.html
-   A /trunk/doc/drafts/draft-saintandre-rfc3921bis-06.txt
-   A /trunk/doc/rfcs
-   A /trunk/doc/rfcs/rfc3920.html
-   A /trunk/doc/rfcs/rfc3920.txt
-   A /trunk/doc/rfcs/rfc3921.html
-   A /trunk/doc/rfcs/rfc3921.txt
-
-Adding some reference docs.
-------------------------------------------------------------------------
-r50 | rakaur | 2008-09-18 16:09:56 -0400 (Thu, 18 Sep 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/configure/parser.rb
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/version.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   D /trunk/lib/xmppd/xmpp/session.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-   M /trunk/test/tc_db.rb
-   M /trunk/test/tc_stream.rb
-   M /trunk/test/tc_timer.rb
-
-Removed sessions. The handlers are basic noops for backwards-compatibility.
-Resources no longer have states (re: lack of sessions).
-Cleaned lots of stuff up. Still lots of work to do.
-
-------------------------------------------------------------------------
-r49 | rakaur | 2008-09-18 13:12:56 -0400 (Thu, 18 Sep 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-
-Made resource binding required.
-Fixed DIGEST-MD5 parsing. It's ugly, but necessary, thanks to stupid clients being stupid and the spec being retarded.
-
-------------------------------------------------------------------------
-r48 | rakaur | 2008-09-17 17:27:31 -0400 (Wed, 17 Sep 2008) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Apparently I should have read the PLAIN spec. Works with other clients now.
-Psi is crappy. It breaks XML rules and so far fails to work with my implementation of DIGEST-MD5. Gajim and Digsby work fine. Also, it doesn't follow the RFC with SASL PLAIN's success return. Bummer.
-
-------------------------------------------------------------------------
-r47 | rakaur | 2008-09-17 15:29:07 -0400 (Wed, 17 Sep 2008) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-
-Added some RFC-required stuff to current code.
-Implemented SASL [PLAIN] rather hackily. Haven't read the spec, just guessed.
-I'm now referencing the new "draft" of the RFC for all of this.
-
-------------------------------------------------------------------------
-r46 | rakaur | 2008-09-15 16:12:12 -0400 (Mon, 15 Sep 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd.rb
-
-Does forking now.
-
-------------------------------------------------------------------------
-r45 | rakaur | 2008-09-11 08:28:17 -0400 (Thu, 11 Sep 2008) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp/tls.rb
-
-Fixed some stuff to work with the new REXML kinks. Back where we were, at least.
-
-------------------------------------------------------------------------
-r44 | rakaur | 2008-09-10 13:05:14 -0400 (Wed, 10 Sep 2008) | 1 line
-Changed paths:
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Commented out the io/nonblock stuff for now. It doesn't work on windows, and I don't think we need it. I handle blocking myself.
-------------------------------------------------------------------------
-r43 | rakaur | 2006-02-24 13:09:31 -0500 (Fri, 24 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-
-Add iq stanza errors, closing #39.
-
-------------------------------------------------------------------------
-r42 | rakaur | 2006-02-24 00:40:55 -0500 (Fri, 24 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-
-Add a bunch of database stuff for rosters.
-Still a lot of work left on rosters...
-
-------------------------------------------------------------------------
-r41 | rakaur | 2006-02-23 10:56:26 -0500 (Thu, 23 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/resource.rb
-   A /trunk/lib/xmppd/xmpp/session.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Add support for sessions, closing #38.
-Fix Stream.genid.
-
-------------------------------------------------------------------------
-r40 | rakaur | 2006-02-20 12:43:42 -0500 (Mon, 20 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client_iq.rb
-   A /trunk/lib/xmppd/xmpp/resource.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Add resource handling. Must go to work now...
-
-------------------------------------------------------------------------
-r39 | rakaur | 2006-02-19 12:41:15 -0500 (Sun, 19 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   A /trunk/lib/xmppd/xmpp/client_iq.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Added 'support' for resource binding. Still have a lot to fix up on this but I'm pretty busy until Tuesday.
-Added basic iq stanza handling.
-
-------------------------------------------------------------------------
-r38 | rakaur | 2006-02-17 14:22:45 -0500 (Fri, 17 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-
-Add some YAML stuff.
-
-------------------------------------------------------------------------
-r37 | rakaur | 2006-02-17 13:39:20 -0500 (Fri, 17 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   D /trunk/var/db/users.yaml
-
-This should have never been in the repos.
-
-------------------------------------------------------------------------
-r36 | rakaur | 2006-02-17 13:37:53 -0500 (Fri, 17 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/test/tc_db.rb
-   M /trunk/test/tc_timer.rb
-   M /trunk/var/db/users.yaml
-
-SASL now auths against the DB.
-Add authorization stuff.
-
-------------------------------------------------------------------------
-r35 | rakaur | 2006-02-16 20:10:00 -0500 (Thu, 16 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/db.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/test/tc_db.rb
-
-Should probably let users have passwords. Stored a la SASL.
-
-------------------------------------------------------------------------
-r34 | rakaur | 2006-02-16 19:51:59 -0500 (Thu, 16 Feb 2006) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/lib/xmppd/db.rb
-   A /trunk/lib/xmppd/timer.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd.rb
-   A /trunk/test/tc_db.rb
-   A /trunk/test/tc_timer.rb
-   M /trunk/test/ts_xmppd.rb
-   A /trunk/var/db
-   A /trunk/var/db/users.yaml
-
-Added unit testing for both.
-Added clever little timers, closing #36.
-Added basic DB stuff using YAML. Closes #9.
-
-------------------------------------------------------------------------
-r33 | rakaur | 2006-02-16 13:35:55 -0500 (Thu, 16 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Fix already-established-stream bug.
-Fix stream id bug.
-
-------------------------------------------------------------------------
-r32 | rakaur | 2006-02-16 13:27:04 -0500 (Thu, 16 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/sasl.rb
-
-Quick fix to SASL.
-
-------------------------------------------------------------------------
-r31 | rakaur | 2006-02-16 13:20:22 -0500 (Thu, 16 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   A /trunk/lib/xmppd/xmpp/sasl.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   A /trunk/lib/xmppd/xmpp/tls.rb
-
-Implemented #34.
-Cleaned up SASL, closing #3.
-
-------------------------------------------------------------------------
-r30 | rakaur | 2006-02-16 00:00:55 -0500 (Thu, 16 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-SASL works. I'm going to clean it up, but I'm commiting it now in case I break something.
-
-------------------------------------------------------------------------
-r29 | rakaur | 2006-02-15 00:37:04 -0500 (Wed, 15 Feb 2006) | 6 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/features.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Fixed a problem in XMPP::Stream#resolve.
-Rearranged auth/deny in example.conf.
-Cleaned up state machine in XMPP::Stream classes.
-Added handling for closing stream tag.
-Fixed up feature listing.
-
-------------------------------------------------------------------------
-r28 | rakaur | 2006-02-14 11:28:53 -0500 (Tue, 14 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd.rb
-
-Updated Ruby version requirements.
-
-------------------------------------------------------------------------
-r27 | rakaur | 2006-02-13 22:56:28 -0500 (Mon, 13 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/lib/xmppd/xmpp/features.rb
-
-Forgot to add this file in [26].
-
-------------------------------------------------------------------------
-r26 | rakaur | 2006-02-13 22:50:14 -0500 (Mon, 13 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   D /trunk/lib/xmppd/xmpp/tls.rb
-   M /trunk/lib/xmppd.rb
-
-After much, much trouble, client TLS now works, closing #2.
-Fixed some minor stuff.
-
-------------------------------------------------------------------------
-r25 | rakaur | 2006-02-09 14:09:31 -0500 (Thu, 09 Feb 2006) | 6 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/listen.rb
-   A /trunk/lib/xmppd/xmpp/client.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   A /trunk/lib/xmppd/xmpp/tls.rb
-
-Fix the @myhost stuff.
-Add handler for initial client stream stanza.
-Add xmpp/client.rb mixin for XMPP::ClientStream.
-Add XMPP::Stream#error.
-Add provisional TLS stuff.
-
-------------------------------------------------------------------------
-r24 | rakaur | 2006-02-09 12:19:21 -0500 (Thu, 09 Feb 2006) | 6 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   A /trunk/lib/xmppd/auth.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-   M /trunk/test/tc_stream.rb
-
-Implement authorization checking against auth{} and deny{} configuration closing #32.
-Fix a bug with auths and denys in configuration.
-Move new connection handling to listen.rb instead of ioloop.
-Fix the unit test for streams.
-Further devide streams by ServerStreamIn and ServerStreamOut.
-
-------------------------------------------------------------------------
-r23 | rakaur | 2006-02-08 23:32:01 -0500 (Wed, 08 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/lib/xmppd/listen.rb
-   M /trunk/lib/xmppd/log.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-All socket stuff should be done, closing #6.
-Add listening and accepting. Basic functionality seems to be working.
-
-------------------------------------------------------------------------
-r22 | rakaur | 2006-02-08 15:55:34 -0500 (Wed, 08 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Make sure to nameprep hosts for Streams.
-
-------------------------------------------------------------------------
-r21 | rakaur | 2006-02-08 13:50:56 -0500 (Wed, 08 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-   A /trunk/var/log (from /trunk/var/logs:12)
-   D /trunk/var/logs
-   A /trunk/var/streams/c2s
-   A /trunk/var/streams/s2s
-
-Implement stream debugging, closing #29.
-
-------------------------------------------------------------------------
-r20 | rakaur | 2006-02-08 13:24:42 -0500 (Wed, 08 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd.rb
-
-Add signal handling, closing #28.
-
-------------------------------------------------------------------------
-r19 | rakaur | 2006-02-08 12:45:57 -0500 (Wed, 08 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/example.conf
-   M /trunk/lib/xmppd/configure/listen.rb
-   M /trunk/lib/xmppd/configure.rb
-
-Add support for specifying a certfile for starttls.
-
-------------------------------------------------------------------------
-r18 | rakaur | 2006-02-08 01:54:34 -0500 (Wed, 08 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd.rb
-
-Actually empty the recvq when finished with it.
-Fix a spacing error.
-
-------------------------------------------------------------------------
-r17 | rakaur | 2006-02-08 01:32:45 -0500 (Wed, 08 Feb 2006) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/lib/xmppd/xmpp.rb
-   M /trunk/lib/xmppd.rb
-   M /trunk/test/tc_stream.rb
-
-Add xmlns:db to the opening server streams. Apparently ejabberd doesn't even allow connections without it.
-XMPP::ClientStream#connect and XMPP::ServerStream#connect were kind of backwards.
-Add reading, writing, and parsing to XMPP::Stream.
-Add socket handling, so ioloop actually does something.
-------------------------------------------------------------------------
-r16 | rakaur | 2006-02-07 13:12:54 -0500 (Tue, 07 Feb 2006) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/configure/configuration.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-   M /trunk/test/tc_logging.rb
-   A /trunk/test/tc_stream.rb
-   M /trunk/test/ts_xmppd.rb
-
-Fix up some bugs in configuration and logging.
-Add a test case for streams.
-More work on streams.
-
-------------------------------------------------------------------------
-r15 | rakaur | 2006-02-07 00:27:29 -0500 (Tue, 07 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Did some more stream stuff. Devided Stream into ServerStream and ClientStream.
-
-------------------------------------------------------------------------
-r14 | rakaur | 2006-02-06 22:45:52 -0500 (Mon, 06 Feb 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/lib/xmppd/log.rb
-   M /trunk/lib/xmppd/xmpp/stream.rb
-
-Fix logging so that 'enable' actually has meaning.
-Add some more socket stuff and XMPP library stuff.
-
-------------------------------------------------------------------------
-r13 | rakaur | 2006-02-06 15:40:24 -0500 (Mon, 06 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/lib/xmppd/xmpp
-   A /trunk/lib/xmppd/xmpp/stream.rb
-   A /trunk/lib/xmppd/xmpp.rb
-
-Did some work on library stuff. Not a whole lot of free time lately.
-
-------------------------------------------------------------------------
-r12 | rakaur | 2006-02-02 19:36:01 -0500 (Thu, 02 Feb 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   D /trunk/etc/configure.xml
-   D /trunk/etc/configure.xsd
-   A /trunk/etc/example.conf
-   M /trunk/lib/xmppd/configure/auth.rb
-   M /trunk/lib/xmppd/configure/configuration.rb
-   A /trunk/lib/xmppd/configure/deny.rb
-   M /trunk/lib/xmppd/configure/listen.rb
-   M /trunk/lib/xmppd/configure/logging.rb
-   M /trunk/lib/xmppd/configure/operator.rb
-   A /trunk/lib/xmppd/configure/parser.rb
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/log.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd.rb
-   D /trunk/test/bad_config.xml
-   D /trunk/test/ok_config.xml
-   M /trunk/test/tc_config.rb
-   A /trunk/var/logs
-   A /trunk/var/streams
-
-First attempt at changing config stuff from XML to easier bind-style.
-
-------------------------------------------------------------------------
-r11 | rakaur | 2006-01-31 01:36:00 -0500 (Tue, 31 Jan 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-
-Forgot a <tt/> in the README.
-
-------------------------------------------------------------------------
-r10 | rakaur | 2006-01-31 01:25:36 -0500 (Tue, 31 Jan 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-   D /trunk/TODO
-
-Update README for new tracker.
-Removed TODO, as we have a tracker now.
-
-------------------------------------------------------------------------
-r9 | rakaur | 2006-01-27 18:01:07 -0500 (Fri, 27 Jan 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/etc/configure.xml
-   M /trunk/etc/configure.xsd
-   M /trunk/lib/xmppd/configure/logging.rb
-   M /trunk/lib/xmppd/configure.rb
-   A /trunk/lib/xmppd/log.rb
-   M /trunk/lib/xmppd.rb
-   A /trunk/test/tc_logging.rb
-   M /trunk/test/ts_xmppd.rb
-
-Implemented logging with Logger.
-Added <fork/> and <logging><level/></logging> to the config.
-
-------------------------------------------------------------------------
-r8 | rakaur | 2006-01-27 13:20:42 -0500 (Fri, 27 Jan 2006) | 4 lines
-Changed paths:
-   M /trunk/TODO
-   M /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd.rb
-
-Worked on the logging for about three hours, unfortunately both Logger and Log4r are pieces of shit, so I had to remove it all.
-Added proper configuration error catching and such.
-Updated TODO.
-
-------------------------------------------------------------------------
-r7 | rakaur | 2006-01-27 01:47:36 -0500 (Fri, 27 Jan 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/Rakefile
-   M /trunk/lib/xmppd/configure/auth.rb
-   M /trunk/lib/xmppd/configure/configuration.rb
-   M /trunk/lib/xmppd/configure/operator.rb
-   M /trunk/lib/xmppd/configure.rb
-   A /trunk/test/bad_config.xml
-   A /trunk/test/ok_config.xml
-   A /trunk/test/tc_config.rb
-   A /trunk/test/ts_xmppd.rb
-
-Added unit tests.
-Finished major work on configure stuff.
-
-------------------------------------------------------------------------
-r6 | rakaur | 2006-01-26 23:44:29 -0500 (Thu, 26 Jan 2006) | 4 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/TODO
-   M /trunk/etc/configure.xml
-   A /trunk/lib/xmppd/configure
-   A /trunk/lib/xmppd/configure/auth.rb
-   A /trunk/lib/xmppd/configure/configuration.rb
-   A /trunk/lib/xmppd/configure/listen.rb
-   A /trunk/lib/xmppd/configure/logging.rb
-   A /trunk/lib/xmppd/configure/operator.rb
-   A /trunk/lib/xmppd/configure.rb
-   M /trunk/lib/xmppd/var.rb
-   M /trunk/lib/xmppd.rb
-
-Did a significant amount of work on configure.
-Edited TODO.
-Changed a word in configure.xml.
-
-------------------------------------------------------------------------
-r5 | rakaur | 2006-01-26 17:39:47 -0500 (Thu, 26 Jan 2006) | 2 lines
-Changed paths:
-   A /trunk/TODO
-
-Added a brief TODO list.
-
-------------------------------------------------------------------------
-r4 | rakaur | 2006-01-26 17:14:49 -0500 (Thu, 26 Jan 2006) | 2 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/README
-
-Set the svn:keywords on README.
-
-------------------------------------------------------------------------
-r3 | rakaur | 2006-01-26 17:13:59 -0500 (Thu, 26 Jan 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   A /trunk/README
-   M /trunk/Rakefile
-
-Added an early README, in rdoc format.
-Touched up the Rakefile.
-
-------------------------------------------------------------------------
-r2 | rakaur | 2006-01-26 02:29:49 -0500 (Thu, 26 Jan 2006) | 3 lines
-Changed paths:
-   M /trunk/ChangeLog
-   M /trunk/Rakefile
-   A /trunk/etc/configure.xml
-   A /trunk/etc/configure.xsd
-
-Did some work on the configuration file format.
-Touched up the Rakefile.
-
-------------------------------------------------------------------------
-r1 | rakaur | 2006-01-24 12:34:28 -0500 (Tue, 24 Jan 2006) | 2 lines
-Changed paths:
-   A /branches
-   A /tags
-   A /trunk
-   A /trunk/ChangeLog
-   A /trunk/Rakefile
-   A /trunk/bin
-   A /trunk/bin/xmppd
-   A /trunk/etc
-   A /trunk/lib
-   A /trunk/lib/xmppd
-   A /trunk/lib/xmppd/var.rb
-   A /trunk/lib/xmppd/version.rb
-   A /trunk/lib/xmppd.rb
-   A /trunk/test
-   A /trunk/var
-
-Initial import.
-
-------------------------------------------------------------------------
+commit eafa62403543b12e1917f8bd9e3ffde6212de29f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 31 14:09:41 2008 -0400
+
+    Added a copy of the BSD license, closes #83.
+
+ README          |    2 +-
+ doc/license.txt |   27 +++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 1 deletions(-)
+
+commit 4cf0e07fe7acb046a4b52726c2267453584ca5b3
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Oct 25 13:01:59 2008 -0400
+
+    Working on presence subscriptions.
+    
+    I'm pretty sure this is mostly done, but I wanna make sure before I merge back.
+
+ .gitignore                 |    7 ++
+ lib/xmppd/db.rb            |    7 +-
+ lib/xmppd/xmpp/iq_get.rb   |    2 +-
+ lib/xmppd/xmpp/iq_set.rb   |   21 +++-
+ lib/xmppd/xmpp/presence.rb |  240 +++++++++++++++++++++++++++++++++++++++++++-
+ 5 files changed, 263 insertions(+), 14 deletions(-)
+
+commit a0114b5430f69cccbfba34262a3174a216427916
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sun Oct 19 04:46:48 2008 +0000
+
+    Added some new docs.
+    Start working on the rest of subscriptions.
+    Fix a few bugs.
+    Disallow multiple resource binding to one stream.
+    Start working on last-activity.
+    Track uptime.
+    The Parser.dispatch method will soon be very critical. See #60.
+
+ ChangeLog                         |   82 +++++++++++
+ README                            |   33 +++--
+ doc/extensions/html/xep-0153.html |  251 ++++++++++++++++++++++++++++++++
+ doc/extensions/xml/xep-0153.xml   |  284 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/db.rb                   |    4 +-
+ lib/xmppd/var.rb                  |    3 +
+ lib/xmppd/xmpp/iq_set.rb          |    9 +-
+ lib/xmppd/xmpp/parser.rb          |    3 +-
+ lib/xmppd/xmpp/presence.rb        |   51 +++++++
+ 9 files changed, 700 insertions(+), 20 deletions(-)
+
+commit 45854ae7b6e6bdc03f751d77031d6dabbc802d8f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Oct 18 20:37:19 2008 +0000
+
+    Just updating some documentation.
+
+ doc/drafts/draft-saintandre-rfc3920bis-08.html     | 7220 ---------------
+ doc/drafts/draft-saintandre-rfc3920bis-08.txt      | 9240 --------------------
+ doc/drafts/draft-saintandre-rfc3921bis-07.html     | 4122 ---------
+ doc/drafts/draft-saintandre-rfc3921bis-07.txt      | 5376 ------------
+ .../html/draft-saintandre-rfc3920bis-08.html       | 7220 +++++++++++++++
+ .../html/draft-saintandre-rfc3921bis-07.html       | 4122 +++++++++
+ doc/drafts/text/draft-saintandre-rfc3920bis-08.txt | 9240 ++++++++++++++++++++
+ doc/drafts/text/draft-saintandre-rfc3921bis-07.txt | 5376 ++++++++++++
+ 8 files changed, 25958 insertions(+), 25958 deletions(-)
+
+commit 1b3ea5276d4f8ec9ffc3dcbf1e891a1174f575b8
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Oct 18 20:35:15 2008 +0000
+
+    Just updating some documentation.
+
+ doc/drafts/draft-saintandre-rfc3920bis-07.html    | 7214 ----------------
+ doc/drafts/draft-saintandre-rfc3920bis-07.txt     | 9240 ---------------------
+ doc/drafts/draft-saintandre-rfc3920bis-08.html    | 7220 ++++++++++++++++
+ doc/drafts/draft-saintandre-rfc3920bis-08.txt     | 9240 +++++++++++++++++++++
+ doc/drafts/draft-saintandre-rfc3921bis-06.html    | 4122 ---------
+ doc/drafts/draft-saintandre-rfc3921bis-06.txt     | 5376 ------------
+ doc/drafts/draft-saintandre-rfc3921bis-07.html    | 4122 +++++++++
+ doc/drafts/draft-saintandre-rfc3921bis-07.txt     | 5376 ++++++++++++
+ doc/drafts/xml/draft-saintandre-rfc3920bis-08.xml | 6047 ++++++++++++++
+ doc/drafts/xml/draft-saintandre-rfc3921bis-07.xml | 3525 ++++++++
+ doc/extensions/html/xep-0030.html                 |  808 ++
+ doc/extensions/html/xep-0054.html                 |  618 ++
+ doc/extensions/html/xep-0077.html                 |  817 ++
+ doc/extensions/html/xep-0092.html                 |  123 +
+ doc/extensions/html/xep-0160.html                 |  107 +
+ doc/extensions/html/xep-0186.html                 |  169 +
+ doc/extensions/html/xep-0203.html                 |  149 +
+ doc/extensions/html/xmpp.css                      |  143 +
+ doc/extensions/xep-0030.html                      |  808 --
+ doc/extensions/xep-0077.html                      |  817 --
+ doc/extensions/xep-0092.html                      |  123 -
+ doc/extensions/xep-0160.html                      |  107 -
+ doc/extensions/xep-0186.html                      |  169 -
+ doc/extensions/xep-0203.html                      |  149 -
+ doc/extensions/xml/xep-0030.xml                   |  943 +++
+ doc/extensions/xml/xep-0054.xml                   |  641 ++
+ doc/extensions/xml/xep-0077.xml                   |  901 ++
+ doc/extensions/xml/xep-0092.xml                   |  142 +
+ doc/extensions/xml/xep-0160.xml                   |  132 +
+ doc/extensions/xml/xep-0186.xml                   |  256 +
+ doc/extensions/xml/xep-0203.xml                   |  182 +
+ doc/extensions/xmpp.css                           |  143 -
+ doc/rfcs/html/rfc3920.html                        | 3458 ++++++++
+ doc/rfcs/html/rfc3921.html                        | 4102 +++++++++
+ doc/rfcs/rfc3920.html                             | 3458 --------
+ doc/rfcs/rfc3920.txt                              | 5043 -----------
+ doc/rfcs/rfc3921.html                             | 4102 ---------
+ doc/rfcs/rfc3921.txt                              | 5995 -------------
+ doc/rfcs/text/rfc3920.txt                         | 5043 +++++++++++
+ doc/rfcs/text/rfc3921.txt                         | 5995 +++++++++++++
+ doc/rfcs/xml/rfc3920.xml                          | 3235 ++++++++
+ doc/rfcs/xml/rfc3921.xml                          | 3677 ++++++++
+ 42 files changed, 67171 insertions(+), 46866 deletions(-)
+
+commit c018feb41e7f6bd63580584ae7bd340ac6af2faa
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 17 18:32:27 2008 +0000
+
+    Add support for vcard-temp, closes #22.
+    Fixed some bugs in special handlers in XMPP::Resource.send_iq.
+
+ ChangeLog                  |   14 +++++++++++++
+ README                     |    1 +
+ lib/xmppd.rb               |    2 +-
+ lib/xmppd/db.rb            |    4 +-
+ lib/xmppd/xmpp/iq_get.rb   |   47 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/iq_set.rb   |   25 +++++++++++++++++++++++
+ lib/xmppd/xmpp/resource.rb |   18 +++++++++++++++-
+ 7 files changed, 107 insertions(+), 4 deletions(-)
+
+commit 5aaaef939e332c5139e8329659b72dd2f85234a8
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 17 14:43:56 2008 +0000
+
+    Fix some typos.
+    Add roster pruning/cleaning/etc timer, closes #65.
+    Fuck Ruby's threads.
+
+ ChangeLog                  |   12 ++++++++
+ lib/xmppd.rb               |    5 +++
+ lib/xmppd/db.rb            |   61 +++++++++++++++++++++++++++++++++++++++----
+ lib/xmppd/xmpp/iq_set.rb   |   10 ++++++-
+ lib/xmppd/xmpp/presence.rb |    1 +
+ lib/xmppd/xmpp/resource.rb |    9 ++++++
+ 6 files changed, 90 insertions(+), 8 deletions(-)
+
+commit b7fc2a7ad19befca9d88c96b431715877f4b5218
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 17 00:19:04 2008 +0000
+
+    Cleaned up lots of XML generation stuff, closes #63.
+
+ ChangeLog                  |   18 +++++++++++
+ lib/xmppd/db.rb            |    8 ++---
+ lib/xmppd/xmpp/iq_get.rb   |   39 ++++++------------------
+ lib/xmppd/xmpp/iq_set.rb   |   68 +++++++++++++++-----------------------------
+ lib/xmppd/xmpp/presence.rb |   16 ++--------
+ lib/xmppd/xmpp/stanza.rb   |   38 ++++++++++++++++++++++++
+ 6 files changed, 96 insertions(+), 91 deletions(-)
+
+commit dd2f51e44e62874f3454ce1c70ee6cee87455abe
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Oct 16 20:29:01 2008 +0000
+
+    Fixed a bug in SASL DIGEST-MD5. Now processes optional authzid properly.
+    Fixed a crash in presence.rb when checking for offline messages.
+    Fixed a crash in db.rb when checking for front-resource.
+    Cleaned up the presence subscriptions a little bit.
+    Added processing of roster sets. This implements adding, modifying, and removing roster items, closes #40.
+    Fixed a typo in resource.rb: stana => stanza.
+    Simplified some to_xml methods in db.rb.
+
+ ChangeLog                  |   12 +++++
+ lib/xmppd/db.rb            |   29 ++++++++----
+ lib/xmppd/xmpp/iq_set.rb   |  108 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/presence.rb |   48 ++++++++-----------
+ lib/xmppd/xmpp/resource.rb |    2 +-
+ lib/xmppd/xmpp/sasl.rb     |    8 +++-
+ 6 files changed, 167 insertions(+), 40 deletions(-)
+
+commit ef90ddb458329125ffbffdf3098fd55dca163976
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Oct 14 17:33:18 2008 +0000
+
+    Haven't committed in a long time. Been working on presence stuff. It sucks.
+    In this commit subscribe/subscribed work so far. They're not pretty. All the details aren't there yet.
+    Still have a ways to go, see #62.
+
+ ChangeLog                  |   11 ++
+ lib/xmppd/db.rb            |  109 ++++++++++++-------
+ lib/xmppd/xmpp/presence.rb |  261 +++++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/resource.rb |    8 +-
+ 4 files changed, 342 insertions(+), 47 deletions(-)
+
+commit de6b2631b5db852432464b5a3ebdbf606a633068
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Oct 9 20:34:14 2008 +0000
+
+    Added removal of users via jabber:iq:register. It's not perfect yet.
+    Added resource limiting, closes #55.
+
+ ChangeLog                |   24 ++++++++++++++++++++++++
+ lib/xmppd/db.rb          |   13 ++++++++++++-
+ lib/xmppd/xmpp/iq_set.rb |   22 ++++++++++++++++++++--
+ lib/xmppd/xmpp/sasl.rb   |   15 ++++++++++++++-
+ 4 files changed, 70 insertions(+), 4 deletions(-)
+
+commit 2b7e1e6beba0b899942e288ba6a7f6aa421690b0
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Oct 9 16:24:28 2008 +0000
+
+    Implemented XEP-0077, closes #5.
+    Fixed some bugs.
+
+ ChangeLog                    |   15 +
+ README                       |   32 +-
+ doc/extensions/xep-0030.html |  808 +++++++++++++++++++++++++++++++++++++++++
+ doc/extensions/xep-0077.html |  817 ++++++++++++++++++++++++++++++++++++++++++
+ doc/extensions/xep-0092.html |  123 +++++++
+ doc/extensions/xep-0160.html |  107 ++++++
+ doc/extensions/xep-0203.html |  149 ++++++++
+ etc/example.conf             |   17 +-
+ lib/xmppd/db.rb              |    7 +-
+ lib/xmppd/xmpp/features.rb   |   13 +
+ lib/xmppd/xmpp/iq.rb         |    4 +-
+ lib/xmppd/xmpp/iq_get.rb     |   69 ++++-
+ lib/xmppd/xmpp/iq_set.rb     |  102 ++++++
+ lib/xmppd/xmpp/message.rb    |    4 +-
+ lib/xmppd/xmpp/parser.rb     |    9 +-
+ lib/xmppd/xmpp/presence.rb   |   10 +-
+ lib/xmppd/xmpp/stream.rb     |   34 ++-
+ 17 files changed, 2275 insertions(+), 45 deletions(-)
+
+commit 9bfa8131020edc727dcea90f89bafbe82c8c8cb6
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Oct 8 21:21:27 2008 +0000
+
+    Another big commit. Implemented Service Discovery, which closes #15.
+    Reworked the IQ stanza stuff, which closes #56.
+    I think the processing works now, still need to look at presence. See #60.
+
+ ChangeLog                  |    8 +++
+ lib/xmppd/db.rb            |    8 +++
+ lib/xmppd/xmpp/iq.rb       |   29 ++++++++++-
+ lib/xmppd/xmpp/iq_get.rb   |  106 ++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/message.rb  |   51 ++-----------------
+ lib/xmppd/xmpp/resource.rb |  119 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb   |    3 +-
+ 7 files changed, 272 insertions(+), 52 deletions(-)
+
+commit 3907113ab6e9d2f762cf4a49bc9ada3777c4b874
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Oct 8 03:37:27 2008 +0000
+
+    Implement XEP-0092, software version. Closes #23.
+
+ ChangeLog                |   29 +++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/iq_get.rb |   26 ++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+), 0 deletions(-)
+
+commit 1b33dff7b521d4f96bbef19b245a04d3ea8bf2da
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Oct 8 00:44:50 2008 +0000
+
+    Big commit.
+    Add message stuff, including offline messages (XEP-0160) with delay (XEP-0203). Closes #16 and #57.
+    Fix up IQ stuff a little more.
+    General cleanups.
+
+ ChangeLog                  |   23 ++++++++++
+ bin/xmppd                  |    5 +-
+ lib/xmppd.rb               |    5 +-
+ lib/xmppd/configure.rb     |    1 -
+ lib/xmppd/db.rb            |   28 +++++++++++-
+ lib/xmppd/listen.rb        |    1 +
+ lib/xmppd/xmpp.rb          |   12 +++++
+ lib/xmppd/xmpp/client.rb   |    9 +---
+ lib/xmppd/xmpp/features.rb |    3 +-
+ lib/xmppd/xmpp/iq.rb       |    8 +--
+ lib/xmppd/xmpp/iq_get.rb   |    4 +-
+ lib/xmppd/xmpp/iq_set.rb   |    4 +-
+ lib/xmppd/xmpp/message.rb  |   99 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/parser.rb   |    2 +-
+ lib/xmppd/xmpp/presence.rb |   22 ++++++----
+ lib/xmppd/xmpp/resource.rb |    4 +-
+ lib/xmppd/xmpp/sasl.rb     |    3 +-
+ lib/xmppd/xmpp/stream.rb   |    5 +-
+ lib/xmppd/xmpp/tls.rb      |    2 +-
+ test/ts_xmppd.rb           |    1 +
+ 20 files changed, 197 insertions(+), 44 deletions(-)
+
+commit 3d47ef9a8806b702bc8f357761928c3a2c2733fe
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Oct 7 18:36:25 2008 +0000
+
+    Resorted the IQ stuff. Still not sure I'm happy with it. See #56.
+    Fixed a few random things.
+
+ ChangeLog                     |   13 +++
+ doc/object_tree.txt           |   89 +++++++++--------
+ lib/xmppd/auth.rb             |    4 -
+ lib/xmppd/configure.rb        |    2 +-
+ lib/xmppd/configure/parser.rb |    4 +-
+ lib/xmppd/db.rb               |   11 ++-
+ lib/xmppd/xmpp/client.rb      |    2 +-
+ lib/xmppd/xmpp/iq.rb          |  222 +----------------------------------------
+ lib/xmppd/xmpp/iq_get.rb      |  113 +++++++++++++++++++++
+ lib/xmppd/xmpp/iq_set.rb      |  187 ++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/parser.rb      |    2 +-
+ lib/xmppd/xmpp/presence.rb    |    4 +-
+ lib/xmppd/xmpp/resource.rb    |    2 +-
+ lib/xmppd/xmpp/sasl.rb        |    7 +-
+ lib/xmppd/xmpp/stream.rb      |    3 +-
+ test/tc_db.rb                 |    3 +
+ 16 files changed, 393 insertions(+), 275 deletions(-)
+
+commit 6c387ce73bc9097347254afcc5e2bad573ec8ead
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Oct 7 14:11:17 2008 +0000
+
+    Just cleaning some stuff up.
+    IQ and Presence don't need to be under Client. Gotta start refactoring via #56.
+
+ ChangeLog                         |   27 ++++
+ doc/object_tree.txt               |    8 +-
+ lib/xmppd/xmpp/client_iq.rb       |  269 -------------------------------------
+ lib/xmppd/xmpp/client_presence.rb |   94 -------------
+ lib/xmppd/xmpp/iq.rb              |  269 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/presence.rb        |   94 +++++++++++++
+ 6 files changed, 395 insertions(+), 366 deletions(-)
+
+commit a3ad2b603e43c306cd6f6601bd04d50d2189939b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Oct 7 14:02:23 2008 +0000
+
+    Intermediate commit to get svn to shut up.
+
+ lib/xmppd/xmpp/client.rb          |   10 +++++---
+ lib/xmppd/xmpp/client_iq.rb       |   44 +++++++++++++++++++++++-------------
+ lib/xmppd/xmpp/client_presence.rb |   11 +++++----
+ lib/xmppd/xmpp/features.rb        |   40 ++++++++++++++++++++++++++-------
+ 4 files changed, 71 insertions(+), 34 deletions(-)
+
+commit d43db0e39a04a9cf43af3b47394d73e8cf3d7aae
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Oct 7 13:27:30 2008 +0000
+
+    Continue the documentation saga.
+
+ ChangeLog                         |   12 +++++++++
+ doc/object_tree.txt               |   48 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/client.rb          |    2 +-
+ lib/xmppd/xmpp/client_iq.rb       |   39 +++++++++++++++++++++++++++---
+ lib/xmppd/xmpp/client_presence.rb |    2 +-
+ lib/xmppd/xmpp/features.rb        |    2 +-
+ lib/xmppd/xmpp/parser.rb          |    2 +-
+ lib/xmppd/xmpp/resource.rb        |    2 +-
+ lib/xmppd/xmpp/sasl.rb            |    2 +-
+ lib/xmppd/xmpp/stanza.rb          |    2 +-
+ lib/xmppd/xmpp/stream.rb          |    2 +-
+ lib/xmppd/xmpp/tls.rb             |    2 +-
+ 12 files changed, 104 insertions(+), 13 deletions(-)
+
+commit 53c669d40eda59658a3fd0c2bce594f8d406eae4
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Oct 6 22:56:36 2008 +0000
+
+    Continuing the documentation saga.
+    IQ handling is just... ugh... need to rework it, see #56.
+
+ ChangeLog                   |   11 +++++++++++
+ lib/xmppd/auth.rb           |    8 ++------
+ lib/xmppd/xmpp/client.rb    |    4 +---
+ lib/xmppd/xmpp/client_iq.rb |   35 +++++++++++++++++------------------
+ lib/xmppd/xmpp/resource.rb  |    2 ++
+ 5 files changed, 33 insertions(+), 27 deletions(-)
+
+commit cf78507b5a4482ca342b23b75288c3c32ef9f11a
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Oct 6 19:19:10 2008 +0000
+
+    Continue the documentation effort.
+
+ ChangeLog                  |   10 ++++++
+ lib/xmppd/xmpp/client.rb   |   78 +++++++++++++++++++++++++++++++++----------
+ lib/xmppd/xmpp/parser.rb   |   29 ++++++++--------
+ lib/xmppd/xmpp/resource.rb |   17 +++++----
+ lib/xmppd/xmpp/stream.rb   |   75 +++++++++++++++++++++---------------------
+ 5 files changed, 131 insertions(+), 78 deletions(-)
+
+commit 8babe3528de3e1aee4eb7259920d3ea0f32f8a10
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Oct 6 14:50:23 2008 +0000
+
+    Added rate limiting, closing #51.
+
+ ChangeLog                   |   18 ++++++++++++++++++
+ lib/xmppd/xmpp/client_iq.rb |    4 ++--
+ lib/xmppd/xmpp/parser.rb    |   20 +++++++++++++++++++-
+ lib/xmppd/xmpp/stream.rb    |    5 +++++
+ 4 files changed, 44 insertions(+), 3 deletions(-)
+
+commit e0ef483ee5565de705e6c5f68cc9fd1056a375d5
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Oct 6 11:41:00 2008 +0000
+
+    Fixed timeouts, closing #48.
+    Make some fixes for ruby19. Won't run yet because IDN doesn't work.
+
+ ChangeLog                   |    9 +++++++++
+ Rakefile                    |    2 +-
+ etc/example.conf            |    6 ++++++
+ lib/xmppd.rb                |   18 +++++++-----------
+ lib/xmppd/base64.rb         |   27 +++++++++++++++++++++++++++
+ lib/xmppd/configure.rb      |    4 ++++
+ lib/xmppd/configure/auth.rb |   15 ++++++++++++---
+ lib/xmppd/timer.rb          |   24 ++++++++++++++----------
+ lib/xmppd/xmpp/client.rb    |    2 +-
+ lib/xmppd/xmpp/sasl.rb      |    2 +-
+ lib/xmppd/xmpp/stream.rb    |   16 ++++++++++++++--
+ 11 files changed, 96 insertions(+), 29 deletions(-)
+
+commit 2201fc745f27fb2639110f76e03e44c2782ed785
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sun Oct 5 14:54:41 2008 +0000
+
+    This commit doesn't work. Trying to stamp out a bug.
+
+ ChangeLog                |   10 ++++++++++
+ lib/xmppd.rb             |   11 ++++++-----
+ lib/xmppd/xmpp/stream.rb |   11 ++++++++---
+ 3 files changed, 24 insertions(+), 8 deletions(-)
+
+commit 410fdfa2efa365cf4b68290a24551bd9e877b515
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sun Oct 5 04:36:23 2008 +0000
+
+    Changed the resource binding to not modify a client's provided resource.
+
+ ChangeLog                   |   11 +++++++++++
+ lib/xmppd.rb                |    4 ++--
+ lib/xmppd/xmpp/client_iq.rb |    8 +++++---
+ lib/xmppd/xmpp/stream.rb    |    6 ++++--
+ 4 files changed, 22 insertions(+), 7 deletions(-)
+
+commit 5a4a22a390b63ef733185af87340b13d03d84885
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Oct 4 23:45:01 2008 +0000
+
+    Move some stuff from Stream#close to ClientStream#close where it should have been.
+    Fix some typos in resource.rb.
+    Document the hell out of stream.rb.
+
+ ChangeLog                  |   14 ++
+ lib/xmppd/xmpp/resource.rb |   18 ++-
+ lib/xmppd/xmpp/stream.rb   |  330 +++++++++++++++++++++++++++++++++-----------
+ 3 files changed, 276 insertions(+), 86 deletions(-)
+
+commit ef8120e2534c223a9e51b302f1f36e1b1a90e395
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Oct 4 18:51:23 2008 +0000
+
+    Got rid of the useless Stanza classes. Just pass the REXML::Elements now. Closes #53.
+    Also, documented the hell out of resource.rb. Going to keep on doing this. Part of #31.
+
+ ChangeLog                         |   11 ++
+ lib/xmppd/db.rb                   |    4 +-
+ lib/xmppd/xmpp/client_iq.rb       |   89 +++++----------
+ lib/xmppd/xmpp/client_presence.rb |   78 +++----------
+ lib/xmppd/xmpp/resource.rb        |  230 ++++++++++++++++++++-----------------
+ lib/xmppd/xmpp/stanza.rb          |   79 ++++++-------
+ lib/xmppd/xmpp/stream.rb          |   10 +-
+ 7 files changed, 220 insertions(+), 281 deletions(-)
+
+commit e66e316060144e53aa0d1ccaa50cae601a828b30
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 3 17:33:37 2008 +0000
+
+    Fixed the certfile stuff so it only asks for the password once.
+
+ ChangeLog                  |   14 ++++++++++++++
+ lib/xmppd/configure.rb     |    8 ++++++--
+ lib/xmppd/var.rb           |    3 +++
+ lib/xmppd/xmpp/resource.rb |    6 +-----
+ lib/xmppd/xmpp/tls.rb      |   11 +----------
+ 5 files changed, 25 insertions(+), 17 deletions(-)
+
+commit 95bcd71225eb8c99f21be1229c6bb92dbc163ec0
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Oct 2 22:28:28 2008 +0000
+
+    Fixed some bugs with available resources. A resource may now become available after being unavailable and everything works right.
+    Finished directed presence, which finishes off presence, closing #41.
+    Imposed a stanza limit of 65536. There is currently no standard for handling this, see #50.
+
+ ChangeLog                         |   19 ++++++++++
+ lib/xmppd.rb                      |    2 +-
+ lib/xmppd/xmpp/client_presence.rb |   18 ++++++++--
+ lib/xmppd/xmpp/parser.rb          |   10 +++--
+ lib/xmppd/xmpp/resource.rb        |   70 ++++++++++++++++++++++++++++++++-----
+ lib/xmppd/xmpp/stream.rb          |   27 +++++++-------
+ 6 files changed, 116 insertions(+), 30 deletions(-)
+
+commit 7be485194c4c29817359b92908fd75fcd8c7a14a
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Oct 2 16:25:42 2008 +0000
+
+    Fixed up the parser to kind of work.
+    Cleaned up the REXML creation stuff.
+    Added a limit on the buffer waiting to be parsed.
+
+ ChangeLog                   |   44 +++++++++++++++++++
+ lib/xmppd.rb                |   12 +++++-
+ lib/xmppd/xmpp/client.rb    |   48 +++++----------------
+ lib/xmppd/xmpp/client_iq.rb |   16 +------
+ lib/xmppd/xmpp/features.rb  |    4 +-
+ lib/xmppd/xmpp/parser.rb    |   97 ++++++++++++++++++++++++++----------------
+ lib/xmppd/xmpp/resource.rb  |   10 +---
+ lib/xmppd/xmpp/sasl.rb      |    8 +---
+ lib/xmppd/xmpp/stanza.rb    |    3 -
+ lib/xmppd/xmpp/stream.rb    |   97 ++++++++++++++++++++-----------------------
+ lib/xmppd/xmpp/tls.rb       |    2 +-
+ 11 files changed, 182 insertions(+), 159 deletions(-)
+
+commit 44739192eef462d6b50cd7e6e1cdf6b0cf0e4f95
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Oct 1 14:08:21 2008 +0000
+
+    Named 'synapse.' Fitting, I think.
+
+ ChangeLog                            |   34 ++++++++++++++++++++++++++++++++++
+ README                               |   23 +++++++++++------------
+ Rakefile                             |   10 +++++-----
+ bin/xmppd                            |    2 +-
+ etc/example.conf                     |    2 +-
+ lib/xmppd.rb                         |    4 ++--
+ lib/xmppd/auth.rb                    |    2 +-
+ lib/xmppd/configure.rb               |    2 +-
+ lib/xmppd/configure/auth.rb          |    2 +-
+ lib/xmppd/configure/configuration.rb |    2 +-
+ lib/xmppd/configure/deny.rb          |    2 +-
+ lib/xmppd/configure/listen.rb        |    2 +-
+ lib/xmppd/configure/logging.rb       |    2 +-
+ lib/xmppd/configure/operator.rb      |    2 +-
+ lib/xmppd/configure/parser.rb        |    2 +-
+ lib/xmppd/db.rb                      |    2 +-
+ lib/xmppd/listen.rb                  |    2 +-
+ lib/xmppd/log.rb                     |    2 +-
+ lib/xmppd/timer.rb                   |    2 +-
+ lib/xmppd/var.rb                     |    4 ++--
+ lib/xmppd/version.rb                 |    6 +++---
+ lib/xmppd/xmpp.rb                    |    2 +-
+ lib/xmppd/xmpp/client.rb             |    2 +-
+ lib/xmppd/xmpp/client_iq.rb          |    2 +-
+ lib/xmppd/xmpp/client_presence.rb    |    2 +-
+ lib/xmppd/xmpp/features.rb           |    2 +-
+ lib/xmppd/xmpp/parser.rb             |    2 +-
+ lib/xmppd/xmpp/resource.rb           |    2 +-
+ lib/xmppd/xmpp/sasl.rb               |    2 +-
+ lib/xmppd/xmpp/stanza.rb             |    2 +-
+ lib/xmppd/xmpp/stream.rb             |    2 +-
+ lib/xmppd/xmpp/tls.rb                |    2 +-
+ test/tc_config.rb                    |    2 +-
+ test/tc_db.rb                        |    2 +-
+ test/tc_logging.rb                   |    2 +-
+ test/tc_stream.rb                    |    2 +-
+ test/tc_timer.rb                     |    2 +-
+ test/ts_xmppd.rb                     |    2 +-
+ 38 files changed, 89 insertions(+), 56 deletions(-)
+
+commit f5ca94ca4c8f11b30338b760de679daecc7b1972
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Sep 30 21:25:19 2008 +0000
+
+    Clean up some stuff.
+
+ lib/xmppd/xmpp/parser.rb |    1 +
+ lib/xmppd/xmpp/stanza.rb |   10 +---------
+ lib/xmppd/xmpp/stream.rb |   19 -------------------
+ 3 files changed, 2 insertions(+), 28 deletions(-)
+
+commit 797d65905612bb2a01991eaae5e65170bcf28209
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Sep 30 21:05:47 2008 +0000
+
+    Fixing svn:keywords.
+
+ etc/example.conf                  |    2 +-
+ lib/xmppd/xmpp/client_presence.rb |    2 +-
+ lib/xmppd/xmpp/parser.rb          |    2 +-
+ lib/xmppd/xmpp/stanza.rb          |    2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+commit e5717728203372411185d42721e6983e009835d4
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Sep 30 20:58:41 2008 +0000
+
+    Gotta make sure to commit while I remember. Big commit.
+    Cleaned up stanza classes.
+    Made resource stuff more sane.
+    The XML is now parsed by a SAX parser, and can handle partial stanzas. This took me days.
+    More later, after I clean this up.
+
+ ChangeLog                         |   13 +++++
+ lib/xmppd.rb                      |    6 ++-
+ lib/xmppd/xmpp/client_presence.rb |    2 +-
+ lib/xmppd/xmpp/parser.rb          |  108 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/resource.rb        |   41 +++-----------
+ lib/xmppd/xmpp/stanza.rb          |   12 ++--
+ lib/xmppd/xmpp/stream.rb          |   53 +-----------------
+ 7 files changed, 144 insertions(+), 91 deletions(-)
+
+commit ceee9b58736eec08a1a5b7602e940380c1644915
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Sep 29 18:29:26 2008 +0000
+
+    Cleaned up stanza classes. See #43.
+    Still need to work on storing the actual XML. Things are messing up for some reason and my brain hurts.
+
+ ChangeLog                         |    8 +++
+ lib/xmppd.rb                      |   14 +++++-
+ lib/xmppd/xmpp/client_iq.rb       |   58 ++-----------------------
+ lib/xmppd/xmpp/client_presence.rb |   61 ++------------------------
+ lib/xmppd/xmpp/stanza.rb          |   87 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb          |    2 +-
+ 6 files changed, 115 insertions(+), 115 deletions(-)
+
+commit 2b334ecf65fef3e5918ca55edd479785a8f8b7c3
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Sep 29 14:03:35 2008 +0000
+
+    See comment in stream.rb on #45.
+
+ ChangeLog                |   23 +++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb |   23 +++++++++++++++++++++--
+ 2 files changed, 44 insertions(+), 2 deletions(-)
+
+commit e119db14a04b68dde8bb617b76e9a96f3fcf3862
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Sep 26 20:07:39 2008 +0000
+
+    Still gotta get private keys/passphases working right.
+    Did a bunch of clean ups. Now stuff doesn't have to edit other stuff's states. This is good.
+    Finally got parsing to work with Psi. REXML sucks, and my UNGODLY hacky work-around is to wrap everything in a <xmppd/> element.
+    Hopefully move away from REXML in the future. Maybe hpricot or xml-simple.
+    More cleanups.
+
+ ChangeLog                         |   13 ++++
+ etc/example.conf                  |    4 +
+ lib/xmppd.rb                      |    2 +-
+ lib/xmppd/configure.rb            |    9 +++
+ lib/xmppd/db.rb                   |   35 ++++-------
+ lib/xmppd/xmpp/client.rb          |   12 ++--
+ lib/xmppd/xmpp/client_iq.rb       |    6 +-
+ lib/xmppd/xmpp/client_presence.rb |   24 ++++---
+ lib/xmppd/xmpp/features.rb        |   12 ++--
+ lib/xmppd/xmpp/resource.rb        |   53 +++++++++------
+ lib/xmppd/xmpp/sasl.rb            |    3 +-
+ lib/xmppd/xmpp/stream.rb          |  127 ++++++++++++++++++++++---------------
+ lib/xmppd/xmpp/tls.rb             |    1 +
+ 13 files changed, 180 insertions(+), 121 deletions(-)
+
+commit f6e976e3314e7a87a36c56d14e9ba6d23684c241
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Sep 23 18:26:28 2008 +0000
+
+    Huge commit. Presence now broadcasts, at least locally. I think all of it finally works.
+    Need to write some new unit tests... XXX
+
+ ChangeLog                         |   12 ++++
+ lib/xmppd/db.rb                   |   99 +++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/client_iq.rb       |    9 ++-
+ lib/xmppd/xmpp/client_presence.rb |   33 ++++++-----
+ lib/xmppd/xmpp/resource.rb        |  116 ++++++++++++++++++++++++++++++++++--
+ lib/xmppd/xmpp/stream.rb          |   32 +++++++++-
+ 6 files changed, 271 insertions(+), 30 deletions(-)
+
+commit e737ec70fbccc067156dd914e1bdbe0234396536
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Sep 22 20:47:48 2008 +0000
+
+    Add some more docs, and remove useless sending of XML.
+
+ ChangeLog                         |    8 ++
+ doc/extensions/xep-0186.html      |  169 +++++++++++++++++++++++++++++++++++++
+ doc/extensions/xmpp.css           |  143 +++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/client_iq.rb       |    4 +-
+ lib/xmppd/xmpp/client_presence.rb |    2 -
+ 5 files changed, 321 insertions(+), 5 deletions(-)
+
+commit 43d3b95f05a135fe986a053a8c1b9b4250c00f99
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Sep 22 18:27:29 2008 +0000
+
+    Carrying over shrike's CLIENTINFO legacy... :)
+
+ ChangeLog                   |   14 ++++++++++++++
+ lib/xmppd/xmpp/client_iq.rb |    5 ++++-
+ 2 files changed, 18 insertions(+), 1 deletions(-)
+
+commit bd2a6ebbe0ab74395198f6360588cd7fa96b1fc5
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Sep 19 21:02:16 2008 +0000
+
+    Added lots of useful stuff to Resource.
+    Added the beginnings of <presence/> processing.
+    Still buggy, haven't done any kind of broadcasting stuff yet.
+
+ ChangeLog                         |   43 +++++++++
+ Rakefile                          |    2 +-
+ lib/xmppd/xmpp/client.rb          |    1 +
+ lib/xmppd/xmpp/client_iq.rb       |   10 ++-
+ lib/xmppd/xmpp/client_presence.rb |  179 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/resource.rb        |   34 +++++++-
+ 6 files changed, 263 insertions(+), 6 deletions(-)
+
+commit 8c20f0ea38d4e514a5ce6d294873d758b2842ea1
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Sep 18 20:14:15 2008 +0000
+
+    Adding some reference docs.
+
+ doc/drafts/draft-saintandre-rfc3920bis-07.html | 7214 ++++++++++++++++++
+ doc/drafts/draft-saintandre-rfc3920bis-07.txt  | 9240 ++++++++++++++++++++++++
+ doc/drafts/draft-saintandre-rfc3921bis-06.html | 4122 +++++++++++
+ doc/drafts/draft-saintandre-rfc3921bis-06.txt  | 5376 ++++++++++++++
+ doc/rfcs/rfc3920.html                          | 3458 +++++++++
+ doc/rfcs/rfc3920.txt                           | 5043 +++++++++++++
+ doc/rfcs/rfc3921.html                          | 4102 +++++++++++
+ doc/rfcs/rfc3921.txt                           | 5995 +++++++++++++++
+ 8 files changed, 44550 insertions(+), 0 deletions(-)
+
+commit b4d258920e815d7e47a26bb90ac14e639695219b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Sep 18 20:09:56 2008 +0000
+
+    Removed sessions. The handlers are basic noops for backwards-compatibility.
+    Resources no longer have states (re: lack of sessions).
+    Cleaned lots of stuff up. Still lots of work to do.
+
+ ChangeLog                     |   10 ++++++++
+ README                        |    1 +
+ etc/example.conf              |    6 +++++
+ lib/xmppd.rb                  |   12 +++++++---
+ lib/xmppd/configure/parser.rb |    2 +-
+ lib/xmppd/db.rb               |   11 ++-------
+ lib/xmppd/listen.rb           |    2 +-
+ lib/xmppd/var.rb              |    7 +++++-
+ lib/xmppd/version.rb          |    4 +-
+ lib/xmppd/xmpp/client.rb      |    2 +-
+ lib/xmppd/xmpp/client_iq.rb   |   30 +++++++++++++++++--------
+ lib/xmppd/xmpp/features.rb    |    5 +++-
+ lib/xmppd/xmpp/resource.rb    |   12 ++-------
+ lib/xmppd/xmpp/sasl.rb        |    2 +-
+ lib/xmppd/xmpp/session.rb     |   47 -----------------------------------------
+ lib/xmppd/xmpp/stream.rb      |   18 ++++-----------
+ test/tc_db.rb                 |    4 +-
+ test/tc_stream.rb             |    4 +-
+ test/tc_timer.rb              |    4 +-
+ 19 files changed, 78 insertions(+), 105 deletions(-)
+
+commit d47ca9e0f38de3ba12c6d3db74658a9e70f43be5
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Sep 18 17:12:56 2008 +0000
+
+    Made resource binding required.
+    Fixed DIGEST-MD5 parsing. It's ugly, but necessary, thanks to stupid clients being stupid and the spec being retarded.
+
+ ChangeLog                  |   10 ++++++++++
+ lib/xmppd/xmpp/client.rb   |   21 ++++++++++++---------
+ lib/xmppd/xmpp/features.rb |   10 ++++++++--
+ 3 files changed, 30 insertions(+), 11 deletions(-)
+
+commit d9642cabeb72a671e399ee0bc35ede59d5a6419c
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Sep 17 21:27:31 2008 +0000
+
+    Apparently I should have read the PLAIN spec. Works with other clients now.
+    Psi is crappy. It breaks XML rules and so far fails to work with my implementation of DIGEST-MD5. Gajim and Digsby work fine. Also, it doesn't follow the RFC with SASL PLAIN's success return. Bummer.
+
+ ChangeLog                |   14 ++++++++++++++
+ lib/xmppd/xmpp/client.rb |    3 ++-
+ lib/xmppd/xmpp/stream.rb |   10 +++++++---
+ 3 files changed, 23 insertions(+), 4 deletions(-)
+
+commit c3e11620d8cb742fb0ddb757006052d41516c771
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Sep 17 19:29:07 2008 +0000
+
+    Added some RFC-required stuff to current code.
+    Implemented SASL [PLAIN] rather hackily. Haven't read the spec, just guessed.
+    I'm now referencing the new "draft" of the RFC for all of this.
+
+ ChangeLog                   |    9 +++++
+ lib/xmppd/xmpp/client.rb    |   74 +++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/client_iq.rb |    6 +++
+ lib/xmppd/xmpp/features.rb  |   15 ++++-----
+ lib/xmppd/xmpp/sasl.rb      |    2 +
+ lib/xmppd/xmpp/tls.rb       |    3 +-
+ 6 files changed, 98 insertions(+), 11 deletions(-)
+
+commit f2a89a0cb5ac6f5cfaf43232248f46c939ce44ae
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Sep 15 20:12:12 2008 +0000
+
+    Does forking now.
+
+ ChangeLog              |    9 +++++++++
+ lib/xmppd.rb           |   37 +++++++++++++++++++++++++++++++++++++
+ lib/xmppd/configure.rb |    1 +
+ 3 files changed, 47 insertions(+), 0 deletions(-)
+
+commit ec7fc1137c32ea821c448ce19c362f704c446551
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Sep 11 12:28:17 2008 +0000
+
+    Fixed some stuff to work with the new REXML kinks. Back where we were, at least.
+
+ ChangeLog                |   99 ++++++++++++++++++++++++++-------------------
+ lib/xmppd/xmpp/stream.rb |    6 ++-
+ lib/xmppd/xmpp/tls.rb    |    2 +-
+ 3 files changed, 63 insertions(+), 44 deletions(-)
+
+commit 07fe7421d5642c1df4b23e19a84fcbd92d7fd0db
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Sep 10 17:05:14 2008 +0000
+
+    Commented out the io/nonblock stuff for now. It doesn't work on windows, and I don't think we need it. I handle blocking myself.
+
+ lib/xmppd/xmpp/stream.rb |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+commit 0c2751fbf7ea73282d84a2fe1fb70fce53d1579e
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 24 18:09:31 2006 +0000
+
+    Add iq stanza errors, closing #39.
+
+ ChangeLog                   |   11 +++++
+ lib/xmppd/db.rb             |    3 +-
+ lib/xmppd/xmpp/client_iq.rb |   93 +++++++++++++++++++++++++++++++++++++------
+ 3 files changed, 93 insertions(+), 14 deletions(-)
+
+commit 1bb90ee7313818e337ae906adf396372c9cec631
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 24 05:40:55 2006 +0000
+
+    Add a bunch of database stuff for rosters.
+    Still a lot of work left on rosters...
+
+ ChangeLog                   |   13 +++
+ lib/xmppd/db.rb             |  176 +++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/client_iq.rb |   53 ++++++++++++-
+ lib/xmppd/xmpp/resource.rb  |    6 +-
+ 4 files changed, 235 insertions(+), 13 deletions(-)
+
+commit 917bd79499640f8d5253182192e94e836627c5e4
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 23 15:56:26 2006 +0000
+
+    Add support for sessions, closing #38.
+    Fix Stream.genid.
+
+ ChangeLog                   |   11 ++++++++++
+ lib/xmppd/xmpp/client_iq.rb |   34 +++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/features.rb  |   10 ++++++++-
+ lib/xmppd/xmpp/resource.rb  |    6 +++++
+ lib/xmppd/xmpp/session.rb   |   47 +++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb    |   26 +++++++++++++----------
+ 6 files changed, 122 insertions(+), 12 deletions(-)
+
+commit 5778bdfe1f16dacdb058ec47416f4c467e2c074f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Feb 20 17:43:42 2006 +0000
+
+    Add resource handling. Must go to work now...
+
+ ChangeLog                   |   13 ++++++++++
+ lib/xmppd/db.rb             |   12 ++++++++-
+ lib/xmppd/xmpp/client_iq.rb |    5 ++++
+ lib/xmppd/xmpp/resource.rb  |   55 +++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb    |    3 +-
+ 5 files changed, 86 insertions(+), 2 deletions(-)
+
+commit fd1e0d20504ac1f195e64a73b03a15721123d38a
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sun Feb 19 17:41:15 2006 +0000
+
+    Added 'support' for resource binding. Still have a lot to fix up on this but I'm pretty busy until Tuesday.
+    Added basic iq stanza handling.
+
+ ChangeLog                   |    8 +++
+ lib/xmppd/xmpp/client.rb    |    4 +-
+ lib/xmppd/xmpp/client_iq.rb |  143 +++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/features.rb  |   11 +++-
+ lib/xmppd/xmpp/sasl.rb      |    4 +-
+ lib/xmppd/xmpp/stream.rb    |    3 +-
+ 6 files changed, 164 insertions(+), 9 deletions(-)
+
+commit dca7577b70d035ab84e2d6cf9eed8c419cd53878
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 17 19:22:45 2006 +0000
+
+    Add some YAML stuff.
+
+ ChangeLog       |    8 ++++++++
+ lib/xmppd/db.rb |    4 ++++
+ 2 files changed, 12 insertions(+), 0 deletions(-)
+
+commit 5b19ef0f28364730610fd2d73df7be6ba3df4c51
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 17 18:39:20 2006 +0000
+
+    This should have never been in the repos.
+
+ ChangeLog         |   13 +++++++++++++
+ var/db/users.yaml |    9 ---------
+ 2 files changed, 13 insertions(+), 9 deletions(-)
+
+commit b2b97e4a33518316cbb98ec5254c9b7bf0e73e59
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 17 18:37:53 2006 +0000
+
+    SASL now auths against the DB.
+    Add authorization stuff.
+
+ ChangeLog              |   10 +++++++++
+ lib/xmppd/db.rb        |   31 +++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/sasl.rb |   12 +++-------
+ test/tc_db.rb          |   53 ++++++++++++++++++++++++++++++++++++++++++++++++
+ test/tc_timer.rb       |    2 +-
+ var/db/users.yaml      |   11 ++++++++-
+ 6 files changed, 107 insertions(+), 12 deletions(-)
+
+commit f6cc988dbb6e94e7c67f8e66aed1653998a2d10d
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 17 01:10:00 2006 +0000
+
+    Should probably let users have passwords. Stored a la SASL.
+
+ ChangeLog                |   18 ++++++++++++++++++
+ lib/xmppd/db.rb          |    8 ++++++--
+ lib/xmppd/xmpp/client.rb |    1 +
+ test/tc_db.rb            |   12 ++++++++----
+ 4 files changed, 33 insertions(+), 6 deletions(-)
+
+commit 99e8634fe0b2d733e6eb405c2d6e2a46211df49c
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 17 00:51:59 2006 +0000
+
+    Added unit testing for both.
+    Added clever little timers, closing #36.
+    Added basic DB stuff using YAML. Closes #9.
+
+ ChangeLog                |   10 ++++
+ lib/xmppd.rb             |   26 ++++++++---
+ lib/xmppd/db.rb          |  104 ++++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/timer.rb       |   56 +++++++++++++++++++++++++
+ lib/xmppd/xmpp/client.rb |    2 +-
+ test/tc_db.rb            |   65 ++++++++++++++++++++++++++++
+ test/tc_timer.rb         |   64 ++++++++++++++++++++++++++++
+ test/ts_xmppd.rb         |    2 +
+ var/db/users.yaml        |    2 +
+ 9 files changed, 323 insertions(+), 8 deletions(-)
+
+commit 9709ce6220f2e90fce8b41306975342ae795ccb9
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 16 18:35:55 2006 +0000
+
+    Fix already-established-stream bug.
+    Fix stream id bug.
+
+ ChangeLog                |    8 ++++++++
+ lib/xmppd/xmpp/client.rb |    8 ++++++++
+ lib/xmppd/xmpp/stream.rb |    3 ++-
+ 3 files changed, 18 insertions(+), 1 deletions(-)
+
+commit 341d3ec3c6187fef14ab0064935701528829ec1c
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 16 18:27:04 2006 +0000
+
+    Quick fix to SASL.
+
+ ChangeLog              |   13 +++++++++++++
+ lib/xmppd/xmpp/sasl.rb |   17 ++++++++++++++---
+ 2 files changed, 27 insertions(+), 3 deletions(-)
+
+commit 3d685b392e0c4cdc1ebf43e622a084dd67e5599f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 16 18:20:22 2006 +0000
+
+    Implemented #34.
+    Cleaned up SASL, closing #3.
+
+ ChangeLog                  |   11 ++++++
+ lib/xmppd/xmpp/client.rb   |   83 ++++--------------------------------------
+ lib/xmppd/xmpp/features.rb |   19 ++++++----
+ lib/xmppd/xmpp/sasl.rb     |   86 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb   |   27 +++++++++++++-
+ lib/xmppd/xmpp/tls.rb      |   62 +++++++++++++++++++++++++++++++
+ 6 files changed, 204 insertions(+), 84 deletions(-)
+
+commit dcf994dfe8efc22644110ac426cbcc4f909ea9f1
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 16 05:00:55 2006 +0000
+
+    SASL works. I'm going to clean it up, but I'm commiting it now in case I break something.
+
+ ChangeLog                  |   15 ++++
+ README                     |   13 +++
+ lib/xmppd/xmpp/client.rb   |  199 +++++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/features.rb |    6 +-
+ lib/xmppd/xmpp/stream.rb   |    9 ++-
+ 5 files changed, 235 insertions(+), 7 deletions(-)
+
+commit 7ec1e46cc94cb0fb102bfc98db2e8804a6bf3c56
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 15 05:37:04 2006 +0000
+
+    Fixed a problem in XMPP::Stream#resolve.
+    Rearranged auth/deny in example.conf.
+    Cleaned up state machine in XMPP::Stream classes.
+    Added handling for closing stream tag.
+    Fixed up feature listing.
+
+ ChangeLog                  |    8 ++++
+ etc/example.conf           |   12 ++++---
+ lib/xmppd/xmpp/client.rb   |    7 ++--
+ lib/xmppd/xmpp/features.rb |   58 ++++++++++++++++++++------------
+ lib/xmppd/xmpp/stream.rb   |   78 ++++++++++++++++++++++++++++---------------
+ 5 files changed, 106 insertions(+), 57 deletions(-)
+
+commit d9eee014fe01a0938a307734176d5ea17003ad93
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 14 16:28:53 2006 +0000
+
+    Updated Ruby version requirements.
+
+ ChangeLog    |    8 ++++++++
+ lib/xmppd.rb |   10 ++++++++--
+ 2 files changed, 16 insertions(+), 2 deletions(-)
+
+commit cad67c4b6bbbbb9499be2614744ae028f87ec03d
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 14 03:56:28 2006 +0000
+
+    Forgot to add this file in [26].
+
+ ChangeLog                  |   16 ++++++++++
+ lib/xmppd/xmpp/features.rb |   67 ++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 83 insertions(+), 0 deletions(-)
+
+commit eb52348c19067996d55c0177c64e17274289f7ab
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 14 03:50:14 2006 +0000
+
+    After much, much trouble, client TLS now works, closing #2.
+    Fixed some minor stuff.
+
+ ChangeLog                |   16 +++++++++++++
+ etc/example.conf         |   11 +++------
+ lib/xmppd.rb             |    2 +-
+ lib/xmppd/auth.rb        |    9 ++++---
+ lib/xmppd/configure.rb   |   21 +++++++-----------
+ lib/xmppd/listen.rb      |    8 +++++-
+ lib/xmppd/xmpp/client.rb |   53 ++++++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/xmpp/stream.rb |   41 ++++++++++++++++++++++++++++++-----
+ lib/xmppd/xmpp/tls.rb    |   32 ---------------------------
+ 9 files changed, 126 insertions(+), 67 deletions(-)
+
+commit 0248f915173c7698c594804de03a7fd4da38163f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 9 19:09:31 2006 +0000
+
+    Fix the @myhost stuff.
+    Add handler for initial client stream stanza.
+    Add xmpp/client.rb mixin for XMPP::ClientStream.
+    Add XMPP::Stream#error.
+    Add provisional TLS stuff.
+
+ ChangeLog                |   18 +++++++++++
+ lib/xmppd/auth.rb        |   12 -------
+ lib/xmppd/listen.rb      |    4 +-
+ lib/xmppd/xmpp/client.rb |   75 ++++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/stream.rb |   69 +++++++++++++++++++++++++++++++++---------
+ lib/xmppd/xmpp/tls.rb    |   32 +++++++++++++++++++
+ 6 files changed, 181 insertions(+), 29 deletions(-)
+
+commit e945df84490830e1d68e592948915f13f2478aa3
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 9 17:19:21 2006 +0000
+
+    Implement authorization checking against auth{} and deny{} configuration closing #32.
+    Fix a bug with auths and denys in configuration.
+    Move new connection handling to listen.rb instead of ioloop.
+    Fix the unit test for streams.
+    Further devide streams by ServerStreamIn and ServerStreamOut.
+
+ ChangeLog                |   13 +++++
+ etc/example.conf         |    7 ++-
+ lib/xmppd.rb             |   19 +-------
+ lib/xmppd/auth.rb        |   83 +++++++++++++++++++++++++++++++++
+ lib/xmppd/configure.rb   |    8 ++--
+ lib/xmppd/listen.rb      |   57 +++++++++++++++++++++++-
+ lib/xmppd/xmpp/stream.rb |  113 ++++++++++++++++++++++++++++-----------------
+ test/tc_stream.rb        |    2 +-
+ 8 files changed, 233 insertions(+), 69 deletions(-)
+
+commit 434fad9d6a1be7c6e80f69711113788876197a77
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Feb 9 04:32:01 2006 +0000
+
+    All socket stuff should be done, closing #6.
+    Add listening and accepting. Basic functionality seems to be working.
+
+ ChangeLog                |    8 +++++
+ lib/xmppd.rb             |   34 ++++++++++++++++-----
+ lib/xmppd/listen.rb      |   75 ++++++++++++++++++++++++++++++++++++++++++++++
+ lib/xmppd/log.rb         |    5 ---
+ lib/xmppd/var.rb         |    3 ++
+ lib/xmppd/xmpp/stream.rb |   60 +++++++++++++++++++++++++++----------
+ 6 files changed, 156 insertions(+), 29 deletions(-)
+
+commit 4d0feed75e8d893aadf6b131c03ef67c787aeaba
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 20:55:34 2006 +0000
+
+    Make sure to nameprep hosts for Streams.
+
+ ChangeLog                |   15 +++++++++++++++
+ lib/xmppd/xmpp/stream.rb |    5 +++--
+ 2 files changed, 18 insertions(+), 2 deletions(-)
+
+commit 09d72d6d7ff06dcb01640ddb6b129ad3604bdc5b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 18:50:56 2006 +0000
+
+    Implement stream debugging, closing #29.
+
+ ChangeLog                |    8 +++++++
+ etc/example.conf         |    8 +++---
+ lib/xmppd.rb             |   13 +++++++++++
+ lib/xmppd/var.rb         |    3 ++
+ lib/xmppd/xmpp/stream.rb |   51 +++++++++++++++++++++++++++-------------------
+ 5 files changed, 58 insertions(+), 25 deletions(-)
+
+commit 4ce7db233f239d8d471e02c95d3e27ac052b1f4f
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 18:24:42 2006 +0000
+
+    Add signal handling, closing #28.
+
+ ChangeLog    |   10 ++++++++++
+ lib/xmppd.rb |   22 ++++++++++++++++++++--
+ 2 files changed, 30 insertions(+), 2 deletions(-)
+
+commit b0b03d4c255f7f0d580b1510a1c92975e074fb21
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 17:45:57 2006 +0000
+
+    Add support for specifying a certfile for starttls.
+
+ ChangeLog                     |   10 ++++++++++
+ etc/example.conf              |   16 ++++++++++++++++
+ lib/xmppd/configure.rb        |   21 +++++++++++++++++++++
+ lib/xmppd/configure/listen.rb |    3 ++-
+ 4 files changed, 49 insertions(+), 1 deletions(-)
+
+commit 839705844f03e579f93a0b82df569adec328d762
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 06:54:34 2006 +0000
+
+    Actually empty the recvq when finished with it.
+    Fix a spacing error.
+
+ ChangeLog                |   14 ++++++++++++++
+ lib/xmppd.rb             |    1 -
+ lib/xmppd/xmpp/stream.rb |    2 ++
+ 3 files changed, 16 insertions(+), 1 deletions(-)
+
+commit fa3cd32b9d31afa0679910e3a50b417c0c92991b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Wed Feb 8 06:32:45 2006 +0000
+
+    Add xmlns:db to the opening server streams. Apparently ejabberd doesn't even allow connections without it.
+    XMPP::ClientStream#connect and XMPP::ServerStream#connect were kind of backwards.
+    Add reading, writing, and parsing to XMPP::Stream.
+    Add socket handling, so ioloop actually does something.
+
+ ChangeLog                |   14 +++++
+ lib/xmppd.rb             |   33 +++++++++++-
+ lib/xmppd/var.rb         |    3 +
+ lib/xmppd/xmpp.rb        |    2 +-
+ lib/xmppd/xmpp/stream.rb |  135 ++++++++++++++++++++++++++++++++++++----------
+ test/tc_stream.rb        |   12 ++--
+ 6 files changed, 162 insertions(+), 37 deletions(-)
+
+commit f4e89e03dfeb6cc812497bac7836ffc207b497e3
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 7 18:12:54 2006 +0000
+
+    Fix up some bugs in configuration and logging.
+    Add a test case for streams.
+    More work on streams.
+
+ ChangeLog                            |    8 +++
+ lib/xmppd/configure/configuration.rb |    1 -
+ lib/xmppd/xmpp/stream.rb             |   84 ++++++++++++++++++++++------------
+ test/tc_logging.rb                   |   20 ++++----
+ test/tc_stream.rb                    |   73 +++++++++++++++++++++++++++++
+ test/ts_xmppd.rb                     |    1 +
+ 6 files changed, 146 insertions(+), 41 deletions(-)
+
+commit 62e8c2a1c64e26bcc59bfcb1600ecc147740f78b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 7 05:27:29 2006 +0000
+
+    Did some more stream stuff. Devided Stream into ServerStream and ClientStream.
+
+ ChangeLog                |   10 ++++
+ lib/xmppd/xmpp/stream.rb |  109 +++++++++++++++++++++++++++++++++------------
+ 2 files changed, 90 insertions(+), 29 deletions(-)
+
+commit b78399238489715589ebfb52f1ea869b74334fc0
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Feb 7 03:45:52 2006 +0000
+
+    Fix logging so that 'enable' actually has meaning.
+    Add some more socket stuff and XMPP library stuff.
+
+ ChangeLog                |   10 ++++++
+ lib/xmppd/log.rb         |   16 +++++++--
+ lib/xmppd/xmpp/stream.rb |   75 +++++++++++++++++++++++++++++++++++++++------
+ 3 files changed, 87 insertions(+), 14 deletions(-)
+
+commit 41fbdebd7ee30ab0118bdda4d99ee93e2a424033
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Feb 6 20:40:24 2006 +0000
+
+    Did some work on library stuff. Not a whole lot of free time lately.
+
+ ChangeLog                |   26 +++++++
+ lib/xmppd/xmpp.rb        |   13 ++++
+ lib/xmppd/xmpp/stream.rb |  177 ++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 216 insertions(+), 0 deletions(-)
+
+commit e231ffeedc9c00c17cffb8edf193676cff94ed47
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Feb 3 00:36:01 2006 +0000
+
+    First attempt at changing config stuff from XML to easier bind-style.
+
+ ChangeLog                            |    8 +
+ etc/configure.xml                    |  163 ---------------
+ etc/configure.xsd                    |  128 ------------
+ etc/example.conf                     |  148 ++++++++++++++
+ lib/xmppd.rb                         |   13 +-
+ lib/xmppd/configure.rb               |  326 ++++++++++++------------------
+ lib/xmppd/configure/auth.rb          |   25 ++-
+ lib/xmppd/configure/configuration.rb |    7 +-
+ lib/xmppd/configure/deny.rb          |   24 +++
+ lib/xmppd/configure/listen.rb        |    5 +-
+ lib/xmppd/configure/logging.rb       |   45 ++++-
+ lib/xmppd/configure/operator.rb      |   23 ++-
+ lib/xmppd/configure/parser.rb        |  365 ++++++++++++++++++++++++++++++++++
+ lib/xmppd/log.rb                     |   10 +-
+ lib/xmppd/var.rb                     |    4 +-
+ test/bad_config.xml                  |   17 --
+ test/ok_config.xml                   |   23 --
+ test/tc_config.rb                    |  158 ++++++++++++++-
+ 18 files changed, 923 insertions(+), 569 deletions(-)
+
+commit 6652ddc3ee068c8756cede9affeaa7c4e6d93faa
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Jan 31 06:36:00 2006 +0000
+
+    Forgot a <tt/> in the README.
+
+ ChangeLog |   10 ++++++++++
+ README    |    2 +-
+ 2 files changed, 11 insertions(+), 1 deletions(-)
+
+commit 2cc883140dbbabb89e574733d23fd5597de7ec5c
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Jan 31 06:25:36 2006 +0000
+
+    Update README for new tracker.
+    Removed TODO, as we have a tracker now.
+
+ ChangeLog |   16 ++++++++++++++++
+ README    |    2 +-
+ TODO      |   59 -----------------------------------------------------------
+ 3 files changed, 17 insertions(+), 60 deletions(-)
+
+commit 384095a2f92858dfd679539ad1c12686ab9d4280
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Jan 27 23:01:07 2006 +0000
+
+    Implemented logging with Logger.
+    Added <fork/> and <logging><level/></logging> to the config.
+
+ ChangeLog                      |   29 ++++++++++++++++
+ etc/configure.xml              |   18 ++++++++++
+ etc/configure.xsd              |    7 ++++
+ lib/xmppd.rb                   |   30 ++++++++++++++---
+ lib/xmppd/configure.rb         |   25 ++++++++++++-
+ lib/xmppd/configure/logging.rb |    3 +-
+ lib/xmppd/log.rb               |   65 +++++++++++++++++++++++++++++++++++
+ test/tc_logging.rb             |   73 ++++++++++++++++++++++++++++++++++++++++
+ test/ts_xmppd.rb               |    1 +
+ 9 files changed, 243 insertions(+), 8 deletions(-)
+
+commit 3414c55ece57fbae2017b0d95d55a778c05f2128
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Jan 27 18:20:42 2006 +0000
+
+    Worked on the logging for about three hours, unfortunately both Logger and Log4r are pieces of shit, so I had to remove it all.
+    Added proper configuration error catching and such.
+    Updated TODO.
+
+ TODO                   |   18 +++++++++---------
+ lib/xmppd.rb           |   46 +++++++++++++++++++++++++++++++++++++++++++++-
+ lib/xmppd/configure.rb |    4 ++++
+ lib/xmppd/var.rb       |    6 ++++++
+ 4 files changed, 64 insertions(+), 10 deletions(-)
+
+commit 53fee6b98d3e7816971f742e3d707375901d23f0
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Jan 27 06:47:36 2006 +0000
+
+    Added unit tests.
+    Finished major work on configure stuff.
+
+ ChangeLog                            |   20 +++++++
+ Rakefile                             |    7 ++-
+ lib/xmppd/configure.rb               |  100 +++++++++++++++++++++++++++++++++-
+ lib/xmppd/configure/auth.rb          |    2 +-
+ lib/xmppd/configure/configuration.rb |    4 +-
+ lib/xmppd/configure/operator.rb      |    2 +-
+ test/bad_config.xml                  |   17 ++++++
+ test/ok_config.xml                   |   23 ++++++++
+ test/tc_config.rb                    |   44 +++++++++++++++
+ test/ts_xmppd.rb                     |   18 ++++++
+ 10 files changed, 228 insertions(+), 9 deletions(-)
+
+commit 57d73428ca30ce895e80f154f3210a11b3ed9d35
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Jan 27 04:44:29 2006 +0000
+
+    Did a significant amount of work on configure.
+    Edited TODO.
+    Changed a word in configure.xml.
+
+ ChangeLog                            |   15 +++
+ TODO                                 |    2 +
+ etc/configure.xml                    |    2 +-
+ lib/xmppd.rb                         |    4 +
+ lib/xmppd/configure.rb               |  166 ++++++++++++++++++++++++++++++++++
+ lib/xmppd/configure/auth.rb          |   28 ++++++
+ lib/xmppd/configure/configuration.rb |   36 ++++++++
+ lib/xmppd/configure/listen.rb        |   25 +++++
+ lib/xmppd/configure/logging.rb       |   25 +++++
+ lib/xmppd/configure/operator.rb      |   25 +++++
+ lib/xmppd/var.rb                     |    6 ++
+ 11 files changed, 333 insertions(+), 1 deletions(-)
+
+commit 1a52ec9bce42d163b39c4406bef99f70cef946ce
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Jan 26 22:39:47 2006 +0000
+
+    Added a brief TODO list.
+
+ TODO |   57 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 files changed, 57 insertions(+), 0 deletions(-)
+
+commit 2033009de7078466be6076eb337c638e406bc30b
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Jan 26 22:14:49 2006 +0000
+
+    Set the svn:keywords on README.
+
+ ChangeLog |   10 ++++++++++
+ 1 files changed, 10 insertions(+), 0 deletions(-)
+
+commit 790bea359017969d9553fb331934cf8c1e53cda5
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Jan 26 22:13:59 2006 +0000
+
+    Added an early README, in rdoc format.
+    Touched up the Rakefile.
+
+ ChangeLog |   11 +++++++
+ README    |   94 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Rakefile  |    5 ++-
+ 3 files changed, 108 insertions(+), 2 deletions(-)
+
+commit 8011439f9fbfe53a0fc15f990a95864fa7000646
+Author: Eric Will <rakaur@malkier.net>
+Date:   Thu Jan 26 07:29:49 2006 +0000
+
+    Did some work on the configuration file format.
+    Touched up the Rakefile.
+
+ ChangeLog         |   22 ++++++++
+ Rakefile          |    2 +
+ etc/configure.xml |  145 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ etc/configure.xsd |  121 ++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 290 insertions(+), 0 deletions(-)
+
+commit f6cffb1cdafb5d26ed7b6af055349beb2e209c8a
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Jan 24 17:34:28 2006 +0000
+
+    Initial import.
+
+ Rakefile             |  160 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ bin/xmppd            |   20 ++++++
+ lib/xmppd.rb         |   48 +++++++++++++++
+ lib/xmppd/var.rb     |   17 +++++
+ lib/xmppd/version.rb |   12 ++++
+ 5 files changed, 257 insertions(+), 0 deletions(-)
