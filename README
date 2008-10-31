@@ -10,7 +10,7 @@
 = synapse
 === A Lightweight XMPP Server Implementation
 
-This program is free but copyrighted software; see <tt>doc/license</tt> for
+This program is free but copyrighted software; see <tt>doc/license.txt</tt> for
 details.
 
 Information about +synapse+ may be found at <tt>http://synapse.malkier.net/</tt>.
