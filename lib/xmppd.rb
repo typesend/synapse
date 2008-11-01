@@ -139,17 +139,6 @@ class XMPPd
         # Load the databases.
         DB::User.load
 
-        # Save the db every five minutes.
-        Timer::Timer.new('save user db', 300, true) { DB::User.dump }
-
-        # Clean out useless roster entries and resend subscription requests.
-        Timer::Timer.new('prune rosters', 86400, true) do
-            DB::User.users.each { |jid, user| user.clean_roster }
-        end
-
-        # Set up listening ports.
-        Listen::init
-
         # Fork into the background.
         if $fork
             begin
@@ -183,6 +172,17 @@ class XMPPd
             puts 'xmppd: running in foreground mode from ' + Dir.getwd
         end
         
+        # Save the db every five minutes.
+        Timer::Timer.new('save user db', 300, true) { DB::User.dump }
+
+        # Clean out useless roster entries and resend subscription requests.
+        Timer::Timer.new('prune rosters', 86400, true) do
+            DB::User.users.each { |jid, user| user.clean_roster }
+        end
+
+        # Set up listening ports.
+        Listen::init
+
         # XXX
         #
         # If you want to add users, do this for now:
