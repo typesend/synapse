@@ -23,8 +23,8 @@ module Client
 # receive, such as rosters, presence notifications, etc.
 #
 class Resource
-    attr_accessor :presence_stanza
-    attr_reader   :dp_to, :name, :stream, :user
+    attr_accessor :dp_to, :presence_stanza
+    attr_reader   :name,  :stream, :user
 
     #
     # Create a new XMPP::Client::Resource.
@@ -138,9 +138,6 @@ class Resource
         node,   domain   = jid.split('@')
         domain, resource = domain.split('/')
 
-        # Check to see if it's to a local user.
-        return unless $config.hosts.include?(domain)
-
         user = DB::User.users[node + '@' + domain]
 
         if user and user.available?
@@ -159,9 +156,6 @@ class Resource
                 return self
             end
         end
-
-        @stream.write Stanza.error(stanza, 'feature-not-implemented', 'cancel')
-        # XXX - If we get here then they're s2s.
 
         return self
     end

@@ -32,30 +32,25 @@ module Presence
 
 extend self
 
-def handle_presence(elem)
-    # Are we ready for <presence/> stanzas?
-    unless presence_ready?
-        error('unexpected-request')
-        return
-    end
-
-    methname = 'presence_' + (elem.attributes['type'] or 'none')
-
-    unless respond_to?(methname)
-        write Stanza.error(elem, 'bad-request', 'cancel')
-        return
-    else
-        send(methname, elem)
-    end
-end
+#def handle_presence(elem)
+#    # Are we ready for <presence/> stanzas?
+#    unless presence_ready?
+#        error('unexpected-request')
+#        return
+#    end
+#
+#    methname = 'presence_' + (elem.attributes['type'] or 'none')
+#
+#   unless respond_to?(methname)
+#        write Stanza.error(elem, 'bad-request', 'cancel')
+#        return
+#    else
+#        send(methname, elem)
+#    end
+#end
 
 # No type signals avilability.
 def presence_none(elem)
-    if elem.attributes['to']
-        @resource.send_directed_presence(elem.attributes['to'], elem)
-        return
-    end
-
     @resource.presence_stanza = elem
 
     # Broadcast it to relevant entities.
@@ -73,21 +68,15 @@ def presence_none(elem)
         return unless elem.elements['priority']
         return if elem.elements['priority'].text.to_i < 0
 
-        # XXX - only deliver messages for now
-        @resource.user.offline_stanzas.each do |kind, stanzas|
-            stanzas.each { |stanza| write stanza } if kind == 'message'
-            @resource.user.offline_stanzas[kind] = []
-        end
+        @logger.unknown "(#{@resource.name}) -> start offline stanzas"
+        @resource.user.offline_stanzas.each { |stanza| write stanza }
+        @resource.user.offline_stanzas = []
+        @logger.unknown "(#{@resource.name}) -> end offline stanzas"
     end
 end
 
 # They're logging off.
 def presence_unavailable(elem)
-    if elem.attributes['to']
-        @resource.send_directed_presence(elem.attributes['to'], elem)
-        return
-    end
-
     @resource.presence_stanza = elem
 
     @resource.dp_to.uniq.each do |jid|

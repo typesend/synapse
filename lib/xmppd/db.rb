@@ -46,9 +46,7 @@ class User
     def initialize(node, domain, password)
         @resources = {}
         @roster = {}
-        @offline_stanzas = { 'iq'       => [],
-                             'presence' => [],
-                             'message'  => [] }
+        @offline_stanzas = []
 
         @node = IDN::Stringprep.nodeprep(node[0, 1023])
 

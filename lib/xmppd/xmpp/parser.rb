@@ -54,19 +54,17 @@ STANZAS = ['stream', 'starttls', 'auth', 'response',
 def preprocess_stanza(stanza)
     # Do flood checks.  
     return if flooding? if @resource and not @resource.user.operator?
-    
+
     # Is it a legal stanza type?
     unless STANZAS.include?(stanza.name)
         if client?
-            $log.c2s.error "Unknown stanza from #{@host}: " +
-                           "'#{stanza.name}' (no '#{methname}')"
+            $log.c2s.error "Unknown stanza from #{@host}: '#{stanza.name}'"
         else
-            $log.s2s.error "Unknown stanza from #{@host}: " +
-                           "'#{stanza.name}' (no '#{methname}')"
+            $log.s2s.error "Unknown stanza from #{@host}: '#{stanza.name}'"
         end
 
         error('invalid-namespace')
-        
+
         return
     end
     
