@@ -227,8 +227,8 @@ def squery_roster(stanza)
             presence.add_attribute('to', jid)
             presence.add_attribute('from', @resource.user.jid)
 
-            @resource.send_directed_presence(jid, presence)
-            presence_unsubscribe(presence)
+            process_stanza(presence)
+            #presence_unsubscribe(presence)
         end
 
         if user.subscribed?(@resource.user)
@@ -240,12 +240,9 @@ def squery_roster(stanza)
             presence.add_attribute('to', jid)
             presence.add_attribute('from', @resource.user.jid)
 
-            @resource.send_directed_presence(jid, presence)
-            presence_unsubscribed(presence)
+            process_stanza(presence)
+            #presence_unsubscribed(presence)
         end
-
-        #@resource.user.clean_roster
-        #user.clean_roster
 
         return self
     end

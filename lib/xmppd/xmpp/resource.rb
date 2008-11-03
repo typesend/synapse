@@ -122,48 +122,6 @@ class Resource
     end
 
     #
-    # Send directed presence to one JID.
-    #
-    # jid:: [String] full or bare JID
-    # stanza:: [REXML::Element] the stanza to send
-    #
-    # return:: [XMPP::Client::Resource] self
-    #
-    def send_directed_presence(jid, stanza)
-        unless stanza.class == REXML::Element
-            raise ArgumentError, 'stanza must be a REXML::Element'
-        end
-
-        # Stamp the from.
-        stanza.add_attribute('from', self.jid)
-
-        # Separate out the JID parts.
-        node,   domain   = jid.split('@')
-        domain, resource = domain.split('/')
-
-        user = DB::User.users[node + '@' + domain]
-
-        if user and user.available?
-            sb = user.subscribed?(@user)
-
-            if resource and user.resources[resource]
-                send_presence(user.resources[resource], stanza)
-                @dp_to << user.resources[resource].jid unless sb
-                return self
-            else
-                user.resources.each do |n, resource|
-                    send_presence(resource, stanza)
-                    @dp_to << resource.jid unless sb
-                end
-
-                return self
-            end
-        end
-
-        return self
-    end
-
-    #
     # Send our presence to one resource.
     #
     # resource:: [XMPP::Client::Resource] resource to send it to

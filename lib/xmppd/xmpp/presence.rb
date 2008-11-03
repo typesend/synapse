@@ -81,7 +81,9 @@ def presence_unavailable(elem)
     @resource.presence_stanza = elem
 
     @resource.dp_to.uniq.each do |jid|
-        @resource.send_directed_presence(jid, elem)
+        s = elem.dup
+        s.add_attribute('to', jid)
+        process_stanza(s)
     end
 
     @resource.dp_to = []
@@ -95,17 +97,7 @@ def presence_subscribe(elem)
         return
     end
 
-    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
-        write Stanza.error(elem, 'feature-not-implented', 'cancel')
-        return
-    end
-
     suser = DB::User.users[elem.attributes['to']]
-
-    unless suser
-        write Stanza.error(elem, 'item-not-found', 'cancel')
-        return
-    end
 
     # Update our roster entry.
     myc = @resource.user.roster[suser.jid]
@@ -190,10 +182,9 @@ def presence_subscribe(elem)
     end
 
     if deliver
+        # Send it to all their resources.
         @resource.user.roster[elem.attributes['to']].stime = $time
-        elem.add_attribute('from', @resource.user.jid)
-        @resource.send_directed_presence(elem.attributes['to'], elem)
-        @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+        suser.resources.each { |n, rec| rec.stream.write elem }
 
         # Roster push to all of our resources.
         iq    = Stanza.new_iq('set')
@@ -215,26 +206,11 @@ def presence_unsubscribe(elem)
         return
     end
 
-    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
-        write Stanza.error(elem, 'feature-not-implented', 'cancel')
-        return
-    end
-
     suser = DB::User.users[elem.attributes['to']]
-
-    unless suser
-        write Stanza.error(elem, 'item-not-found', 'cancel')
-        return
-    end
 
     # Update our roster entry.
     myc = @resource.user.roster[suser.jid]
     route = true
-
-@logger.unknown "%s unsub -> %s" % [@resource.user.jid, suser.jid]
-
-@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
-                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
 
     if not myc
         # No state change.
@@ -264,18 +240,12 @@ def presence_unsubscribe(elem)
         myc.subscription = 'from'
     end
 
-@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
-                [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
-
     # XXX - route
 
     # Update their roster entry.
     myc       = suser.roster[@resource.user.jid]
     autoreply = false
     deliver   = false
-
-@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
-                [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
 
     if not myc
         # No state change.
@@ -316,16 +286,12 @@ def presence_unsubscribe(elem)
         presence.add_attribute('from', suser.jid)
         presence.add_attribute('to', @resource.user.jid)
         presence.add_attribute('type', 'unsubscribed')
-    @logger.unknown "Autoreplying to #{@resource.user.jid} " +
-                    "on behalf of #{suser.jid}"
-        suser.resources.each do |n, rec|
-            rec.send_directed_presence(@resource.user.jid, presence)
-            rec.dp_to.delete_if { |to| to =~ /#{suser.jid}/ }
-        end
-    end
 
-@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
-                [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
+@logger.unknown "Autoreplying to #{@resource.user.jid} on behalf of #{suser.jid}"
+
+        # XXX - I don't think this is what I want.
+        write presence
+    end
 
     # Roster push to all of our resources.
     if @resource.user.roster[suser.jid]
@@ -362,17 +328,7 @@ def presence_subscribed(elem)
         return
     end
 
-    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
-        write Stanza.error(elem, 'feature-not-implented', 'cancel')
-        return
-    end
-
     suser = DB::User.users[elem.attributes['to']]
-
-    unless suser
-        write Stanza.error(elem, 'item-not-found', 'cancel')
-        return
-    end
 
     # Update our roster entry.
     myc = @resource.user.roster[suser.jid]
@@ -453,9 +409,7 @@ def presence_subscribed(elem)
     # Only do the below if we route.
     return unless route
 
-    elem.add_attribute('from', @resource.user.jid)
-    @resource.send_directed_presence(elem.attributes['to'], elem)
-    @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+    suser.resources.each { |n, rec| rec.stream.write elem }
 
     # Roster push to all of our resources.
     iq    = Stanza.new_iq('set')
@@ -483,26 +437,11 @@ def presence_unsubscribed(elem)
         return
     end
 
-    unless $config.hosts.include?(elem.attributes['to'].split('@')[1])
-        write Stanza.error(elem, 'feature-not-implented', 'cancel')
-        return
-    end
-
     suser = DB::User.users[elem.attributes['to']]
-
-    unless suser
-        write Stanza.error(elem, 'item-not-found', 'cancel')
-        return
-    end
 
     # Update our roster entry.
     myc = @resource.user.roster[suser.jid]
     route = true
-
-@logger.unknown "%s unsub'd -> %s" % [@resource.user.jid, suser.jid]
-
-@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
-                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
 
     if not myc
         # No state change.
@@ -535,17 +474,11 @@ def presence_unsubscribed(elem)
         myc.subscription = 'to'
     end
 
-@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
-                 [@resource.user.jid, suser.jid, myc.pending, myc.subscription]
-
     # XXX - route
 
     # Update their roster entry.
     myc = suser.roster[@resource.user.jid]
     deliver = false
-
-@logger.unknown "before: %s->%s: pending: %d; subscription: %s" % \
-                 [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
 
     if not myc
         # No state change.
@@ -575,15 +508,10 @@ def presence_unsubscribed(elem)
         myc.subscription = 'from'
     end
 
-@logger.unknown "after: %s->%s: pending: %d; subscription: %s" % \
-                 [suser.jid, @resource.user.jid, myc.pending, myc.subscription]
-
     # Only do the below if we route.
     return unless route
 
-    elem.add_attribute('from', @resource.user.jid)
-    @resource.send_directed_presence(elem.attributes['to'], elem)
-    @resource.dp_to.delete_if { |to| to =~ /#{elem.attributes['to']}/ }
+    suser.resources.each { |n, rec| rec.stream.write elem }
 
     # Roster push to all of our resources.
     iq    = Stanza.new_iq('set')

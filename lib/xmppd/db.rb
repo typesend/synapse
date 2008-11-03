@@ -365,7 +365,7 @@ class User
                 presence.add_attribute('from', jid)
 
                 if available?
-                    front_resource.send_directed_presence(j, presence)
+                    front_resource.stream.process_stanza(presence)
                     c.stime = $time
                 end
             end

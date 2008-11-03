@@ -1,10 +1,8 @@
 #
 # synapse: a small XMPP server
-# xmpp/parser.rb: parse and do initial XML processing
+# xmpp/process.rb: this is where it all happens, folks
 #
 # Copyright (c) 2006-2008 Eric Will <rakaur@malkier.net>
-#
-# $Id$
 #
 
 #
@@ -19,9 +17,14 @@ module XMPP
 module Process
     
 def process_stanza(stanza)
+    recname = @resource.name if @resource
+    recname ||= ''
+
+    @logger.unknown "#{recname}\#process_stanza(): #{stanza.to_s}"
+
     s_type = stanza.name
     s_to   = stanza.attributes['to']
-    
+
     # Section 11.1 - no 'to' attribute
     #   Server MUST handle directly.
     if not s_to or s_to.empty?
@@ -82,7 +85,7 @@ def process_stanza(stanza)
                 else
                     write Stanza.error(stanza, 'bad-request', 'modify')
                 end
-                
+
             # Section 11.2.2 - domain with resource
             #   Server MUST handle based on stanza type.
             elsif not node and resource
@@ -90,19 +93,21 @@ def process_stanza(stanza)
                 #   I have no idea what this could possibly apply to at
                 #   the moment, so for now we error.
                 write Stanza.error(stanza, 'bad-request', 'modify')
-                
+
             # Section 11.2.3 - node at domain
             #   Rules defined in XMPP-IM - XXX
             elsif node and domain
                 user = DB::User.users[node + '@' + domain]
-                
+
                 # Section 11.2.3.1 - no such user
                 #   Ignore 'presence'
                 if not user and s_type =~ /(message|iq)/
                     write Stanza.error(stanza, 'service-unavailable', 'cancel')
                     return
                 end
-                
+
+                sb = user.subscribed?(@resource.user)
+
                 # Section 11.2.3.2 - bare jid
                 if not resource
                     if s_type == 'message'
@@ -124,7 +129,13 @@ def process_stanza(stanza)
                         end
                     elsif s_type == 'presence'
                         p_type = stanza.attributes['type']
-                        sb     = user.subscribed?(@resource.user)
+
+                        # XXX - this sucks.
+                        if p_type =~ /((un)?subscribe(d)?)/
+                            @logger.unknown "THIS SUCKS: overridden"
+                            send("presence_#{p_type}", stanza)
+                            return
+                        end
 
                         # This is directed presence.
                         if user.available?
@@ -162,6 +173,11 @@ def process_stanza(stanza)
 
                     if rec
                         rec.stream.write stanza
+
+                        # Directed presence.
+                        if s_type == 'presence'
+                            @resource.dp_to << rec.jid unless sb
+                        end
                     else
                         stanza.add_attribute('to', node + '@' + domain)
                         process_stanza(stanza)
