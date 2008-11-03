@@ -1,3 +1,39 @@
+commit 268efec7e961a78a1c3489ebb65cca6acb0bb37e
+Author: Eric Will <rakaur@malkier.net>
+Date:   Mon Nov 3 07:31:53 2008 -0500
+
+    Make a note about the RFC being impossible.
+
+ Rakefile                 |    3 ++-
+ lib/xmppd/xmpp/parser.rb |    9 +++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
+
+commit 160be58ef40c47da8f6575997af2896d4e80ce97
+Author: Eric Will <rakaur@malkier.net>
+Date:   Sat Nov 1 16:22:26 2008 -0400
+
+    Fixed a timer issue.
+    
+    Moving the timer stuff to after the fork(), as this kills the timer threads. Thanks Sho.
+    Silly Ruby, threads are for real languages.
+
+ lib/xmppd.rb |   22 +++++++++++-----------
+ 1 files changed, 11 insertions(+), 11 deletions(-)
+
+commit 537f9a377499865e9fe7418761c95e798c156c62
+Author: Eric Will <rakaur@malkier.net>
+Date:   Fri Oct 31 15:11:57 2008 -0400
+
+    Fix some things up for git.
+    
+    Updated Rakefile to work with git instead of svn.
+    Changed the ChangeLog from svn log to git log.
+
+ ChangeLog            | 2642 +++++++++++++++++++++++++++-----------------------
+ Rakefile             |   26 +-
+ lib/xmppd/version.rb |    6 +-
+ 3 files changed, 1440 insertions(+), 1234 deletions(-)
+
 commit eafa62403543b12e1917f8bd9e3ffde6212de29f
 Author: Eric Will <rakaur@malkier.net>
 Date:   Fri Oct 31 14:09:41 2008 -0400

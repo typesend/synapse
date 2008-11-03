@@ -53,8 +53,9 @@ end
 #
 desc 'Commit current working copy'
 task :commit => [:clobber, :test] do
-    sh 'git log --stat=80 > ChangeLog'
     sh 'git commit -a'   
+    sh 'git log --stat=80 > ChangeLog'
+    sh 'git commit -a --amend'
 end
 
 #

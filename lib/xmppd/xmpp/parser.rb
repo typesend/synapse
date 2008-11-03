@@ -140,10 +140,11 @@ def parse(data)
             retry
         else
             # REXML throws this when it gets a partial stanza that's not
-            # well-formed. We store it in the buffer for the next read(),
-            # XXX: IF I DO THIS, THERE IS NO WAY TO DETECT INVALID
-            # XML IN THE STREAM. IF THIS CLIENT IS MESSING WITH US,
-            # IT WILL SIT THERE UNTIL IT TIMES OUT, BEING USELESS.
+            # well-formed. The RFC wants us to be able to stitch together
+            # partial stanzas and also to detect invalid XML, but it's
+            # pretty much IMPOSSIBLE to do both. We meet half way by stitching
+            # together well-formed partial stanzas, and doing a stream error
+            # on anything not well-formed.
             error('xml-not-well-formed')
         end
     end
