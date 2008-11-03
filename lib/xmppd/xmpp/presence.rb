@@ -65,6 +65,7 @@ def presence_none(elem)
         @resource.send_roster_presence
 
         # Do they have any offline stazas?
+        return if @resource.user.offline_stanzas.empty?
         return unless elem.elements['priority']
         return if elem.elements['priority'].text.to_i < 0
 
@@ -82,6 +83,8 @@ def presence_unavailable(elem)
     @resource.dp_to.uniq.each do |jid|
         @resource.send_directed_presence(jid, elem)
     end
+
+    @resource.dp_to = []
 
     @resource.broadcast_presence(elem)
 end

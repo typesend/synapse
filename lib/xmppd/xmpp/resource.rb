@@ -134,6 +134,9 @@ class Resource
             raise ArgumentError, 'stanza must be a REXML::Element'
         end
 
+        # Stamp the from.
+        stanza.add_attribute('from', self.jid)
+
         # Separate out the JID parts.
         node,   domain   = jid.split('@')
         domain, resource = domain.split('/')

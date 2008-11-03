@@ -44,7 +44,7 @@ def process_stanza(stanza)
 
                 if not p_type
                     presence_none(stanza)
-                elsif p_type =~ /^((un)?available|(un)?subscribe(d)?)$/
+                elsif p_type =~ /^(unavailable|(un)?subscribe(d)?)$/
                     send("presence_#{p_type}", stanza)
                 else
                     write Stanza.error(stanza, 'bad-request', 'modify')
@@ -131,7 +131,7 @@ def process_stanza(stanza)
                             user.resources.each do |n, rec|
                                 rec.stream.write stanza
 
-                                if p_type and p_type !~ /((un)?subscribe(d)?)/
+                                if p_type !~ /((un)?subscribe(d)?)/
                                     @resource.dp_to << rec.jid unless sb
                                 end
                             end
