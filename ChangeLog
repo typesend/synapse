@@ -1,12 +1,29 @@
-commit 268efec7e961a78a1c3489ebb65cca6acb0bb37e
+commit 6d8bea847fc851af460e19ba0271d00416caef91
+Author: Eric Will <rakaur@malkier.net>
+Date:   Tue Nov 4 09:10:56 2008 -0500
+
+    Implement an XML parser using expat.
+    
+    This tries to use expat first, then falls back to REXML.
+    There is a major difference: REXML will detect not-well-formed XML, and still manage
+    to patch incomplete stanzas together okay. expat will never recognize a bad stanza, but
+    instead will wait for the rest of it to be valid or just sit there until the buffer explodes.
+
+ lib/xmppd/xmpp/parser.rb       |  150 +--------------------------------------
+ lib/xmppd/xmpp/parser_expat.rb |  133 +++++++++++++++++++++++++++++++++++
+ lib/xmppd/xmpp/parser_rexml.rb |  152 ++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 289 insertions(+), 146 deletions(-)
+
+commit 8d35ec24282011f8aaed429fd77dbf3b61f1093f
 Author: Eric Will <rakaur@malkier.net>
 Date:   Mon Nov 3 07:31:53 2008 -0500
 
     Make a note about the RFC being impossible.
 
+ ChangeLog                |   36 ++++++++++++++++++++++++++++++++++++
  Rakefile                 |    3 ++-
  lib/xmppd/xmpp/parser.rb |    9 +++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ 3 files changed, 43 insertions(+), 5 deletions(-)
 
 commit 160be58ef40c47da8f6575997af2896d4e80ce97
 Author: Eric Will <rakaur@malkier.net>
