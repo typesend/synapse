@@ -15,7 +15,17 @@ module XMPP
 # This is meant to be a mixin to a Stream.
 #
 module Process
-    
+
+# XXX - for debugging
+def method_missing(s, *a, &b)
+    print "method_missing: ", s, " ", a.inspect, "\n"
+end
+
+#
+# This method is long and painful, but so is XMPP.
+# The logic is taken directly from the RFC. It's not set up
+# the best way, but it works for now.
+#
 def process_stanza(stanza)
     recname = @resource.name if @resource
     recname ||= ''
@@ -24,6 +34,25 @@ def process_stanza(stanza)
 
     s_type = stanza.name
     s_to   = stanza.attributes['to']
+
+    # Is the stanza sent in the correct context?
+    case s_type
+    when 'message'
+        unless message_ready?
+            error('unexpected-request')
+            return
+        end
+    when 'presence'
+        unless presence_ready?
+            error('unexpected-request')
+            return
+        end
+    when 'iq'
+        unless iq_ready?
+            error('unexpected-request')
+            return
+        end
+    end
 
     # Section 11.1 - no 'to' attribute
     #   Server MUST handle directly.
@@ -45,10 +74,22 @@ def process_stanza(stanza)
             elsif s_type == 'presence'
                 p_type = stanza.attributes['type']
 
-                if not p_type
-                    presence_none(stanza)
-                elsif p_type =~ /^(unavailable|(un)?subscribe(d)?)$/
-                    send("presence_#{p_type}", stanza)
+                # The only p_types without a 'to' are none and unavailable.
+                if not p_type or p_type == 'unavailable'
+                    @resource.presence_stanza = stanza
+                    @resource.initial_presence unless @resource.available?
+                    @resource.broadcast_presence
+
+                    # Take care of anyone we sent directed presence to.
+                    if p_type == 'unavailable'
+                        @resource.dp_to.uniq.each do |jid|
+                            stanza.add_attribute('to', jid)
+                            stanza.add_attribute('id', 'dp' + rand(10000).to_s)
+                            process_stanza(stanza)
+                        end
+
+                        @resource.dp_to = []
+                    end
                 else
                     write Stanza.error(stanza, 'bad-request', 'modify')
                 end
@@ -129,13 +170,6 @@ def process_stanza(stanza)
                         end
                     elsif s_type == 'presence'
                         p_type = stanza.attributes['type']
-
-                        # XXX - this sucks.
-                        if p_type =~ /((un)?subscribe(d)?)/
-                            @logger.unknown "THIS SUCKS: overridden"
-                            send("presence_#{p_type}", stanza)
-                            return
-                        end
 
                         # This is directed presence.
                         if user.available?

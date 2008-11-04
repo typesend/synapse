@@ -571,8 +571,8 @@ class ClientStream < Stream
         if try and @resource and @resource.available?
             elem = REXML::Element.new('presence')
             elem.add_attribute('type', 'unavailable')
-
-            presence_unavailable(elem)
+            @resource.presence_stanza = elem
+            @resource.broadcast_presence
         end
 
         # Undo some refereces so GC works.

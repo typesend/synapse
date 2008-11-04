@@ -27,8 +27,7 @@ module XMPP
 module Client
 include XMPP::SASL     # For the SASL methods.
 include XMPP::TLS      # For the TLS methods.
-include XMPP::IQ       # For <iq/> stanzas.
-include XMPP::Presence # For <presence/> stanzas.
+include XMPP::IQ       # XXX just for now.
 
 #
 # Handle an incoming <stream> root element.

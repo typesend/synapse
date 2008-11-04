@@ -32,65 +32,6 @@ module Presence
 
 extend self
 
-#def handle_presence(elem)
-#    # Are we ready for <presence/> stanzas?
-#    unless presence_ready?
-#        error('unexpected-request')
-#        return
-#    end
-#
-#    methname = 'presence_' + (elem.attributes['type'] or 'none')
-#
-#   unless respond_to?(methname)
-#        write Stanza.error(elem, 'bad-request', 'cancel')
-#        return
-#    else
-#        send(methname, elem)
-#    end
-#end
-
-# No type signals avilability.
-def presence_none(elem)
-    @resource.presence_stanza = elem
-
-    # Broadcast it to relevant entities.
-    @resource.broadcast_presence(elem)
-
-    # Was this their initial presence?
-    unless @resource.available?
-        @resource.available = true
-
-        # If they're sending out initial presense, then they
-        # need their contacts' presence.
-        @resource.send_roster_presence
-
-        # Do they have any offline stazas?
-        return if @resource.user.offline_stanzas.empty?
-        return unless elem.elements['priority']
-        return if elem.elements['priority'].text.to_i < 0
-
-        @logger.unknown "(#{@resource.name}) -> start offline stanzas"
-        @resource.user.offline_stanzas.each { |stanza| write stanza }
-        @resource.user.offline_stanzas = []
-        @logger.unknown "(#{@resource.name}) -> end offline stanzas"
-    end
-end
-
-# They're logging off.
-def presence_unavailable(elem)
-    @resource.presence_stanza = elem
-
-    @resource.dp_to.uniq.each do |jid|
-        s = elem.dup
-        s.add_attribute('to', jid)
-        process_stanza(s)
-    end
-
-    @resource.dp_to = []
-
-    @resource.broadcast_presence(elem)
-end
-
 def presence_subscribe(elem)
     if not elem.attributes['to'] or elem.attributes['to'].include?('/')
         write Stanza.error(elem, 'bad-request', 'modify')

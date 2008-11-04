@@ -276,47 +276,6 @@ class User
         @roster.find_all { |j, contact| subscribed?(contact) }
     end
 
-    # Send a given xml stanza to ourselves.
-    def to_self(xml)
-        return unless available?
-
-        @resources.each do |name, resource|
-            next unless resource.interested?
-
-            xml.root.add_attribute('to', resource.jid)
-            resource.stream.write xml
-        end
-    end
-
-    #
-    # Send a given xml stanza to all of the entries in our roster
-    # where subscription is either "FROM" or "BOTH."
-    #
-    def to_roster_subscribed(xml)
-        return if @roster.empty?
-
-        # Create a list of roster members who are subscribed to us.
-        roster = roster_subscribed_from
-        return unless roster
-
-        roster.each do |j, contact|
-            next if contact.class == RemoteContact # XXX - haven't done s2s yet...
-
-            # Do they have any online resources?
-            next unless contact.user.available?
-
-            # Now go through each of their online resources and send it.
-            contact.user.resources.each do |name, resource|
-                next unless resource.interested?
-                next unless resource.available?
-
-                xml.root.add_attribute('to', resource.jid)
-
-                resource.stream.write xml 
-            end
-        end
-    end
-
     def roster_to_xml
         query = XMPP::Stanza.new_query('jabber:iq:roster')
         @roster.each { |name, contact| query << contact.to_xml }

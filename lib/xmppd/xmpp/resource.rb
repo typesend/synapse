@@ -71,7 +71,6 @@ class Resource
     def jid
         @user.jid + '/' + @name
     end
-    
 
     #
     # Set the resource's interest in presence updates.
@@ -181,19 +180,46 @@ class Resource
     #
     # return:: [XMPP::Client::Resource] self
     #
-    def broadcast_presence(stanza)
-        unless stanza.class == REXML::Element
-            raise ArgumentError, 'stanza must be a REXML::Element'
-        end
-
-        stanza.add_attribute('from', jid)
+    def broadcast_presence
+        stanza = @presence_stanza.dup
 
         @available = false if stanza.attributes['type'] == 'unavailable'
 
-        @user.to_roster_subscribed(stanza)
-        @user.to_self(stanza) unless stanza.attributes['type'] == 'unavailable'
+        # Broadcast it to our roster where subscription is 'from' or 'both'.
+        # Create a list of roster members who are subscribed to us.
+        @user.roster_subscribed_from.each do |jid, myc|
+            route = true
 
-        self
+            # If it's to a local user we know whether they're online or not.
+            if myc.class == DB::LocalContact and not myc.user.available?
+                route = false
+            end
+
+            if route
+                stanza.add_attribute('to', jid)
+                @stream.process_stanza(stanza)
+            end
+        end
+
+        # And also to ourselves.
+        stanza.add_attribute('to', jid)
+        @stream.process_stanza(stanza)
+    end
+
+    def initial_presence
+        @available = true
+
+        # If they're sending out initial presense, then they
+        # need their contacts' presence.
+        send_roster_presence # XXX this is poopy
+
+        # Do they have any offline stazas?
+        return if @user.offline_stanzas.empty?
+        return unless elem.elements['priority']
+        return if elem.elements['priority'].text.to_i < 0
+
+        @user.offline_stanzas.each { |stanza| write stanza }
+        @user.offline_stanzas = []
     end
 
     def send_iq(stanza)
