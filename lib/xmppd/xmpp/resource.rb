@@ -121,60 +121,6 @@ class Resource
     end
 
     #
-    # Send our presence to one resource.
-    #
-    # resource:: [XMPP::Client::Resource] resource to send it to
-    # stanza:: [REXML::Element] send using specific stanza
-    #
-    # return:: [XMPP::Client::Resource] self
-    #
-    def send_presence(resource, stanza = nil)
-        unless resource.class == Resource
-            raise ArgumentError, 'resource must be a XMPP::Client::Resource'
-        end
-
-        unless stanza.class == REXML::Element
-            raise ArgumentError, 'stanza must be a REXML::Element'
-        end if stanza
-
-        # Only available resources get presence updates.
-        return unless resource.available?
-
-        if stanza
-            resource.stream.write stanza
-        else
-            @presence_stanza.add_attribute('from', jid)
-            @presence_stanza.add_attribute('to',   resource.jid)
-
-            resource.stream.write @presence_stanza
-
-            @presence_stanza.attributes.delete('to')
-        end
-    end
-
-    #
-    # Get our roster's current presence information.
-    # This should only be called upon initial presence.
-    #
-    # return:: [XMPP::Client::Resource] self
-    #
-    def send_roster_presence
-        return if @user.roster.nil? or @user.roster.empty?
-
-        # Create a list of roster members we care about.
-        roster = @user.roster_subscribed_to
-        return unless roster
-
-        roster.each do |j, contact|
-            next unless contact.user.available?
-
-            contact.user.resources.each do |name, resource|
-                resource.send_presence(self) if resource.available?
-            end
-        end
-    end
-
-    #
     # Broadcast our presence to our subscribed contacts.
     # This is called any time a broadcast presence is issued.
     #
@@ -211,14 +157,29 @@ class Resource
 
         # If they're sending out initial presense, then they
         # need their contacts' presence.
-        send_roster_presence # XXX this is poopy
+        #
+        # Create a list of roster members we are subscribed to.
+        @user.roster_subscribed_to.each do |jid, myc|
+            next unless myc.user.available?
+
+            if myc.class == DB::LocalContact
+                myc.user.resources.each do |name, rec|
+                    next unless rec.available?
+                    s = rec.presence_stanza.dup
+                    s.add_attribute('to', self.jid)
+                    rec.stream.process_stanza(s)
+                end
+            else
+                # XXX - s2s presence probe
+            end
+        end
 
         # Do they have any offline stazas?
         return if @user.offline_stanzas.empty?
-        return unless elem.elements['priority']
-        return if elem.elements['priority'].text.to_i < 0
+        return unless @presence_stanza.elements['priority']
+        return if @presence_stanza.elements['priority'].text.to_i < 0
 
-        @user.offline_stanzas.each { |stanza| write stanza }
+        @user.offline_stanzas.each { |stanza| @stream.write stanza }
         @user.offline_stanzas = []
     end
 

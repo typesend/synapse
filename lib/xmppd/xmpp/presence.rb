@@ -366,10 +366,9 @@ def presence_subscribed(elem)
     end
 
     # Send our presence to them.
-    suser.resources.each do |n, rec|
-        next unless rec.available?
-        @resource.send_presence(rec)
-    end
+    s = @resource.presence_stanza.dup
+    s.add_attribute('to', suser.jid)
+    process_stanza(s)
 end
 
 def presence_unsubscribed(elem)

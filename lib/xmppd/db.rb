@@ -242,6 +242,19 @@ class User
         return false
     end
 
+    def offline_stanza(stanza, myhost)
+        # This implements XEP-0203.
+        dt = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+        delay = REXML::Element.new('delay')
+        delay.add_attribute('stamp', dt)
+        delay.add_attribute('from', myhost)
+        delay.add_namespace('urn:xmpp:delay')
+        delay.text = 'Offline Storage'
+
+        stanza << delay
+        @offline_stanzas << stanza.to_s
+    end
+
     #
     # Return the resource with the highest priority.
     #

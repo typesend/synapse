@@ -209,8 +209,9 @@ def squery_roster(stanza)
 @logger.unknown "%s is removing %s from roster" % \
                 [@resource.user.jid, user.jid]
 
-        stanza.add_attribute('id', 'push' + rand(1000000).to_s)
         stanza.delete_attribute('from')
+        stanza.add_attribute('id',
+                             Digest::MD5.hexdigest(rand(1000000).to_s)[8...16])
 
         @resource.user.resources.each do |n, rec|
             next unless rec.interested?
@@ -228,7 +229,6 @@ def squery_roster(stanza)
             presence.add_attribute('from', @resource.user.jid)
 
             process_stanza(presence)
-            #presence_unsubscribe(presence)
         end
 
         if user.subscribed?(@resource.user)
@@ -241,7 +241,6 @@ def squery_roster(stanza)
             presence.add_attribute('from', @resource.user.jid)
 
             process_stanza(presence)
-            #presence_unsubscribed(presence)
         end
 
         return self

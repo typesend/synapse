@@ -152,48 +152,32 @@ def process_stanza(stanza)
                 # Section 11.2.3.2 - bare jid
                 if not resource
                     if s_type == 'message'
-                        if user.available? # Deliver to local user.
+                        if user.available?
                             user.front_resource.stream.write stanza
-                        else # Store it offline.
-                            # This implements XEP-0203.
-                            dt = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-                            delay = REXML::Element.new('delay')
-                            delay.add_attribute('stamp', dt)
-                            delay.add_attribute('from', @myhost)
-                            delay.add_namespace('urn:xmpp:delay')
-                            delay.text = 'Offline Storage'
-
-                            stanza << delay
-                            user.offline_stanzas << stanza.to_s
-
+                        else
+                            user.offline_stanza(stanza, @myhost)
                             @logger.unknown "Last message stored offline"
                         end
                     elsif s_type == 'presence'
                         p_type = stanza.attributes['type']
 
-                        # This is directed presence.
-                        if user.available?
-                            user.resources.each do |n, rec|
-                                rec.stream.write stanza
+                        if not p_type or p_type == 'unavailable'
+                            # This is directed presence.
+                            if user.available?
+                                user.resources.each do |n, rec|
+                                    rec.stream.write stanza
 
-                                if p_type !~ /((un)?subscribe(d)?)/
                                     @resource.dp_to << rec.jid unless sb
                                 end
                             end
 
                         elsif p_type =~ /((un)?subscribe(d)?)/
-                            # This implements XEP-0203.
-                            dt = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-                            delay = REXML::Element.new('delay')
-                            delay.add_attribute('stamp', dt)
-                            delay.add_attribute('from', @myhost)
-                            delay.add_namespace('urn:xmpp:delay')
-                            delay.text = 'Offline Storage'
-
-                            stanza << delay
-                            user.offline_stanzas << stanza.to_s
-
-                            @logger.unknown "Last presence stored offline"
+                            if user.available?
+                                send("presence_#{p_type}", stanza)
+                            else
+                                user.offline_stanza(stanza, @myhost)
+                                @logger.unknown "Last presence stored offline"
+                            end
                         end
                     elsif s_type == 'iq'
                         # XXX - handle on behalf of user
