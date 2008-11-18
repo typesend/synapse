@@ -136,6 +136,12 @@ class XMPPd
         $log.c2s.unknown '-!- new logging session started -!-'
         $log.s2s.unknown '-!- new logging session started -!-'
 
+        unless $".grep(/parser_expat.rb$/).empty?
+          $log.xmppd.info 'using expat for XML parsing'
+        else
+          $log.xmppd.info 'using REXML for XML parsing'
+        end
+
         # Load the databases.
         DB::User.load
 
