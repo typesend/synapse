@@ -194,7 +194,16 @@ def process_stanza(stanza)
 
                         # Directed presence.
                         if s_type == 'presence'
-                            @resource.dp_to << rec.jid unless sb
+                            p_type = stanza.attributes['type']
+
+                            # We don't send subscriptions to full JIDs.
+                            # Treat it as if it's a bare JID.
+                            if p_type =~ /((un)?subscribe(d)?)/
+                                stanza.add_attribute('to', node + '@' + domain)
+                                process_stanza(stanza)
+                            else
+                                @resource.dp_to << rec.jid unless sb
+                            end
                         end
                     else
                         stanza.add_attribute('to', node + '@' + domain)
