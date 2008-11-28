@@ -20,6 +20,8 @@ require 'yaml'
 #
 require 'xmppd/xmpp/stanza'
 
+require "xmppd/db-adaptors/#{$config.db[:class_name]}"
+
 #
 # The DB namespace.
 #
@@ -40,8 +42,10 @@ class User
     @@users = {}
     @@need_dump = false
 
+    @@adaptor = DB.const_get($config.db[:class_name]).new
+
     attr_accessor :last, :offline_stanzas, :vcard
-    attr_reader   :node, :domain, :password, :resources, :roster
+    attr_reader   :node, :domain, :password, :resources, :roster, :users
 
     def initialize(node, domain, password)
         @resources = {}
@@ -91,17 +95,7 @@ class User
     end
 
     def User.load
-        begin
-            File.open('var/db/users.yaml') do |f|
-                @@users = YAML.load(f)
-                @@users ||= {}
-            end
-        rescue Exception => e
-            puts "xmppd: failed to load user database: #{e}"
-            exit
-        else
-            $log.xmppd.info "loaded #{@@users.length} users"
-        end
+        @@users = @@adaptor.load_users
     end
 
     def User.dump
@@ -114,18 +108,7 @@ class User
             uv.roster.delete_if { |k, v| v.nil? } if uv.roster.has_value?(nil)
         end
 
-        begin
-            Dir.mkdir('var/db') unless File.exists?('var/db')
-
-            File.open('var/db/users.yaml', 'w') { |f| YAML.dump(@@users, f) }
-        rescue Exception => e
-            $log.xmppd.warn "failed to write user database: #{e}"
-            return false
-        else
-            $log.xmppd.info "wrote #{@@users.length} users"
-            @@need_dump = false
-            return true
-        end
+        @@adaptor.dump_users(@@users)
     end
 
     def User.auth(jid, password, plain = false)

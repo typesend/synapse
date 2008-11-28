@@ -118,6 +118,13 @@ class XMPPd
             exit
         end
 
+        # now we have config, we need to load the DB
+        
+        puts $config.db.inspect
+        
+        puts 'LOADING DB CLASS'
+        require 'xmppd/db'
+
         if $debug
             puts 'xmppd: warning: debug mode enabled'
             puts 'xmppd: warning: all streams will be logged in the clear!'

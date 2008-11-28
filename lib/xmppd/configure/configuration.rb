@@ -21,7 +21,7 @@ module Configure
 # A singleton class that holds all of our configuration data.
 #
 class Configuration
-    attr_accessor :hosts, :logging, :listen, :auth, :deny, :operator
+    attr_accessor :hosts, :logging, :listen, :auth, :deny, :operator, :db
 
     def initialize
         @hosts = []
@@ -29,6 +29,7 @@ class Configuration
         @listen = Configure::Listen.new
         @auth = []
         @deny = []
+        @db = []
         @operator = []
     end
 end
