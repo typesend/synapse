@@ -54,6 +54,34 @@ describe User, 'a new synapse user' do
   after(:each) do
     User.delete(@user.jid)
   end
-  
 end
+
+describe User, 'a synapse user and his/her roster' do
+  before(:each) do
+    @user = User.new('unit', 'example.org', 'secret')
+    @friend = User.new('niceguy', 'example.org', 'secret')
+    @contact = DB::LocalContact.new(@friend)
+    @user.add_contact(@contact)
+  end
+  
+  it "should show up in the roster of that user" do
+    @user.roster.keys.include?(@friend.jid).should == true
+  end
+  
+  it "should not show up if contact is removed" do
+    @user.delete_contact(@friend.jid)
+    @user.roster.keys.include?(@friend.jid).should == false
+  end
+  
+  it "should not be subscribed to that user yet since they're not even online" do
+    # need to simulate this
+    @user.roster[@friend.jid].subscription.should == 'none'
+  end
+  
+  after(:each) do
+    User.delete(@user.jid)
+    User.delete(@friend.jid)
+  end
+end
+
 
