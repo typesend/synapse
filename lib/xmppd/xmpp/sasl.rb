@@ -17,7 +17,6 @@ require 'rexml/document'
 # Import required xmppd modules.
 #
 require 'xmppd/base64'
-#require 'xmppd/db'
 require 'xmppd/xmpp'
 
 #

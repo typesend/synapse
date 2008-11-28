@@ -16,6 +16,10 @@ require 'test/unit'
 #
 # Import required xmppd modules.
 #
+
+# fake out the db first
+$config = Configure::Configuration.new
+$config.db = {:db_adaptor=>"YAML", :class_name=>"Yaml"}
 require 'xmppd/db'
 require 'xmppd/log'
 

@@ -8,7 +8,6 @@
 #
 
 # Import required xmppd modules.
-#require 'xmppd/db'
 require 'xmppd/xmpp'
 
 # The XMPP namespace.

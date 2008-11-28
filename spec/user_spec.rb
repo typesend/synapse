@@ -33,6 +33,10 @@ describe User, 'a new synapse user' do
     DB::User.users['doesnt_exist@example.com'].should == nil
   end
   
+  it "should not allow creation of a user with a domain we don't service" do
+    lambda {DB::User.new('test', 'soong.net', 'secret')}.should raise_error
+  end
+  
   it "should authenticate an existing user correctly" do
     DB::User.auth('unit@example.org', 'secret', true).should == true
     DB::User.auth('unit@example.org', 'wrong', true).should == false
