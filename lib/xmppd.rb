@@ -32,7 +32,6 @@ end
 require 'xmppd/auth'
 require 'xmppd/base64'
 require 'xmppd/configure'
-require 'xmppd/db'
 require 'xmppd/listen'
 require 'xmppd/log'
 require 'xmppd/timer'

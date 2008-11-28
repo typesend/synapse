@@ -22,6 +22,7 @@ require 'xmppd/xmpp/stanza'
 
 require "xmppd/db-adaptors/#{$config.db[:class_name]}"
 
+
 #
 # The DB namespace.
 #
@@ -95,7 +96,7 @@ class User
     end
 
     def User.load
-        @@users = @@adaptor.load_users
+      @@users = @@adaptor.load_users
     end
 
     def User.dump
