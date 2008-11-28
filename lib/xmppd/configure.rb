@@ -259,11 +259,6 @@ class ConfigParser < Configure::Parser
      # if adaptor is YAML, skip and require that 
 
      $config.db = db_config
-
-     # require 
-
-     puts 'wow, that actually worked'
-     puts $config.db.inspect
     end
 
 

@@ -13,6 +13,12 @@ $0 = 'xmppd'
 # Import required xmppd modules.
 require 'xmppd'
 
+# fake out a YAML adaptor .. need to make this more flexible
+
+$config = Configure::Configuration.new
+$config.db = {:db_adaptor=>"YAML", :class_name=>"Yaml"}
+require 'xmppd/db'
+
 Spec::Runner.configure do |config|
   # == Mock Framework
   #

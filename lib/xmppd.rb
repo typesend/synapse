@@ -119,9 +119,9 @@ class XMPPd
 
         # now we have config, we need to load the DB
         
-        puts $config.db.inspect
+        # puts $config.db.inspect
         
-        puts 'LOADING DB CLASS'
+        puts 'loading DB class ... '
         require 'xmppd/db'
 
         if $debug
