@@ -13,18 +13,8 @@
 require 'optparse'
 require 'singleton'
 
-# Check for libidn.
-begin
-    require 'idn'
-rescue LoadError
-    puts 'xmppd: there was an error loading the IDN library'
-    puts "xmppd: chances are you just don't have it"
-    puts 'xmppd: gem install --remote idn'
-    puts 'xmppd: http://rubyforge.org/projects/idn/'
-    puts 'xmppd: you must install libidn for this gem to work'
-    puts 'xmppd: http://www.gnu.org/software/libidn/'
-    exit
-end
+# go off to the IDN library which will handle requires/definitions according to environment
+require 'xmppd/idn'
 
 #
 # Import required xmppd modules.
